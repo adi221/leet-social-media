@@ -22,6 +22,7 @@ const userSchema = mongoose.Schema(
     username: {
       type: String,
       required: true,
+      unique: true,
     },
     email: {
       type: String,
@@ -35,6 +36,7 @@ const userSchema = mongoose.Schema(
     profileImage: {
       type: String,
       required: true,
+      default: 'https://i.stack.imgur.com/34AD2.jpg',
     },
     description: {
       type: String,

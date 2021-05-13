@@ -5,8 +5,17 @@ import rootReducer from './reducers';
 
 const middleware = [thunk];
 
+const userInfoFromStorage = localStorage.getItem('userInfoLeet')
+  ? JSON.parse(localStorage.getItem('userInfoLeet'))
+  : null;
+
+const initialState = {
+  userLogin: { userInfo: userInfoFromStorage },
+};
+
 const store = createStore(
   rootReducer,
+  initialState,
   composeWithDevTools(applyMiddleware(...middleware))
 );
 
