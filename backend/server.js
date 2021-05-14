@@ -4,6 +4,7 @@ import morgan from 'morgan';
 import colors from 'colors';
 import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
+import postRoutes from './routes/postRoutes.js';
 
 dotenv.config();
 connectDB();
@@ -17,6 +18,7 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.json());
 
 app.use('/api/users', userRoutes);
+app.use('/api/posts', postRoutes);
 
 app.get('/', (req, res) => {
   res.send('API is running');

@@ -43,15 +43,14 @@ const postSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    title: {
-      type: String,
-      required: true,
-    },
     description: {
       type: String,
       required: true,
     },
-    tags: [tagSchema],
+    tags: {
+      type: [String],
+      default: [],
+    },
     image: {
       type: String,
       required: true,

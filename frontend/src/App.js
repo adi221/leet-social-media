@@ -18,7 +18,7 @@ const App = () => {
       <div className='page-container'>
         <Switch>
           <Route path='/upload' component={UploadPage} />
-          <Route path='/profile' component={ProfilePage} />
+          <Route path='/profile/:id' component={ProfilePage} />
           <Route path='/settings' component={SettingsPage} />
           <Route path='/signup' component={SignUpPage} />
           <Route path='/login' component={LoginPage} />

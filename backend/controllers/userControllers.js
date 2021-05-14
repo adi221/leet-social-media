@@ -57,4 +57,19 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
-export { registerUser, authUser };
+// @desc Get image of post owner
+// @route POST /api/users/post/:username
+// @access Public
+const getPostUserImage = asyncHandler(async (req, res) => {
+  const { username } = req.params;
+  const user = await User.findOne({ username });
+  if (user) {
+    const { profileImage } = user;
+    res.json({ profileImage });
+  } else {
+    res.status(401);
+    throw new Error('Invalid username');
+  }
+});
+
+export { registerUser, authUser, getPostUserImage };
