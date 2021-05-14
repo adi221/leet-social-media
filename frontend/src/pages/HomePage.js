@@ -26,16 +26,14 @@ const HomePage = () => {
 
   return (
     <div className='page home-page'>
-      <div className='page-center'>
-        {/* Home Sidebar */}
-        <HomeSidebar />
-        {/* Posts */}
+      <div className='page-center home-grid'>
         <div className='posts-container is-flexed'>
           {posts &&
             posts.map(post => {
               return <SinglePost key={post._id} post={post} />;
             })}
         </div>
+        <HomeSidebar />
       </div>
     </div>
   );

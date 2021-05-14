@@ -12,7 +12,7 @@ const Navbar = () => {
     setShowSettings(true);
   };
   const hideList = () => {
-    setTimeout(() => setShowSettings(false), 5000);
+    setShowSettings(false);
   };
 
   return (
@@ -35,7 +35,6 @@ const Navbar = () => {
                 <button
                   className='dropdown-toggle is-bordered is-flexed'
                   onMouseOver={displayList}
-                  onMouseLeave={hideList}
                 >
                   <IoIosArrowDown />
                 </button>

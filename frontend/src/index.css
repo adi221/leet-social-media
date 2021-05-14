@@ -101,6 +101,12 @@ input {
 .bold {
   font-weight: bold;
 }
+.margin-right16 {
+  margin-right: 1rem;
+}
+.underline:hover {
+  text-decoration: underline;
+}
 
 /* Navbar */
 nav {
@@ -109,7 +115,9 @@ nav {
   left: 0;
   top: 0;
   width: 100%;
-  border-bottom: 1px solid lightgray;
+  border-bottom: 1px solid #dbdbdb;
+  z-index: 900;
+  background-color: var(--clr-white);
 }
 
 .nav-center {
@@ -162,7 +170,7 @@ nav {
 /* Dropdown */
 
 .dropdown {
-  display: relative;
+  position: relative;
 }
 
 .dropdown-toggle {
@@ -173,9 +181,9 @@ nav {
 
 .dropdown-content {
   position: absolute;
-  top: 4rem;
+  top: 2.9rem;
   right: 0;
-  transform: translateX(-10%);
+
   z-index: 30;
   border-radius: var(--radius);
 }
@@ -311,17 +319,38 @@ div.ReactTags__selected a.ReactTags__remove {
   cursor: pointer;
 }
 
+/* Home page grid */
+
+.home-grid {
+  display: grid;
+  grid-template-columns: 1fr 250px;
+  column-gap: 0.5rem;
+}
+
 /* Single Post */
 .single-post {
   width: 740px;
   margin: 2rem 0;
 }
 
+.single-post > * {
+  padding: 0.3rem 2rem;
+}
+
+.single-post > img {
+  padding: 0;
+}
+
+.single-post:first-child {
+  margin: 0 0 2rem;
+}
+
+.single-post-btns,
 .single-post-header {
   padding: 0.5rem 2rem;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 }
 
 .single-post-header img {
@@ -329,4 +358,67 @@ div.ReactTags__selected a.ReactTags__remove {
   height: 40px;
   object-fit: cover;
   margin-right: 1rem;
+  border-radius: 50%;
+}
+
+.single-icon {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.single-post-created-at {
+  padding: 0.1rem 2rem;
+  text-transform: uppercase;
+  font-size: 12px;
+  color: rgb(155, 155, 155);
+}
+
+.tag {
+  color: rgb(4, 104, 255);
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.single-post-add-comment {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  margin-bottom: 0.5rem;
+}
+
+.single-post-add-comment input {
+  border: none;
+  font-family: inherit;
+  font-size: 16px;
+}
+
+.single-post-add-comment button {
+  color: rgb(4, 104, 255);
+}
+
+.single-post-add-comment button:disabled {
+  opacity: 0.5;
+  cursor: initial;
+}
+
+/* Home Sidebar */
+
+.home-sidebar {
+  justify-self: start;
+}
+
+.home-sidebar-header img {
+  border-radius: 50%;
+  object-fit: cover;
+  width: 67px;
+  height: 67px;
+}
+
+@media (max-width: 1064px) {
+  .home-sidebar {
+    display: none;
+  }
+  .home-grid {
+    display: block;
+  }
 }
