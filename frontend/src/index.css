@@ -14,6 +14,7 @@
   --clr-white: #fff;
   --clr-grey: #28313a;
   --clr-border: #bebebe;
+  --clr-bg: #fafafa;
   --spacing: 0.1rem;
   --radius: 0.2rem;
   --max-width: 1180px;
@@ -28,6 +29,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: var(--clr-grey);
+  background-color: var(--clr-bg);
 }
 
 ul {
@@ -331,6 +333,7 @@ div.ReactTags__selected a.ReactTags__remove {
 .single-post {
   width: 740px;
   margin: 2rem 0;
+  background-color: var(--clr-white);
 }
 
 .single-post > * {
@@ -410,6 +413,7 @@ div.ReactTags__selected a.ReactTags__remove {
 
 .home-sidebar {
   justify-self: start;
+  background-color: var(--clr-bg);
 }
 
 .home-sidebar-header img {

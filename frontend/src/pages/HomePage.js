@@ -2,6 +2,10 @@ import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { SinglePost, HomeSidebar } from '../components';
+import {
+  POST_COMMENT_RESET,
+  POST_LIKE_RESET,
+} from '../constants/postConstants';
 import { getPosts } from '../actions/postActions';
 
 const HomePage = () => {

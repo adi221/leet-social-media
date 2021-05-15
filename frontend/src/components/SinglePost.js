@@ -11,10 +11,7 @@ import {
   FaRegBookmark,
 } from 'react-icons/fa';
 import { Tags, Comments } from '../components';
-import {
-  POST_COMMENT_RESET,
-  POST_LIKE_RESET,
-} from '../constants/postConstants';
+
 import {
   likePost,
   commentPost,
@@ -60,12 +57,12 @@ const SinglePost = ({ post }) => {
     setUserImage(profileImage);
   };
 
-  const { success: successLike, error: errorLike } = useSelector(
-    state => state.postLike
-  );
-  const { success: successComment, error: errorComment } = useSelector(
-    state => state.postComment
-  );
+  // const { success: successLike, error: errorLike } = useSelector(
+  //   state => state.postLike
+  // );
+  // const { success: successComment, error: errorComment } = useSelector(
+  //   state => state.postComment
+  // );
 
   // const { post: singlePost } = useSelector(state => state.singlePostGet);
 
@@ -146,11 +143,10 @@ const SinglePost = ({ post }) => {
         </p>
       </div>
       {tags.length > 0 && <Tags tags={tags} />}
-
+      {numComments > 0 && <Comments comments={comments} />}
       <div className='single-post-created-at'>
         {moment(createdAt).fromNow()}
       </div>
-      {numComments.length > 0 && <Comments comments={comments} />}
       <form className='single-post-add-comment' onSubmit={commentHandler}>
         <input
           type='text'
