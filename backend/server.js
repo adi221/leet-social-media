@@ -15,7 +15,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // allows us to accept json data in the body
-app.use(express.json());
+app.use(express.json({ limit: '200mb' }));
 
 app.use('/api/users', userRoutes);
 app.use('/api/posts', postRoutes);

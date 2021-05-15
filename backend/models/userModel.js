@@ -17,6 +17,30 @@ const followersSchema = {
   },
 };
 
+const postsSchema = {
+  post: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'Post',
+  },
+};
+
+const savedPostsSchema = {
+  post: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'Post',
+  },
+};
+
+const likedPostsSchema = {
+  post: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'Post',
+  },
+};
+
 const userSchema = mongoose.Schema(
   {
     username: {
@@ -51,6 +75,24 @@ const userSchema = mongoose.Schema(
     },
     followers: [followersSchema],
     numFollowers: {
+      type: Number,
+      default: 0,
+      required: true,
+    },
+    posts: [postsSchema],
+    numPosts: {
+      type: Number,
+      default: 0,
+      required: true,
+    },
+    savedPosts: [savedPostsSchema],
+    numSavedPosts: {
+      type: Number,
+      default: 0,
+      required: true,
+    },
+    likedPosts: [likedPostsSchema],
+    numLikedPosts: {
       type: Number,
       default: 0,
       required: true,

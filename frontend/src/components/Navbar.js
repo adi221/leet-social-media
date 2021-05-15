@@ -34,7 +34,7 @@ const Navbar = () => {
                 Upload
               </Link>
               <button
-                className='button is-light'
+                className='button is-light margin-right16'
                 onClick={() => dispatch(logout())}
               >
                 Sign out

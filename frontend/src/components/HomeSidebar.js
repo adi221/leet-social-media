@@ -4,13 +4,15 @@ import { useSelector } from 'react-redux';
 
 const HomeSidebar = () => {
   const { userInfo } = useSelector(state => state.userLogin);
-  const { username, profileImage, _id } = userInfo;
+  if (!userInfo) return null;
+
+  const { username, profileImage } = userInfo;
 
   return (
     <aside className='home-sidebar'>
       <header className='home-sidebar-header is-flexed'>
         <img className='margin-right16' src={profileImage} alt={username} />
-        <Link to={`/profile/${_id}`} className='bold underline'>
+        <Link to={`/profile/${username}`} className='bold underline'>
           {username}
         </Link>
       </header>

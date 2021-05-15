@@ -18,11 +18,11 @@ const App = () => {
       <div className='page-container'>
         <Switch>
           <Route path='/upload' component={UploadPage} />
-          <Route path='/profile/:id' component={ProfilePage} />
+          <Route path='/profile/:username' component={ProfilePage} />
           <Route path='/settings' component={SettingsPage} />
           <Route path='/signup' component={SignUpPage} />
           <Route path='/login' component={LoginPage} />
-          <Route path='/posts/:id' component={SinglePostPage} />
+          <Route path='/posts/:username/:id' component={SinglePostPage} />
           <Route path='/' exact component={HomePage} />
         </Switch>
       </div>

@@ -1,20 +1,23 @@
 import asyncHandler from 'express-async-handler';
 import Post from '../models/postModel.js';
+import User from '../models/userModel.js';
 
 // @desc Get all posts - from followers and user's posts
 // @route GET /api/posts
 // @access User
 const getPosts = asyncHandler(async (req, res) => {
-  const posts = await Post.find({});
+  const posts = await Post.find({}).sort({ createdAt: -1 });
   res.json(posts);
 });
 
-// @desc Createa post
+// @desc Create a post
 // @route POST /api/posts
 // @access User
 const createPost = asyncHandler(async (req, res) => {
   const { file, tags, description } = req.body;
   const { _id, username } = req.user;
+
+  const user = await User.findById(_id);
 
   const post = new Post({
     user: _id,
@@ -28,6 +31,11 @@ const createPost = asyncHandler(async (req, res) => {
     numComments: 0,
   });
   const createdPost = await post.save();
+
+  user.posts.push({ post: post._id });
+  user.numPosts = user.posts.length;
+  await user.save();
+
   res.status(201).json(createdPost);
 });
 
@@ -57,7 +65,10 @@ const commentPost = asyncHandler(async (req, res) => {
 // @access User
 const likePost = asyncHandler(async (req, res) => {
   const { id } = req.params;
+  const { _id, username } = req.user;
+
   const post = await Post.findById(id);
+  const user = await User.findById(_id);
 
   if (post) {
     const alreadyLikedIndex = post.likes.findIndex(
@@ -67,10 +78,18 @@ const likePost = asyncHandler(async (req, res) => {
       post.likes.splice(alreadyLikedIndex, 1);
       post.numLikes = post.likes.length;
       await post.save();
+      user.likedPosts = user.likedPosts.filter(
+        p => p.post.toString() !== post._id.toString()
+      );
+      user.numLikedPosts = user.likedPosts.length;
+      await user.save();
     } else {
-      post.likes.push({ user: req.user._id, username: req.user.username });
+      post.likes.push({ user: _id, username });
       post.numLikes = post.likes.length;
       await post.save();
+      user.likedPosts.push({ post: post._id });
+      user.numLikedPosts = user.likedPosts.length;
+      await user.save();
     }
 
     res.status(201).json({

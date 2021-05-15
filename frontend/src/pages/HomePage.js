@@ -15,7 +15,7 @@ const HomePage = () => {
 
   useEffect(() => {
     if (!userInfo) {
-      return history.push('/login');
+      history.push('/login');
     }
   }, [userInfo, history]);
 
@@ -24,6 +24,8 @@ const HomePage = () => {
 
   useEffect(() => {
     dispatch(getPosts());
+    dispatch({ type: POST_COMMENT_RESET });
+    dispatch({ type: POST_LIKE_RESET });
   }, [dispatch, successComment, successLike]);
 
   const postsGet = useSelector(state => state.postsGet);

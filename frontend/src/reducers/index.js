@@ -2,6 +2,8 @@ import { combineReducers } from 'redux';
 import {
   userLoginReducer,
   userRegisterReducer,
+  userDetailsProfileReducer,
+  userDetailsPostsReducer,
 } from '../reducers/userReducers';
 import {
   postCreateReducer,
@@ -14,6 +16,8 @@ import {
 const rootReducer = combineReducers({
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
+  userDetailsProfile: userDetailsProfileReducer,
+  userDetailsPosts: userDetailsPostsReducer,
   postCreate: postCreateReducer,
   postsGet: postsGetReducer,
   postLike: postLikeReducer,

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
@@ -12,11 +12,7 @@ import {
 } from 'react-icons/fa';
 import { Tags, Comments } from '../components';
 
-import {
-  likePost,
-  commentPost,
-  getSinglePostDetails,
-} from '../actions/postActions';
+import { likePost, commentPost } from '../actions/postActions';
 
 const defaultImage =
   'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/600px-No_image_available.svg.png';
@@ -37,6 +33,8 @@ const SinglePost = ({ post }) => {
   } = post;
   const [userImage, setUserImage] = useState(defaultImage);
   const [addedComment, setAddedComment] = useState('');
+
+  const commentRef = useRef(null);
 
   // So I can render again without rerendering all the posts
   const [isLiked, setIsLiked] = useState(false);
@@ -105,7 +103,7 @@ const SinglePost = ({ post }) => {
       <header className='single-post-header'>
         <div className='is-flexed '>
           <img src={userImage} alt={username} />
-          <Link to={`/profile/${user}`} className='bold underline'>
+          <Link to={`/profile/${username}`} className='bold underline'>
             {username}
           </Link>
         </div>
@@ -126,7 +124,10 @@ const SinglePost = ({ post }) => {
               className='single-icon margin-right16'
             />
           )}
-          <FaRegComment onClick={commentHandler} className='single-icon' />
+          <FaRegComment
+            onClick={() => commentRef.current.focus()}
+            className='single-icon'
+          />
         </div>
         <FaRegBookmark className='single-icon' />
       </div>
@@ -134,7 +135,7 @@ const SinglePost = ({ post }) => {
       <div className='single-post-description'>
         <p>
           <Link
-            to={`/profile/${user}`}
+            to={`/profile/${username}`}
             className='bold margin-right16 underline'
           >
             {username}
@@ -151,6 +152,7 @@ const SinglePost = ({ post }) => {
         <input
           type='text'
           placeholder='Add a comment..'
+          ref={commentRef}
           value={addedComment}
           onChange={e => setAddedComment(e.target.value)}
         />

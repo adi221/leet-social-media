@@ -4,5 +4,6 @@ import HomeSidebar from './HomeSidebar';
 import SinglePost from './SinglePost';
 import Tags from './Tags';
 import Comments from './Comments';
+import Loader from './Loader';
 
-export { Navbar, SearchBar, HomeSidebar, SinglePost, Tags, Comments };
+export { Navbar, SearchBar, HomeSidebar, SinglePost, Tags, Comments, Loader };
