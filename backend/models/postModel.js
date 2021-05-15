@@ -6,6 +6,10 @@ const likeSchema = mongoose.Schema({
     required: true,
     ref: 'User',
   },
+  username: {
+    type: String,
+    required: true,
+  },
 });
 
 const tagSchema = mongoose.Schema({
@@ -21,6 +25,10 @@ const commentSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: 'User',
+    },
+    username: {
+      type: String,
+      required: true,
     },
     comment: {
       type: String,

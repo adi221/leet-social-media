@@ -7,22 +7,23 @@ import { getPosts } from '../actions/postActions';
 const HomePage = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getPosts());
-  }, [dispatch]);
-
-  const postsGet = useSelector(state => state.postsGet);
-  const { posts, loading, error } = postsGet;
-
-  const userLogin = useSelector(state => state.userLogin);
-  const { userInfo } = userLogin;
+  const { userInfo } = useSelector(state => state.userLogin);
 
   useEffect(() => {
     if (!userInfo) {
-      history.push('/login');
+      return history.push('/login');
     }
   }, [userInfo, history]);
+
+  const { success: successLike } = useSelector(state => state.postLike);
+  const { success: successComment } = useSelector(state => state.postComment);
+
+  useEffect(() => {
+    dispatch(getPosts());
+  }, [dispatch, successComment, successLike]);
+
+  const postsGet = useSelector(state => state.postsGet);
+  const { posts, loading, error } = postsGet;
 
   return (
     <div className='page home-page'>

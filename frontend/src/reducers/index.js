@@ -6,7 +6,9 @@ import {
 import {
   postCreateReducer,
   postsGetReducer,
-  postGetUserDetailsReducer,
+  postLikeReducer,
+  postCommentReducer,
+  singlePostGetReducer,
 } from '../reducers/postReducers';
 
 const rootReducer = combineReducers({
@@ -14,7 +16,9 @@ const rootReducer = combineReducers({
   userRegister: userRegisterReducer,
   postCreate: postCreateReducer,
   postsGet: postsGetReducer,
-  postGetUserDetails: postGetUserDetailsReducer,
+  postLike: postLikeReducer,
+  postComment: postCommentReducer,
+  singlePostGet: singlePostGetReducer,
 });
 
 export default rootReducer;

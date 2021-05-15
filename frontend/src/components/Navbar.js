@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { IoIosArrowDown } from 'react-icons/io';
 import { SearchBar } from '../components';
 import logo from '../assets/leet-logo.png';
+import { logout } from '../actions/userActions';
 
 const Navbar = () => {
-  const [isLogged, setIsLogged] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
+  const { userInfo } = useSelector(state => state.userLogin);
+  const dispatch = useDispatch();
 
   const displayList = () => {
     setShowSettings(true);
@@ -25,12 +28,17 @@ const Navbar = () => {
           <SearchBar />
         </div>
         <div>
-          {isLogged ? (
+          {userInfo ? (
             <div className='is-flexed'>
               <Link className='button is-primary' to='/upload'>
                 Upload
               </Link>
-              <button className='button is-light'>Sign out</button>
+              <button
+                className='button is-light'
+                onClick={() => dispatch(logout())}
+              >
+                Sign out
+              </button>
               <div className='dropdown'>
                 <button
                   className='dropdown-toggle is-bordered is-flexed'

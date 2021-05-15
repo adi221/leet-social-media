@@ -1,11 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import moment from 'moment';
 import { BsThreeDots } from 'react-icons/bs';
-import { FaRegHeart, FaRegComment, FaRegBookmark } from 'react-icons/fa';
+import {
+  FaRegHeart,
+  FaHeart,
+  FaRegComment,
+  FaRegBookmark,
+} from 'react-icons/fa';
 import { Tags, Comments } from '../components';
+import {
+  POST_COMMENT_RESET,
+  POST_LIKE_RESET,
+} from '../constants/postConstants';
+import {
+  likePost,
+  commentPost,
+  getSinglePostDetails,
+} from '../actions/postActions';
 
 const defaultImage =
   'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/600px-No_image_available.svg.png';
@@ -27,6 +41,17 @@ const SinglePost = ({ post }) => {
   const [userImage, setUserImage] = useState(defaultImage);
   const [addedComment, setAddedComment] = useState('');
 
+  // So I can render again without rerendering all the posts
+  const [isLiked, setIsLiked] = useState(false);
+  // const [totalComments, setTotalComments] = useState(numComments);
+  // const [totalLikes, setTotalLikes] = useState(numLikes);
+  // const [allLikes, setAllLikes] = useState(likes);
+  // const [allComments, setAllComments] = useState(comments);
+
+  const { userInfo } = useSelector(state => state.userLogin);
+
+  const dispatch = useDispatch();
+
   const getUserImage = async username => {
     const {
       data: { profileImage },
@@ -35,9 +60,48 @@ const SinglePost = ({ post }) => {
     setUserImage(profileImage);
   };
 
+  const { success: successLike, error: errorLike } = useSelector(
+    state => state.postLike
+  );
+  const { success: successComment, error: errorComment } = useSelector(
+    state => state.postComment
+  );
+
+  // const { post: singlePost } = useSelector(state => state.singlePostGet);
+
+  // useEffect(() => {
+  //   if (successComment || successLike) {
+  //     dispatch(getSinglePostDetails(_id));
+  //     dispatch({ type: POST_COMMENT_RESET });
+  //     dispatch({ type: POST_LIKE_RESET });
+  //   }
+  // }, [dispatch, successComment, successLike, _id]);
+
+  // useEffect(() => {
+  //   setTotalLikes(singlePost.numLikes);
+  //   setTotalComments(singlePost.numComments);
+  //   setAllComments(singlePost.comments);
+  //   setAllLikes(singlePost.likes);
+  // }, [singlePost]);
+
+  useEffect(() => {
+    const likedOrNot = likes.some(like => like.user === userInfo._id);
+    setIsLiked(likedOrNot);
+  }, [likes, userInfo]);
+
   useEffect(() => {
     getUserImage(username);
   }, [username]);
+
+  const likeHandler = () => {
+    dispatch(likePost(_id));
+  };
+
+  const commentHandler = e => {
+    e.preventDefault();
+    dispatch(commentPost(_id, addedComment));
+    setAddedComment('');
+  };
 
   return (
     <article className='single-post is-bordered'>
@@ -53,8 +117,19 @@ const SinglePost = ({ post }) => {
       <img className='width100' src={image} alt={description} />
       <div className='single-post-btns is-flexed '>
         <div className='is-flexed'>
-          <FaRegHeart className='single-icon margin-right16' />
-          <FaRegComment className='single-icon' />
+          {isLiked ? (
+            <FaHeart
+              onClick={likeHandler}
+              className='single-icon margin-right16'
+              style={{ fill: 'red' }}
+            />
+          ) : (
+            <FaRegHeart
+              onClick={likeHandler}
+              className='single-icon margin-right16'
+            />
+          )}
+          <FaRegComment onClick={commentHandler} className='single-icon' />
         </div>
         <FaRegBookmark className='single-icon' />
       </div>
@@ -76,7 +151,7 @@ const SinglePost = ({ post }) => {
         {moment(createdAt).fromNow()}
       </div>
       {numComments.length > 0 && <Comments comments={comments} />}
-      <div className='single-post-add-comment'>
+      <form className='single-post-add-comment' onSubmit={commentHandler}>
         <input
           type='text'
           placeholder='Add a comment..'
@@ -86,7 +161,7 @@ const SinglePost = ({ post }) => {
         <button className='bold' disabled={addedComment.length === 0}>
           Post
         </button>
-      </div>
+      </form>
     </article>
   );
 };

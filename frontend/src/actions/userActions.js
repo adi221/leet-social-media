@@ -3,6 +3,7 @@ import {
   USER_LOGIN_REQUEST,
   USER_LOGIN_SUCCESS,
   USER_LOGIN_FAIL,
+  USER_LOGOUT,
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
   USER_REGISTER_FAIL,
@@ -33,6 +34,11 @@ export const login = (email, password) => async dispatch => {
           : error.message,
     });
   }
+};
+
+export const logout = () => dispatch => {
+  dispatch({ type: USER_LOGOUT });
+  localStorage.removeItem('userInfoLeet');
 };
 
 export const register = (username, email, password) => async dispatch => {
