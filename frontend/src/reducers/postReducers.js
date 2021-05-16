@@ -77,7 +77,7 @@ export const postCommentReducer = (state = {}, action) => {
   }
 };
 
-export const singlePostGetReducer = (state = { post: [] }, action) => {
+export const singlePostGetReducer = (state = { post: {} }, action) => {
   switch (action.type) {
     case SINGLE_POST_GET_REQUEST:
       return { loading: true };

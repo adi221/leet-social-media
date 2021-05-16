@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { SinglePost, HomeSidebar } from '../components';
+import { SinglePost, HomeSidebar, Loader } from '../components';
 import {
   POST_COMMENT_RESET,
   POST_LIKE_RESET,
@@ -30,6 +30,8 @@ const HomePage = () => {
 
   const postsGet = useSelector(state => state.postsGet);
   const { posts, loading, error } = postsGet;
+
+  if (loading) return <Loader />;
 
   return (
     <div className='page home-page'>

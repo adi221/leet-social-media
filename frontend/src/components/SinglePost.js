@@ -24,7 +24,6 @@ const SinglePost = ({ post }) => {
     numLikes,
     numComments,
     username,
-    user,
     description,
     image,
     likes,
@@ -80,9 +79,10 @@ const SinglePost = ({ post }) => {
   // }, [singlePost]);
 
   useEffect(() => {
-    const likedOrNot = likes.some(like => like.user === userInfo._id);
+    const likedOrNot =
+      numLikes > 0 ? likes.some(like => like.user === userInfo._id) : 0;
     setIsLiked(likedOrNot);
-  }, [likes, userInfo]);
+  }, [likes, userInfo, numLikes]);
 
   useEffect(() => {
     getUserImage(username);
@@ -143,7 +143,7 @@ const SinglePost = ({ post }) => {
           {description}
         </p>
       </div>
-      {tags.length > 0 && <Tags tags={tags} />}
+      {tags && tags.length > 0 && <Tags tags={tags} />}
       {numComments > 0 && <Comments comments={comments} />}
       <div className='single-post-created-at'>
         {moment(createdAt).fromNow()}
