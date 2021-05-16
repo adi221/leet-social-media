@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { IoIosArrowDown } from 'react-icons/io';
 import { SearchBar } from '../components';
@@ -10,12 +10,18 @@ const Navbar = () => {
   const [showSettings, setShowSettings] = useState(false);
   const { userInfo } = useSelector(state => state.userLogin);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const displayList = () => {
     setShowSettings(true);
   };
   const hideList = () => {
     setShowSettings(false);
+  };
+
+  const logoutHandler = () => {
+    dispatch(logout());
+    history.push('/login');
   };
 
   return (
@@ -33,10 +39,7 @@ const Navbar = () => {
               <Link className='button is-primary' to='/upload'>
                 Upload
               </Link>
-              <button
-                className='button is-light margin-right16'
-                onClick={() => dispatch(logout())}
-              >
+              <button className='button is-light ' onClick={logoutHandler}>
                 Sign out
               </button>
               <div className='dropdown'>

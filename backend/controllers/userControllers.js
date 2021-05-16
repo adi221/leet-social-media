@@ -103,8 +103,6 @@ const getUserProfileDetails = asyncHandler(async (req, res) => {
       userLikedPosts = [],
       userSavedPosts = [];
 
-    // .populate('post', 'image')
-
     for (let i = 0; i < posts.length; i++) {
       const id = posts[i].post;
       const post = await Post.findById(id);
@@ -149,4 +147,69 @@ const getUserProfileDetails = asyncHandler(async (req, res) => {
   }
 });
 
-export { registerUser, authUser, getPostUserImage, getUserProfileDetails };
+// @desc Follow user & increase your own following
+// @route POST /api/users/follow/:username
+// @access Public
+const followUser = asyncHandler(async (req, res) => {
+  const { username } = req.params;
+  const followedUser = await User.findOne({ username });
+  const followingUser = await User.findById(req.user._id);
+
+  if (followedUser && followingUser) {
+    followedUser.followers.push({
+      user: req.user._id,
+      username: req.user.username,
+    });
+    followedUser.numFollowers = followedUser.followers.length;
+    await followedUser.save();
+
+    followingUser.following.push({
+      user: followedUser._id,
+      username: followedUser.username,
+    });
+    followingUser.numFollowing = followingUser.following.length;
+    await followingUser.save();
+
+    res.status(200).json({ success: true });
+  } else {
+    res.status(401).send('Invalid username');
+    throw new Error('Invalid username');
+  }
+});
+
+// @desc Follow user & increase your own following
+// @route POST /api/users/follow/:username
+// @access Public
+const unfollowUser = asyncHandler(async (req, res) => {
+  const { username } = req.params;
+  const unFollowedUser = await User.findOne({ username });
+  const unFollowingUser = await User.findById(req.user._id);
+
+  if (unFollowedUser && unFollowingUser) {
+    unFollowedUser.followers = unFollowedUser.followers.filter(
+      follower => follower.user.toString() !== req.user._id.toString()
+    );
+    unFollowedUser.numFollowers = unFollowedUser.followers.length;
+    await unFollowedUser.save();
+
+    unFollowingUser.following = unFollowingUser.following.filter(
+      follower => follower.user.toString() !== unFollowedUser._id.toString()
+    );
+    unFollowingUser.numFollowing = unFollowingUser.following.length;
+    await unFollowingUser.save();
+
+    res.status(200).json({ success: true });
+  } else {
+    res.status(401).send('Invalid username');
+    throw new Error('Invalid username');
+  }
+});
+
+export {
+  registerUser,
+  authUser,
+  getPostUserImage,
+  getUserProfileDetails,
+  followUser,
+  unfollowUser,
+};

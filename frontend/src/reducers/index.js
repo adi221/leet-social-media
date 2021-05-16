@@ -3,7 +3,8 @@ import {
   userLoginReducer,
   userRegisterReducer,
   userDetailsProfileReducer,
-  userDetailsPostsReducer,
+  userFollowReducer,
+  userUnfollowReducer,
 } from '../reducers/userReducers';
 import {
   postCreateReducer,
@@ -17,7 +18,8 @@ const rootReducer = combineReducers({
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
   userDetailsProfile: userDetailsProfileReducer,
-  userDetailsPosts: userDetailsPostsReducer,
+  userFollow: userFollowReducer,
+  userUnfollow: userUnfollowReducer,
   postCreate: postCreateReducer,
   postsGet: postsGetReducer,
   postLike: postLikeReducer,

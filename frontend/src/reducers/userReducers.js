@@ -9,9 +9,12 @@ import {
   USER_DETAILS_PROFILE_GET_REQUEST,
   USER_DETAILS_PROFILE_GET_SUCCESS,
   USER_DETAILS_PROFILE_GET_FAIL,
-  USER_DETAILS_POSTS_GET_REQUEST,
-  USER_DETAILS_POSTS_GET_SUCCESS,
-  USER_DETAILS_POSTS_GET_FAIL,
+  USER_FOLLOW_REQUEST,
+  USER_FOLLOW_SUCCESS,
+  USER_FOLLOW_FAIL,
+  USER_UNFOLLOW_REQUEST,
+  USER_UNFOLLOW_SUCCESS,
+  USER_UNFOLLOW_FAIL,
 } from '../constants/userConstants';
 
 export const userLoginReducer = (state = { userInfo: null }, action) => {
@@ -55,14 +58,26 @@ export const userDetailsProfileReducer = (state = { user: {} }, action) => {
   }
 };
 
-export const userDetailsPostsReducer = (state = { user: {} }, action) => {
+export const userFollowReducer = (state = {}, action) => {
   switch (action.type) {
-    case USER_DETAILS_POSTS_GET_REQUEST:
+    case USER_FOLLOW_REQUEST:
       return { loading: true };
-    case USER_DETAILS_POSTS_GET_SUCCESS:
-      const { likedPosts, savedPosts, posts } = action.payload;
-      return { loading: false, posts, savedPosts, likedPosts };
-    case USER_DETAILS_POSTS_GET_FAIL:
+    case USER_FOLLOW_SUCCESS:
+      return { loading: false, success: true };
+    case USER_FOLLOW_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const userUnfollowReducer = (state = {}, action) => {
+  switch (action.type) {
+    case USER_UNFOLLOW_REQUEST:
+      return { loading: true };
+    case USER_UNFOLLOW_SUCCESS:
+      return { loading: false, success: true };
+    case USER_UNFOLLOW_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;

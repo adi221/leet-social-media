@@ -10,9 +10,12 @@ import {
   USER_DETAILS_PROFILE_GET_REQUEST,
   USER_DETAILS_PROFILE_GET_SUCCESS,
   USER_DETAILS_PROFILE_GET_FAIL,
-  USER_DETAILS_POSTS_GET_REQUEST,
-  USER_DETAILS_POSTS_GET_SUCCESS,
-  USER_DETAILS_POSTS_GET_FAIL,
+  USER_FOLLOW_REQUEST,
+  USER_FOLLOW_SUCCESS,
+  USER_FOLLOW_FAIL,
+  USER_UNFOLLOW_REQUEST,
+  USER_UNFOLLOW_SUCCESS,
+  USER_UNFOLLOW_FAIL,
 } from '../constants/userConstants';
 
 export const login = (email, password) => async dispatch => {
@@ -91,14 +94,52 @@ export const getUserProfileDetails = username => async dispatch => {
   }
 };
 
-export const getUserPostsDetails = username => async dispatch => {
+export const followUser = username => async (dispatch, getState) => {
   try {
-    dispatch({ type: USER_DETAILS_PROFILE_GET_REQUEST });
-    const { data } = await axios.get(`/api/users/posts/${username}`);
-    dispatch({ type: USER_DETAILS_PROFILE_GET_SUCCESS, payload: data });
+    dispatch({ type: USER_FOLLOW_REQUEST });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    await axios.put(`/api/users/follow/${username}`, {}, config);
+    dispatch({ type: USER_FOLLOW_SUCCESS });
   } catch (error) {
     dispatch({
-      type: USER_DETAILS_PROFILE_GET_FAIL,
+      type: USER_FOLLOW_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const unfollowUser = username => async (dispatch, getState) => {
+  try {
+    dispatch({ type: USER_UNFOLLOW_REQUEST });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    await axios.put(`/api/users/unfollow/${username}`, {}, config);
+    dispatch({ type: USER_UNFOLLOW_SUCCESS });
+  } catch (error) {
+    dispatch({
+      type: USER_UNFOLLOW_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

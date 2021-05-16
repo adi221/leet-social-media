@@ -7,6 +7,10 @@ const followingSchema = {
     required: true,
     ref: 'User',
   },
+  username: {
+    required: true,
+    type: String,
+  },
 };
 
 const followersSchema = {
@@ -14,6 +18,10 @@ const followersSchema = {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: 'User',
+  },
+  username: {
+    required: true,
+    type: String,
   },
 };
 
