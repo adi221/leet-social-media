@@ -130,7 +130,7 @@ nav {
   top: 0;
   width: 100%;
   border-bottom: 1px solid #dbdbdb;
-  z-index: 900;
+  z-index: 5;
   background-color: var(--clr-white);
 }
 
@@ -346,6 +346,8 @@ div.ReactTags__selected a.ReactTags__remove {
   width: 740px;
   margin: 2rem 0;
   background-color: var(--clr-white);
+  min-height: 1002px;
+  position: relative;
 }
 
 .single-post > * {
@@ -354,6 +356,8 @@ div.ReactTags__selected a.ReactTags__remove {
 
 .single-post > img {
   padding: 0;
+  width: 740px;
+  height: 740px;
 }
 
 .single-post:first-child {
@@ -619,6 +623,31 @@ div.ReactTags__selected a.ReactTags__remove {
   justify-self: start;
   margin: 1rem 1.5rem;
   width: 100px;
+}
+
+/* Modal */
+
+.modal {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: var(--radius);
+  width: 420px;
+  transition: var(--transition);
+  z-index: 100;
+  background-color: var(--clr-white);
+  flex-direction: column;
+}
+
+.overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 10;
 }
 
 /* Loader */

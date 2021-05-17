@@ -6,6 +6,7 @@ import Tags from './Tags';
 import Comments from './Comments';
 import Loader from './Loader';
 import EditProfile from './settings/EditProfile';
+import EditImageProfile from './settings/EditImageProfile';
 import ChangePassword from './settings/ChangePassword';
 
 export {
@@ -18,4 +19,5 @@ export {
   Loader,
   EditProfile,
   ChangePassword,
+  EditImageProfile,
 };

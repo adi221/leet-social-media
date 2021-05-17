@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import moment from 'moment';
 import { BsThreeDots } from 'react-icons/bs';
@@ -10,50 +10,16 @@ import {
   FaRegComment,
   FaRegBookmark,
 } from 'react-icons/fa';
-import { Tags, Comments, Loader } from '../components';
-import { ErrorPage } from '../pages';
+import { Tags, Comments } from '../components';
+
+import { likePost, commentPost } from '../actions/postActions';
 
 const defaultImage =
   'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/600px-No_image_available.svg.png';
 
-const SinglePost = ({ uniqueId }) => {
-  const [post, setPost] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-  const [successAction, setSuccessAction] = useState(false);
-  const [userImage, setUserImage] = useState(defaultImage);
-  const [isLiked, setIsLiked] = useState(false);
-  const [addedComment, setAddedComment] = useState('');
-  const commentRef = useRef(null);
-
-  const getUserData = async id => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get(`/api/posts/${id}`);
-      setPost(data);
-      console.log(data);
-    } catch (error) {
-      setError(true);
-    }
-    setLoading(false);
-  };
-
-  const getUserImage = async username => {
-    const {
-      data: { profileImage },
-    } = await axios.get(`/api/users/post/${username}`);
-
-    setUserImage(profileImage);
-  };
-
-  useEffect(() => {
-    getUserData(uniqueId);
-    if (successAction) {
-      setSuccessAction(false);
-    }
-  }, [uniqueId, successAction]);
-
+const SinglePost = ({ post }) => {
   const {
+    _id,
     tags,
     numLikes,
     numComments,
@@ -64,12 +30,29 @@ const SinglePost = ({ uniqueId }) => {
     comments,
     createdAt,
   } = post;
+  const [userImage, setUserImage] = useState(defaultImage);
+  const [addedComment, setAddedComment] = useState('');
 
-  useEffect(() => {
-    getUserImage(username);
-  }, [username]);
+  const commentRef = useRef(null);
+
+  // So I can render again without rerendering all the posts
+  const [isLiked, setIsLiked] = useState(false);
+  // const [totalComments, setTotalComments] = useState(numComments);
+  // const [totalLikes, setTotalLikes] = useState(numLikes);
+  // const [allLikes, setAllLikes] = useState(likes);
+  // const [allComments, setAllComments] = useState(comments);
 
   const { userInfo } = useSelector(state => state.userLogin);
+
+  const dispatch = useDispatch();
+
+  const getUserImage = async username => {
+    const {
+      data: { profileImage },
+    } = await axios.get(`/api/users/post/${username}`);
+
+    setUserImage(profileImage);
+  };
 
   useEffect(() => {
     const likedOrNot =
@@ -77,53 +60,19 @@ const SinglePost = ({ uniqueId }) => {
     setIsLiked(likedOrNot);
   }, [likes, userInfo, numLikes]);
 
-  const likeHandler = async () => {
-    try {
-      setLoading(true);
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
-      await axios.post(`/api/posts/like/${uniqueId}`, {}, config);
-      setSuccessAction(true);
-    } catch (error) {
-      setError(true);
-    }
-    setLoading(false);
+  useEffect(() => {
+    getUserImage(username);
+  }, [username]);
+
+  const likeHandler = () => {
+    dispatch(likePost(_id));
   };
 
-  const commentHandler = async e => {
+  const commentHandler = e => {
     e.preventDefault();
-    try {
-      setLoading(true);
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
-      await axios.post(
-        `/api/posts/comment/${uniqueId}`,
-        { comment: addedComment },
-        config
-      );
-      setSuccessAction(true);
-    } catch (error) {
-      setError(true);
-    }
-    setLoading(false);
+    dispatch(commentPost(_id, addedComment));
     setAddedComment('');
   };
-
-  if (loading)
-    return (
-      <article className='single-post is-bordered'>
-        <Loader />
-      </article>
-    );
-  if (error) return <ErrorPage />;
 
   return (
     <article className='single-post is-bordered'>

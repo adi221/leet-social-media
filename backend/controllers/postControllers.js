@@ -7,7 +7,10 @@ import User from '../models/userModel.js';
 // @access User
 const getPosts = asyncHandler(async (req, res) => {
   const posts = await Post.find({}).sort({ createdAt: -1 });
-  res.json(posts);
+  const postsId = posts.map(post => post._id);
+  // [ 60a23419fe5b4a47c4d26d68, 60a233ebfe5b4a47c4d26d66 ]
+  // res.json(posts);
+  res.json(postsId);
 });
 
 // @desc Create a post

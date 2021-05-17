@@ -54,8 +54,6 @@ const authUser = asyncHandler(async (req, res) => {
       email: user.email,
       profileImage: user.profileImage,
       description: user.description,
-      numFollowing: user.numFollowing,
-      numFollowers: user.numFollowers,
       token: generateToken(user._id),
     });
   } else {
@@ -223,6 +221,38 @@ const getUserDetails = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc Get details of user profile
+// @route PUT /api/users/profile
+// @access User
+const updateUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  console.log(req.body);
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.username = req.body.username || user.username;
+    user.email = req.body.email || user.email;
+    user.description = req.body.description || user.description;
+    user.profileImage = req.body.profileImage || user.profileImage;
+    if (req.body.password) {
+      user.password = req.body.password;
+    }
+    const updatedUser = await user.save();
+
+    res.json({
+      _id: updatedUser._id,
+      username: updatedUser.username,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      profileImage: updatedUser.profileImage,
+      description: updatedUser.description,
+      token: generateToken(updatedUser._id),
+    });
+  } else {
+    res.status(404).json({ success: false, message: 'User not found' });
+    throw new Error('User not found');
+  }
+});
+
 export {
   registerUser,
   authUser,
@@ -231,4 +261,5 @@ export {
   followUser,
   unfollowUser,
   getUserDetails,
+  updateUserProfile,
 };
