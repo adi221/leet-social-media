@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { Loader } from '../components';
 import { register } from '../actions/userActions';
 
 const SignUpPage = () => {
   const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
@@ -28,14 +30,16 @@ const SignUpPage = () => {
 
   const submitHandler = e => {
     e.preventDefault();
-    if (!email || !password || !username || !passwordConfirm) {
+    if (!email || !password || !username || !passwordConfirm || !name) {
       return window.alert('Please enter email and password');
     }
     if (password !== passwordConfirm) {
       return window.alert('Password and password confirmation do not match ');
     }
-    dispatch(register(username, email, password));
+    dispatch(register(username, name, email, password));
   };
+
+  if (loading) return <Loader />;
 
   return (
     <div className='page signup-page '>
@@ -51,6 +55,13 @@ const SignUpPage = () => {
         <input
           className='form-control is-bordered'
           type='text'
+          placeholder='Name'
+          value={name}
+          onChange={e => setName(e.target.value)}
+        />
+        <input
+          className='form-control is-bordered'
+          type='email'
           placeholder='Email'
           value={email}
           onChange={e => setEmail(e.target.value)}

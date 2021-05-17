@@ -7,7 +7,7 @@ import Post from '../models/postModel.js';
 // @route POST /api/users
 // @access Public
 const registerUser = asyncHandler(async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, name, email, password } = req.body;
   const userEmailExists = await User.findOne({ email });
   const userNameExists = await User.findOne({ username });
 
@@ -19,12 +19,13 @@ const registerUser = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error('Username already exists');
   }
-  const user = await User.create({ username, email, password });
+  const user = await User.create({ username, name, email, password });
 
   if (user) {
     res.json({
       _id: user._id,
       username: user.username,
+      name: user.name,
       email: user.email,
       profileImage: user.profileImage,
       description: user.description,
@@ -49,6 +50,7 @@ const authUser = asyncHandler(async (req, res) => {
     res.json({
       _id: user._id,
       username: user.username,
+      name: user.name,
       email: user.email,
       profileImage: user.profileImage,
       description: user.description,
@@ -97,6 +99,7 @@ const getUserProfileDetails = asyncHandler(async (req, res) => {
       posts,
       savedPosts,
       likedPosts,
+      name,
     } = user;
 
     const userPosts = [],
@@ -129,6 +132,7 @@ const getUserProfileDetails = asyncHandler(async (req, res) => {
 
     res.json({
       profileImage,
+      name,
       description,
       numFollowers,
       numFollowing,
@@ -210,7 +214,6 @@ const unfollowUser = asyncHandler(async (req, res) => {
 // @access User
 const getUserDetails = asyncHandler(async (req, res) => {
   const { _id } = req.user;
-  console.log(req.user, 'Heyyyyyyyyyy');
   const user = await User.findById(_id);
   if (user) {
     res.json(user);

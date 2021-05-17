@@ -8,6 +8,7 @@ import {
   UploadPage,
   ProfilePage,
   SinglePostPage,
+  ErrorPage,
 } from './pages';
 import { Navbar } from './components';
 
@@ -24,6 +25,7 @@ const App = () => {
           <Route path='/login' component={LoginPage} />
           <Route path='/posts/:username/:id' component={SinglePostPage} />
           <Route path='/' exact component={HomePage} />
+          <Route path='*' component={ErrorPage} />
         </Switch>
       </div>
     </Router>
