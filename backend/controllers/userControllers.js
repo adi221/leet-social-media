@@ -205,6 +205,21 @@ const unfollowUser = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc Get details of user profile
+// @route GET /api/users/
+// @access User
+const getUserDetails = asyncHandler(async (req, res) => {
+  const { _id } = req.user;
+  console.log(req.user, 'Heyyyyyyyyyy');
+  const user = await User.findById(_id);
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(401).json({ success: false, message: 'User not found' });
+    throw new Error('Invalid request');
+  }
+});
+
 export {
   registerUser,
   authUser,
@@ -212,4 +227,5 @@ export {
   getUserProfileDetails,
   followUser,
   unfollowUser,
+  getUserDetails,
 };

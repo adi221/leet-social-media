@@ -517,6 +517,20 @@ div.ReactTags__selected a.ReactTags__remove {
   object-fit: cover;
 }
 
+/* Setting page */
+
+.settings-sidebar {
+  width: 230px;
+}
+
+.settings-sidebar li {
+  width: 100%;
+  padding: 1rem;
+}
+
+.settings-content {
+}
+
 /* Loader */
 .loader-container {
   position: absolute;
