@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { ErrorPage } from '../pages';
 import { SinglePost, HomeSidebar, Loader } from '../components';
 import {
   POST_COMMENT_RESET,
@@ -32,6 +33,7 @@ const HomePage = () => {
   const { posts, loading, error } = postsGet;
 
   if (loading) return <Loader />;
+  if (error) return <ErrorPage />;
 
   return (
     <div className='page home-page'>

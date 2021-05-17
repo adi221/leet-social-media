@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { Loader } from '../components';
 import { login } from '../actions/userActions';
 
 const LoginPage = () => {
@@ -28,6 +29,8 @@ const LoginPage = () => {
     }
     dispatch(login(email, password));
   };
+
+  if (loading) return <Loader />;
 
   return (
     <div className='page login-page '>

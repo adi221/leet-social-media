@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { WithContext as ReactTags } from 'react-tag-input';
+import { ErrorPage } from '../pages';
 import { Loader } from '../components';
 import { POST_CREATE_RESET } from '../constants/postConstants';
 import { createPost } from '../actions/postActions';
@@ -27,6 +28,7 @@ const UploadPage = () => {
   }, [success, dispatch, history]);
 
   if (loading) return <Loader />;
+  if (error) return <ErrorPage />;
 
   const getBase64 = file => {
     return new Promise(resolve => {

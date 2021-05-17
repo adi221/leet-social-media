@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { ErrorPage } from '../pages';
 import { SinglePost, Loader } from '../components';
 import { getSinglePostDetails } from '../actions/postActions';
 
@@ -16,6 +17,7 @@ const SinglePostPage = () => {
   }, [id, dispatch]);
 
   if (loading) return <Loader />;
+  if (error) return <ErrorPage />;
 
   return (
     <div className='single-posy-page page is-flexed'>

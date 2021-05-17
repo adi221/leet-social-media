@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { BsGrid3X3, BsBookmark, BsHeart } from 'react-icons/bs';
+import { ErrorPage } from '../pages';
 import { Loader } from '../components';
 import {
   getUserProfileDetails,
@@ -52,6 +53,7 @@ const ProfilePage = () => {
   }, [userInfo, followers, user]);
 
   if (loading) return <Loader />;
+  if (error) return <ErrorPage />;
 
   const allLists = [userPosts, userLikedPosts, userSavedPosts];
 
