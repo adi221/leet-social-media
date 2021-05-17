@@ -10,7 +10,7 @@ import {
   SinglePostPage,
   ErrorPage,
 } from './pages';
-import { Navbar } from './components';
+import { Navbar, PrivateRoute } from './components';
 
 const App = () => {
   return (
@@ -18,13 +18,16 @@ const App = () => {
       <Navbar />
       <div className='page-container'>
         <Switch>
-          <Route path='/upload' component={UploadPage} />
-          <Route path='/profile/:username' component={ProfilePage} />
-          <Route path='/settings' component={SettingsPage} />
+          <PrivateRoute path='/upload' component={UploadPage} />
+          <PrivateRoute path='/profile/:username' component={ProfilePage} />
+          <PrivateRoute path='/settings' component={SettingsPage} />
           <Route path='/signup' component={SignUpPage} />
           <Route path='/login' component={LoginPage} />
-          <Route path='/posts/:username/:id' component={SinglePostPage} />
-          <Route path='/' exact component={HomePage} />
+          <PrivateRoute
+            path='/posts/:username/:id'
+            component={SinglePostPage}
+          />
+          <PrivateRoute path='/' exact component={HomePage} />
           <Route path='*' component={ErrorPage} />
         </Switch>
       </div>

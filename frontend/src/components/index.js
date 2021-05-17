@@ -8,6 +8,7 @@ import Loader from './Loader';
 import EditProfile from './settings/EditProfile';
 import EditImageProfile from './settings/EditImageProfile';
 import ChangePassword from './settings/ChangePassword';
+import PrivateRoute from './routing/PrivateRoute';
 
 export {
   Navbar,
@@ -20,4 +21,5 @@ export {
   EditProfile,
   ChangePassword,
   EditImageProfile,
+  PrivateRoute,
 };

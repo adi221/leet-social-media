@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ErrorPage } from '../pages';
 import { Loader, EditProfile, EditImageProfile } from '../components';
