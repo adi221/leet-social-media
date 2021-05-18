@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import {
   HomePage,
   LoginPage,
@@ -10,9 +11,11 @@ import {
   SinglePostPage,
   ErrorPage,
 } from './pages';
-import { Navbar, PrivateRoute } from './components';
+import { Navbar, PrivateRoute, RootModal } from './components';
 
 const App = () => {
+  const { isShow } = useSelector(state => state.modal);
+
   return (
     <Router>
       <Navbar />
@@ -31,6 +34,7 @@ const App = () => {
           <Route path='*' component={ErrorPage} />
         </Switch>
       </div>
+      {isShow && <RootModal />}
     </Router>
   );
 };

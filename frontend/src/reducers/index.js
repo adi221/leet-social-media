@@ -13,6 +13,7 @@ import {
   postsGetReducer,
   singlePostGetReducer,
 } from '../reducers/postReducers';
+import { modalReducer } from '../reducers/utilReducers';
 
 const rootReducer = combineReducers({
   userLogin: userLoginReducer,
@@ -24,8 +25,8 @@ const rootReducer = combineReducers({
   userDetails: userDetailsReducer,
   postCreate: postCreateReducer,
   postsGet: postsGetReducer,
-
   singlePostGet: singlePostGetReducer,
+  modal: modalReducer,
 });
 
 export default rootReducer;

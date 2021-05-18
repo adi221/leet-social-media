@@ -232,7 +232,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     user.username = req.body.username || user.username;
     user.email = req.body.email || user.email;
     user.description = req.body.description || user.description;
-    user.profileImage = req.body.profileImage || user.profileImage;
+    user.profileImage = req.body.image || user.profileImage;
     if (req.body.password) {
       user.password = req.body.password;
     }

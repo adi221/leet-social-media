@@ -10,8 +10,8 @@ import {
   FaRegComment,
   FaRegBookmark,
 } from 'react-icons/fa';
-import { Tags, Comments, Loader } from '../components';
-import { ErrorPage } from '../pages';
+import { Tags, Comments, Loader } from '..';
+import { ErrorPage } from '../../pages';
 
 const defaultImage =
   'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/600px-No_image_available.svg.png';

@@ -36,7 +36,7 @@ const SettingsPage = () => {
         <article className='settings-content'>
           <EditImageProfile username={usernameCurr} image={profileImage} />
           <EditProfile
-            defaultSettings={{
+            currentSettings={{
               descriptionCurr,
               nameCurr,
               usernameCurr,

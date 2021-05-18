@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUserProfile } from '../../actions/userActions';
 
-const EditProfile = ({ defaultSettings, onSubmit }) => {
+const EditProfile = ({ currentSettings }) => {
   const { descriptionCurr, nameCurr, usernameCurr, emailCurr } =
-    defaultSettings;
+    currentSettings;
   const [name, setName] = useState(nameCurr);
   const [username, setUsername] = useState(usernameCurr);
   const [description, setDescription] = useState(descriptionCurr);
