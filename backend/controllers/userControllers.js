@@ -29,6 +29,7 @@ const registerUser = asyncHandler(async (req, res) => {
       email: user.email,
       profileImage: user.profileImage,
       description: user.description,
+      savedPosts: user.savedPosts,
       token: generateToken(user._id),
     });
   }
@@ -48,6 +49,7 @@ const authUser = asyncHandler(async (req, res) => {
       email: user.email,
       profileImage: user.profileImage,
       description: user.description,
+      savedPosts: user.savedPosts,
       token: generateToken(user._id),
     });
   } else {
@@ -57,17 +59,17 @@ const authUser = asyncHandler(async (req, res) => {
 });
 
 // @desc Get image of post owner
-// @route POST /api/users/post/:username
+// @route POST /api/users/post/:id
 // @access Public
 const getPostUserImage = asyncHandler(async (req, res) => {
-  const { username } = req.params;
-  const user = await User.findOne({ username });
+  const { id } = req.params;
+  const user = await User.findById(id);
   if (user) {
-    const { profileImage } = user;
-    res.json({ profileImage });
+    const { profileImage, username } = user;
+    res.json({ profileImage, username });
   } else {
     res.status(401);
-    throw new Error('Invalid username');
+    throw new Error('Invalid id');
   }
 });
 
@@ -75,8 +77,8 @@ const getPostUserImage = asyncHandler(async (req, res) => {
 // @route POST /api/users/post/:username
 // @access Public
 const getUserProfileDetails = asyncHandler(async (req, res) => {
-  const { username } = req.params;
-  const user = await User.findOne({ username });
+  const { id } = req.params;
+  const user = await User.findById(id);
   if (user) {
     const {
       profileImage,
@@ -92,6 +94,7 @@ const getUserProfileDetails = asyncHandler(async (req, res) => {
       savedPosts,
       likedPosts,
       name,
+      username,
     } = user;
 
     const userPosts = [],
@@ -136,10 +139,11 @@ const getUserProfileDetails = asyncHandler(async (req, res) => {
       userPosts,
       userLikedPosts,
       userSavedPosts,
+      username,
     });
   } else {
     res.status(401);
-    throw new Error('Invalid username');
+    throw new Error('Invalid id');
   }
 });
 
@@ -202,7 +206,7 @@ const unfollowUser = asyncHandler(async (req, res) => {
 });
 
 // @desc Get details of user profile
-// @route GET /api/users/
+// @route GET /api/users
 // @access User
 const getUserDetails = asyncHandler(async (req, res) => {
   const { _id } = req.user;
@@ -252,7 +256,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 // @access User
 const updateUserPassword = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
-  console.log(req.body);
   if (user) {
     const { newPassword, oldPassword } = req.body;
     if (newPassword && (await user.matchPassword(oldPassword))) {
@@ -279,6 +282,48 @@ const updateUserPassword = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc Save or unsave posts
+// @route PUT /api/users/save/:id
+// @access User
+const addPostToSaved = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { _id } = req.user;
+
+  const post = await Post.findById(id);
+  const user = await User.findById(_id);
+  console.log(user);
+  console.log(user.savedPosts);
+
+  if (post) {
+    const isAlreadySavedIndex = user.savedPosts.findIndex(
+      p => p.post.toString() === id
+    );
+    if (isAlreadySavedIndex > -1) {
+      user.savedPosts.splice(isAlreadySavedIndex, 1);
+      user.numSavedPosts = user.savedPosts.length;
+      await user.save();
+    } else {
+      user.savedPosts.push({ post: id });
+      user.numSavedPosts = user.savedPosts.length;
+      await user.save();
+    }
+
+    res.status(201).json({
+      success: true,
+      savedPosts: user.savedPosts,
+      message: `Post ${
+        isAlreadySavedIndex > -1 ? 'removed' : 'added'
+      } from saved posts`,
+    });
+  } else {
+    res.status(404).json({
+      success: false,
+      message: 'Post not found',
+    });
+    throw new Error('Post was not found');
+  }
+});
+
 export {
   registerUser,
   authUser,
@@ -289,4 +334,5 @@ export {
   getUserDetails,
   updateUserProfile,
   updateUserPassword,
+  addPostToSaved,
 };

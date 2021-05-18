@@ -12,7 +12,7 @@ import {
 
 const ProfilePage = () => {
   const history = useHistory();
-  const { username } = useParams();
+  const { id } = useParams();
   const dispatch = useDispatch();
   const [listIndex, setListIndex] = useState(0);
   const [isFollowing, setIsFollowing] = useState(false);
@@ -22,8 +22,8 @@ const ProfilePage = () => {
   const { success: successUnfollow } = useSelector(state => state.userUnfollow);
 
   useEffect(() => {
-    dispatch(getUserProfileDetails(username));
-  }, [dispatch, username, successFollow, successUnfollow]);
+    dispatch(getUserProfileDetails(id));
+  }, [dispatch, id, successFollow, successUnfollow]);
 
   const { user, loading, error } = useSelector(
     state => state.userDetailsProfile
@@ -42,12 +42,13 @@ const ProfilePage = () => {
     userSavedPosts,
     userLikedPosts,
     profileImage,
+    username,
   } = user;
 
   useEffect(() => {
     if (!followers) return;
     const isUserFollowing = followers.some(
-      follower => follower.username === userInfo.username
+      follower => follower.user === userInfo._id
     );
     setIsFollowing(isUserFollowing);
   }, [userInfo, followers, user]);

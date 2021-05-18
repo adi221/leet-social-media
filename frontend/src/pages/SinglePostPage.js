@@ -22,7 +22,7 @@ const SinglePostPage = () => {
   return (
     <div className='single-posy-page page is-flexed'>
       <div className='page-center'>
-        <SinglePost post={post} />
+        <SinglePost uniqudId={id} />
       </div>
     </div>
   );

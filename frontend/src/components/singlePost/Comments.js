@@ -5,11 +5,11 @@ const Comments = ({ comments }) => {
   return (
     <div className='single-post-comments'>
       {comments.map(c => {
-        const { _id, username, comment } = c;
+        const { _id, username, comment, user } = c;
         return (
           <p key={_id}>
             <Link
-              to={`/profile/${username}`}
+              to={`/profile/${user}`}
               className='bold margin-right16 underline'
             >
               {username}

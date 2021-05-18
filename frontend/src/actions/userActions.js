@@ -25,6 +25,9 @@ import {
   USER_UPDATE_PASSWORD_REQUEST,
   USER_UPDATE_PASSWORD_SUCCESS,
   USER_UPDATE_PASSWORD_FAIL,
+  USER_ADD_SAVED_REQUEST,
+  USER_ADD_SAVED_SUCCESS,
+  USER_ADD_SAVED_FAIL,
 } from '../constants/userConstants';
 
 export const login = (email, password) => async dispatch => {
@@ -87,10 +90,10 @@ export const register = (username, name, email, password) => async dispatch => {
   }
 };
 
-export const getUserProfileDetails = username => async dispatch => {
+export const getUserProfileDetails = id => async dispatch => {
   try {
     dispatch({ type: USER_DETAILS_PROFILE_GET_REQUEST });
-    const { data } = await axios.get(`/api/users/${username}`);
+    const { data } = await axios.get(`/api/users/${id}`);
     dispatch({ type: USER_DETAILS_PROFILE_GET_SUCCESS, payload: data });
   } catch (error) {
     dispatch({

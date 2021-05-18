@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import moment from 'moment';
 import { BsThreeDots } from 'react-icons/bs';
@@ -9,9 +9,11 @@ import {
   FaHeart,
   FaRegComment,
   FaRegBookmark,
+  FaBookmark,
 } from 'react-icons/fa';
 import { Tags, Comments, Loader } from '..';
 import { ErrorPage } from '../../pages';
+import { USER_LOGIN_ADD_SAVED } from '../../constants/userConstants';
 
 const defaultImage =
   'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/600px-No_image_available.svg.png';
@@ -22,9 +24,13 @@ const SinglePost = ({ uniqueId }) => {
   const [error, setError] = useState(false);
   const [successAction, setSuccessAction] = useState(false);
   const [userImage, setUserImage] = useState(defaultImage);
+  const [postUsername, setPostUsername] = useState('');
   const [isLiked, setIsLiked] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
   const [addedComment, setAddedComment] = useState('');
   const commentRef = useRef(null);
+
+  const dispatch = useDispatch();
 
   const getUserData = async id => {
     try {
@@ -38,12 +44,13 @@ const SinglePost = ({ uniqueId }) => {
     setLoading(false);
   };
 
-  const getUserImage = async username => {
+  const getUserImageName = async id => {
     const {
-      data: { profileImage },
-    } = await axios.get(`/api/users/post/${username}`);
+      data: { profileImage, username },
+    } = await axios.get(`/api/users/post/${id}`);
 
     setUserImage(profileImage);
+    setPostUsername(username);
   };
 
   useEffect(() => {
@@ -57,23 +64,29 @@ const SinglePost = ({ uniqueId }) => {
     tags,
     numLikes,
     numComments,
-    username,
     description,
     image,
     likes,
     comments,
     createdAt,
+    user: userId,
+    _id,
   } = post;
 
   useEffect(() => {
-    getUserImage(username);
-  }, [username]);
+    getUserImageName(userId);
+  }, [userId]);
 
   const { userInfo } = useSelector(state => state.userLogin);
 
   useEffect(() => {
+    const savedOrNot = userInfo.savedPosts.some(p => p.post === _id);
+    setIsSaved(savedOrNot);
+  }, [userInfo, _id]);
+
+  useEffect(() => {
     const likedOrNot =
-      numLikes > 0 ? likes.some(like => like.user === userInfo._id) : 0;
+      numLikes > 0 ? likes.some(like => like.user === userInfo._id) : false;
     setIsLiked(likedOrNot);
   }, [likes, userInfo, numLikes]);
 
@@ -89,7 +102,7 @@ const SinglePost = ({ uniqueId }) => {
       await axios.post(`/api/posts/like/${uniqueId}`, {}, config);
       setSuccessAction(true);
     } catch (error) {
-      setError(true);
+      setError(error);
     }
     setLoading(false);
   };
@@ -104,17 +117,41 @@ const SinglePost = ({ uniqueId }) => {
           Authorization: `Bearer ${userInfo.token}`,
         },
       };
-      await axios.post(
+      const data = await axios.post(
         `/api/posts/comment/${uniqueId}`,
         { comment: addedComment },
         config
       );
       setSuccessAction(true);
     } catch (error) {
-      setError(true);
+      setError(error);
     }
     setLoading(false);
     setAddedComment('');
+  };
+
+  const addToSavedHandler = async () => {
+    try {
+      setLoading(true);
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+      const { data } = await axios.post(
+        `/api/users/save/${uniqueId}`,
+        {},
+        config
+      );
+      setSuccessAction(true);
+      console.log(data);
+      console.log('works');
+      dispatch({ type: USER_LOGIN_ADD_SAVED, payload: data.savedPosts });
+    } catch (error) {
+      setError(error);
+    }
+    setLoading(false);
   };
 
   if (loading)
@@ -129,9 +166,9 @@ const SinglePost = ({ uniqueId }) => {
     <article className='single-post is-bordered'>
       <header className='single-post-header'>
         <div className='is-flexed '>
-          <img src={userImage} alt={username} />
-          <Link to={`/profile/${username}`} className='bold underline'>
-            {username}
+          <img src={userImage} alt={postUsername} />
+          <Link to={`/profile/${userId}`} className='bold underline'>
+            {postUsername}
           </Link>
         </div>
         <BsThreeDots className='single-icon' />
@@ -156,16 +193,20 @@ const SinglePost = ({ uniqueId }) => {
             className='single-icon'
           />
         </div>
-        <FaRegBookmark className='single-icon' />
+        {isSaved ? (
+          <FaBookmark className='single-icon' onClick={addToSavedHandler} />
+        ) : (
+          <FaRegBookmark className='single-icon' onClick={addToSavedHandler} />
+        )}
       </div>
       <div className='single-post-likes bold'>{numLikes} likes</div>
       <div className='single-post-description'>
         <p>
           <Link
-            to={`/profile/${username}`}
+            to={`/profile/${userId}`}
             className='bold margin-right16 underline'
           >
-            {username}
+            {postUsername}
           </Link>
           {description}
         </p>

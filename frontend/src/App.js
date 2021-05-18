@@ -22,7 +22,7 @@ const App = () => {
       <div className='page-container'>
         <Switch>
           <PrivateRoute path='/upload' component={UploadPage} />
-          <PrivateRoute path='/profile/:username' component={ProfilePage} />
+          <PrivateRoute path='/profile/:id' component={ProfilePage} />
           <PrivateRoute path='/settings' component={SettingsPage} />
           <Route path='/signup' component={SignUpPage} />
           <Route path='/login' component={LoginPage} />

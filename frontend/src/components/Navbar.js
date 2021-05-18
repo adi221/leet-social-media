@@ -56,7 +56,7 @@ const Navbar = () => {
                     onMouseLeave={hideList}
                   >
                     <li className='dropdown-item'>
-                      <Link to={`/profile/${userInfo.username}`}>Profile</Link>
+                      <Link to={`/profile/${userInfo._id}`}>Profile</Link>
                     </li>
                     <li className='dropdown-item'>
                       <Link to='/settings'>Settings</Link>
