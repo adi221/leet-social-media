@@ -11,9 +11,6 @@ const EditProfile = ({ currentSettings }) => {
   const [email, setEmail] = useState(emailCurr);
 
   const dispatch = useDispatch();
-  const { success, loading, error } = useSelector(
-    state => state.userUpdateProfile
-  );
 
   const submitHandler = e => {
     e.preventDefault();

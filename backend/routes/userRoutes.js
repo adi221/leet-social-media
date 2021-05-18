@@ -8,6 +8,7 @@ import {
   unfollowUser,
   getUserDetails,
   updateUserProfile,
+  updateUserPassword,
 } from '../controllers/userControllers.js';
 import { protect } from '../middleware/authMiddleware.js';
 
@@ -17,6 +18,7 @@ router.route('/').post(registerUser);
 router.route('/settings').put(protect, getUserDetails);
 router.route('/login').post(authUser);
 router.route('/profile').put(protect, updateUserProfile);
+router.route('/profile/password').put(protect, updateUserPassword);
 router.route('/post/:username').get(getPostUserImage);
 router.route('/:username').get(getUserProfileDetails);
 router.route('/follow/:username').put(protect, followUser);

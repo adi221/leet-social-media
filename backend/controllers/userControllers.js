@@ -29,12 +29,6 @@ const registerUser = asyncHandler(async (req, res) => {
       email: user.email,
       profileImage: user.profileImage,
       description: user.description,
-      numFollowing: user.numFollowing,
-      numFollowers: user.numFollowers,
-      numPosts: user.numPosts,
-      posts: user.posts,
-      followers: user.followers,
-      following: user.following,
       token: generateToken(user._id),
     });
   }
@@ -221,7 +215,7 @@ const getUserDetails = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc Get details of user profile
+// @desc Update user profile
 // @route PUT /api/users/profile
 // @access User
 const updateUserProfile = asyncHandler(async (req, res) => {
@@ -253,6 +247,38 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc Update user pasword
+// @route PUT /api/users/profile/password
+// @access User
+const updateUserPassword = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  console.log(req.body);
+  if (user) {
+    const { newPassword, oldPassword } = req.body;
+    if (newPassword && (await user.matchPassword(oldPassword))) {
+      user.password = newPassword;
+    } else {
+      return res
+        .status(401)
+        .json({ success: false, message: 'Old password incorrect' });
+    }
+    const updatedUser = await user.save();
+
+    res.json({
+      _id: updatedUser._id,
+      username: updatedUser.username,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      profileImage: updatedUser.profileImage,
+      description: updatedUser.description,
+      token: generateToken(updatedUser._id),
+    });
+  } else {
+    res.status(404).json({ success: false, message: 'User not found' });
+    throw new Error('User not found');
+  }
+});
+
 export {
   registerUser,
   authUser,
@@ -262,4 +288,5 @@ export {
   unfollowUser,
   getUserDetails,
   updateUserProfile,
+  updateUserPassword,
 };

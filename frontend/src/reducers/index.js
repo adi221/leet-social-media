@@ -7,6 +7,7 @@ import {
   userUnfollowReducer,
   userDetailsReducer,
   userUpdateProfileReducer,
+  userUpdatePasswordReducer,
 } from '../reducers/userReducers';
 import {
   postCreateReducer,
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   userFollow: userFollowReducer,
   userUnfollow: userUnfollowReducer,
   userUpdateProfile: userUpdateProfileReducer,
+  userUpdatePassword: userUpdatePasswordReducer,
   userDetails: userDetailsReducer,
   postCreate: postCreateReducer,
   postsGet: postsGetReducer,
