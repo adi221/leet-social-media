@@ -9,6 +9,9 @@ import {
   SINGLE_POST_GET_REQUEST,
   SINGLE_POST_GET_SUCCESS,
   SINGLE_POST_GET_FAIL,
+  POST_DELETE_REQUEST,
+  POST_DELETE_SUCCESS,
+  POST_DELETE_FAIL,
 } from '../constants/postConstants';
 
 export const getPosts = () => async dispatch => {
@@ -61,6 +64,31 @@ export const getSinglePostDetails = id => async dispatch => {
   } catch (error) {
     dispatch({
       type: SINGLE_POST_GET_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const deletePost = (postId, userId) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: POST_DELETE_REQUEST });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    await axios.delete(`/api/posts/delete/${postId}/${userId}`, {}, config);
+    dispatch({ type: POST_DELETE_SUCCESS });
+  } catch (error) {
+    dispatch({
+      type: POST_DELETE_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

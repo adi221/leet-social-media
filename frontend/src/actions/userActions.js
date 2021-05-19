@@ -25,9 +25,6 @@ import {
   USER_UPDATE_PASSWORD_REQUEST,
   USER_UPDATE_PASSWORD_SUCCESS,
   USER_UPDATE_PASSWORD_FAIL,
-  USER_ADD_SAVED_REQUEST,
-  USER_ADD_SAVED_SUCCESS,
-  USER_ADD_SAVED_FAIL,
 } from '../constants/userConstants';
 
 export const login = (email, password) => async dispatch => {
@@ -106,7 +103,7 @@ export const getUserProfileDetails = id => async dispatch => {
   }
 };
 
-export const followUser = username => async (dispatch, getState) => {
+export const followUser = userId => async (dispatch, getState) => {
   try {
     dispatch({ type: USER_FOLLOW_REQUEST });
     const {
@@ -120,7 +117,7 @@ export const followUser = username => async (dispatch, getState) => {
       },
     };
 
-    await axios.put(`/api/users/follow/${username}`, {}, config);
+    await axios.put(`/api/users/follow/${userId}`, {}, config);
     dispatch({ type: USER_FOLLOW_SUCCESS });
   } catch (error) {
     dispatch({
@@ -133,7 +130,7 @@ export const followUser = username => async (dispatch, getState) => {
   }
 };
 
-export const unfollowUser = username => async (dispatch, getState) => {
+export const unfollowUser = userId => async (dispatch, getState) => {
   try {
     dispatch({ type: USER_UNFOLLOW_REQUEST });
     const {
@@ -147,7 +144,7 @@ export const unfollowUser = username => async (dispatch, getState) => {
       },
     };
 
-    await axios.put(`/api/users/unfollow/${username}`, {}, config);
+    await axios.put(`/api/users/unfollow/${userId}`, {}, config);
     dispatch({ type: USER_UNFOLLOW_SUCCESS });
   } catch (error) {
     dispatch({

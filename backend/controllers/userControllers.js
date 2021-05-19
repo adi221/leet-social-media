@@ -30,6 +30,7 @@ const registerUser = asyncHandler(async (req, res) => {
       profileImage: user.profileImage,
       description: user.description,
       savedPosts: user.savedPosts,
+      following: user.following,
       token: generateToken(user._id),
     });
   }
@@ -50,6 +51,7 @@ const authUser = asyncHandler(async (req, res) => {
       profileImage: user.profileImage,
       description: user.description,
       savedPosts: user.savedPosts,
+      following: user.following,
       token: generateToken(user._id),
     });
   } else {
@@ -148,11 +150,15 @@ const getUserProfileDetails = asyncHandler(async (req, res) => {
 });
 
 // @desc Follow user & increase your own following
-// @route POST /api/users/follow/:username
+// @route POST /api/users/follow/:id
 // @access Public
 const followUser = asyncHandler(async (req, res) => {
-  const { username } = req.params;
-  const followedUser = await User.findOne({ username });
+  const { id } = req.params;
+  if (id === req.user._id) {
+    res.status(401).send('User cannot follow himself');
+    throw new Error('User cannot follow himself');
+  }
+  const followedUser = await User.findById(id);
   const followingUser = await User.findById(req.user._id);
 
   if (followedUser && followingUser) {
@@ -177,12 +183,16 @@ const followUser = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc Follow user & increase your own following
-// @route POST /api/users/follow/:username
+// @desc Unollow user & remove from your own following
+// @route POST /api/users/follow/:id
 // @access Public
 const unfollowUser = asyncHandler(async (req, res) => {
-  const { username } = req.params;
-  const unFollowedUser = await User.findOne({ username });
+  const { id } = req.params;
+  if (id === req.user._id) {
+    res.status(401).send('User cannot follow himself');
+    throw new Error('User cannot follow himself');
+  }
+  const unFollowedUser = await User.findById(id);
   const unFollowingUser = await User.findById(req.user._id);
 
   if (unFollowedUser && unFollowingUser) {
@@ -310,7 +320,17 @@ const addPostToSaved = asyncHandler(async (req, res) => {
 
     res.status(201).json({
       success: true,
-      savedPosts: user.savedPosts,
+      userInfo: {
+        _id: user._id,
+        username: user.username,
+        name: user.name,
+        email: user.email,
+        profileImage: user.profileImage,
+        description: user.description,
+        savedPosts: user.savedPosts,
+        following: user.following,
+        token: generateToken(user._id),
+      },
       message: `Post ${
         isAlreadySavedIndex > -1 ? 'removed' : 'added'
       } from saved posts`,

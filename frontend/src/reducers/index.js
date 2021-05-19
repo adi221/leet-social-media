@@ -13,6 +13,7 @@ import {
   postCreateReducer,
   postsGetReducer,
   singlePostGetReducer,
+  postDeleteReducer,
 } from '../reducers/postReducers';
 import { modalReducer } from '../reducers/utilReducers';
 
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   userDetails: userDetailsReducer,
   postCreate: postCreateReducer,
   postsGet: postsGetReducer,
+  postDelete: postDeleteReducer,
   singlePostGet: singlePostGetReducer,
   modal: modalReducer,
 });

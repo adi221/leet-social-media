@@ -3,7 +3,6 @@ import {
   USER_LOGIN_SUCCESS,
   USER_LOGIN_FAIL,
   USER_LOGOUT,
-  USER_LOGIN_ADD_SAVED,
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
   USER_REGISTER_FAIL,
@@ -13,9 +12,11 @@ import {
   USER_FOLLOW_REQUEST,
   USER_FOLLOW_SUCCESS,
   USER_FOLLOW_FAIL,
+  USER_FOLLOW_RESET,
   USER_UNFOLLOW_REQUEST,
   USER_UNFOLLOW_SUCCESS,
   USER_UNFOLLOW_FAIL,
+  USER_UNFOLLOW_RESET,
   USER_DETAILS_GET_REQUEST,
   USER_DETAILS_GET_SUCCESS,
   USER_DETAILS_GET_FAIL,
@@ -32,18 +33,13 @@ import {
 export const userLoginReducer = (state = { userInfo: null }, action) => {
   switch (action.type) {
     case USER_LOGIN_REQUEST:
-      return { loading: true };
+      return { ...state, loading: true };
     case USER_LOGIN_SUCCESS:
       return { loading: false, userInfo: action.payload };
     case USER_LOGIN_FAIL:
       return { loading: false, error: action.payload };
     case USER_LOGOUT:
       return {};
-    case USER_LOGIN_ADD_SAVED:
-      return {
-        loading: false,
-        userInfo: { ...state.userInfo, savedPosts: action.payload },
-      };
     default:
       return state;
   }
@@ -83,6 +79,8 @@ export const userFollowReducer = (state = {}, action) => {
       return { loading: false, success: true };
     case USER_FOLLOW_FAIL:
       return { loading: false, error: action.payload };
+    case USER_FOLLOW_RESET:
+      return {};
     default:
       return state;
   }
@@ -96,6 +94,8 @@ export const userUnfollowReducer = (state = {}, action) => {
       return { loading: false, success: true };
     case USER_UNFOLLOW_FAIL:
       return { loading: false, error: action.payload };
+    case USER_UNFOLLOW_RESET:
+      return {};
     default:
       return state;
   }

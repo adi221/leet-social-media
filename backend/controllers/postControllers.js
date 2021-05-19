@@ -118,4 +118,33 @@ const getPostDetails = asyncHandler(async (req, res) => {
   }
 });
 
-export { getPosts, createPost, commentPost, likePost, getPostDetails };
+// @desc Delete single post
+// @route GET /api/posts/delete/:id
+// @access User
+const deletePost = asyncHandler(async (req, res) => {
+  const { postId, userId } = req.params;
+  const post = await Post.findById(postId);
+  const user = await User.findById(userId);
+
+  if (post) {
+    await post.remove();
+    // user.posts.filter(post => post.post !== postId);
+    user.posts.pull({ post: postId });
+    user.numPosts = user.posts.length;
+    await user.save();
+    console.log(user);
+    res.json({ success: true, message: 'Post was removed' });
+  } else {
+    res.status(404).json({ success: false, message: 'Post was not found' });
+    throw new Error('Post was not found');
+  }
+});
+
+export {
+  getPosts,
+  createPost,
+  commentPost,
+  likePost,
+  getPostDetails,
+  deletePost,
+};

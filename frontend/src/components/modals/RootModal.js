@@ -10,7 +10,7 @@ const MODAL_COMPONENTS = {
 };
 
 const RootModal = () => {
-  const { isShow, modalType } = useSelector(state => state.modal);
+  const { isShow, modalType, modalProps } = useSelector(state => state.modal);
   const dispatch = useDispatch();
 
   if (!isShow) return null;
@@ -24,7 +24,7 @@ const RootModal = () => {
   return (
     <>
       <div className='modal is-flexed'>
-        <SpecificModal />
+        <SpecificModal {...modalProps} />
       </div>
       <div className='overlay' onClick={closeModal}></div>
     </>

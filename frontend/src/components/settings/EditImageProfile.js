@@ -8,7 +8,7 @@ const EditImageProfile = ({ image, username }) => {
   const openModalHandler = () => {
     dispatch({
       type: SHOW_MODAL,
-      payload: { isShow: true, modalType: 'EDIT_PROFILE_IMAGE' },
+      payload: { modalType: 'EDIT_PROFILE_IMAGE', modalProps: {} },
     });
   };
 

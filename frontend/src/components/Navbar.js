@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { IoIosArrowDown } from 'react-icons/io';
+import { IoIosSettings, IoIosPerson } from 'react-icons/io';
 import { SearchBar } from '../components';
 import logo from '../assets/leet-logo.png';
 import { logout } from '../actions/userActions';
@@ -44,22 +44,28 @@ const Navbar = () => {
               </button>
               <div className='dropdown'>
                 <button
-                  className='dropdown-toggle is-bordered is-flexed'
+                  className='dropdown-toggle is-flexed'
                   onMouseOver={displayList}
                 >
-                  <IoIosArrowDown />
+                  <img src={userInfo.profileImage} alt={userInfo.username} />
                 </button>
                 {showSettings && (
                   <ul
-                    className='dropdown-content is-bordered '
+                    className='dropdown-content  '
                     onMouseOver={displayList}
                     onMouseLeave={hideList}
                   >
-                    <li className='dropdown-item'>
-                      <Link to={`/profile/${userInfo._id}`}>Profile</Link>
+                    <li className='dropdown-item '>
+                      <Link to={`/profile/${userInfo._id}`}>
+                        {' '}
+                        <IoIosPerson /> Profile
+                      </Link>
                     </li>
-                    <li className='dropdown-item'>
-                      <Link to='/settings'>Settings</Link>
+                    <li className='dropdown-item '>
+                      <Link to='/settings'>
+                        {' '}
+                        <IoIosSettings /> Settings
+                      </Link>
                     </li>
                   </ul>
                 )}

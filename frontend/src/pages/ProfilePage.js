@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { BsGrid3X3, BsBookmark, BsHeart } from 'react-icons/bs';
 import { ErrorPage } from '../pages';
@@ -59,9 +59,7 @@ const ProfilePage = () => {
   const allLists = [userPosts, userLikedPosts, userSavedPosts];
 
   const followHandler = () => {
-    isFollowing
-      ? dispatch(unfollowUser(username))
-      : dispatch(followUser(username));
+    isFollowing ? dispatch(unfollowUser(id)) : dispatch(followUser(id));
   };
 
   const imgHandler = (username, id) => {
@@ -76,10 +74,18 @@ const ProfilePage = () => {
           <section className='profile-page-header-content'>
             <div className='profile-page-header-heading is-flexed'>
               <h1 className='margin-right32'>{username}</h1>
-              {userInfo.username !== username && (
+              {userInfo.username !== username ? (
                 <button className='button is-primary' onClick={followHandler}>
                   {isFollowing ? 'Unfollow' : 'Follow'}
                 </button>
+              ) : (
+                <Link
+                  to='/settings'
+                  className='button is-light'
+                  onClick={followHandler}
+                >
+                  Edit Profile
+                </Link>
               )}
             </div>
             <div className='profile-page-header-follow is-flexed'>

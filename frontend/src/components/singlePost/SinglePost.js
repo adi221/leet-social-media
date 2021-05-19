@@ -13,7 +13,8 @@ import {
 } from 'react-icons/fa';
 import { Tags, Comments, Loader } from '..';
 import { ErrorPage } from '../../pages';
-import { USER_LOGIN_ADD_SAVED } from '../../constants/userConstants';
+import { USER_LOGIN_SUCCESS } from '../../constants/userConstants';
+import { SHOW_MODAL } from '../../constants/utilConstants';
 
 const defaultImage =
   'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/600px-No_image_available.svg.png';
@@ -32,7 +33,7 @@ const SinglePost = ({ uniqueId }) => {
 
   const dispatch = useDispatch();
 
-  const getUserData = async id => {
+  const getPostData = async id => {
     try {
       setLoading(true);
       const { data } = await axios.get(`/api/posts/${id}`);
@@ -54,7 +55,7 @@ const SinglePost = ({ uniqueId }) => {
   };
 
   useEffect(() => {
-    getUserData(uniqueId);
+    getPostData(uniqueId);
     if (successAction) {
       setSuccessAction(false);
     }
@@ -70,19 +71,18 @@ const SinglePost = ({ uniqueId }) => {
     comments,
     createdAt,
     user: userId,
-    _id,
+    _id: postId,
+    username,
   } = post;
-
-  useEffect(() => {
-    getUserImageName(userId);
-  }, [userId]);
 
   const { userInfo } = useSelector(state => state.userLogin);
 
   useEffect(() => {
-    const savedOrNot = userInfo.savedPosts.some(p => p.post === _id);
+    getUserImageName(userId);
+    const savedOrNot =
+      userInfo.savedPosts && userInfo.savedPosts.some(p => p.post === uniqueId);
     setIsSaved(savedOrNot);
-  }, [userInfo, _id]);
+  }, [userId, uniqueId, userInfo]);
 
   useEffect(() => {
     const likedOrNot =
@@ -117,7 +117,7 @@ const SinglePost = ({ uniqueId }) => {
           Authorization: `Bearer ${userInfo.token}`,
         },
       };
-      const data = await axios.post(
+      await axios.post(
         `/api/posts/comment/${uniqueId}`,
         { comment: addedComment },
         config
@@ -145,13 +145,22 @@ const SinglePost = ({ uniqueId }) => {
         config
       );
       setSuccessAction(true);
-      console.log(data);
-      console.log('works');
-      dispatch({ type: USER_LOGIN_ADD_SAVED, payload: data.savedPosts });
+      dispatch({ type: USER_LOGIN_SUCCESS, payload: data.userInfo });
+      localStorage.setItem('userInfoLeet', JSON.stringify(data.userInfo));
     } catch (error) {
       setError(error);
     }
     setLoading(false);
+  };
+
+  const openModalHandler = () => {
+    dispatch({
+      type: SHOW_MODAL,
+      payload: {
+        modalType: 'SINGLE_POST',
+        modalProps: { username, postId, userId },
+      },
+    });
   };
 
   if (loading)
@@ -171,7 +180,7 @@ const SinglePost = ({ uniqueId }) => {
             {postUsername}
           </Link>
         </div>
-        <BsThreeDots className='single-icon' />
+        <BsThreeDots className='single-icon' onClick={openModalHandler} />
       </header>
       <img className='width100' src={image} alt={description} />
       <div className='single-post-btns is-flexed '>

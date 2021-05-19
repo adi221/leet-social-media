@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { CLOSE_MODAL } from '../../constants/utilConstants';
 import { updateUserProfile } from '../../actions/userActions';
 
@@ -54,8 +54,10 @@ const EditImageModal = () => {
             Upload Photo
           </label>
         </li>
-        <li className='red bold'>
-          <button onClick={removeHandler}>Remove Current Photo</button>
+        <li>
+          <button className='red bold' onClick={removeHandler}>
+            Remove Current Photo
+          </button>
         </li>
         <li>
           <button onClick={closeModal}> Cancel</button>

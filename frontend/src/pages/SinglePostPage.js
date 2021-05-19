@@ -1,28 +1,14 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { ErrorPage } from '../pages';
-import { SinglePost, Loader } from '../components';
-import { getSinglePostDetails } from '../actions/postActions';
+import { SinglePost } from '../components';
 
 const SinglePostPage = () => {
   const { id } = useParams();
-  console.log(id);
-  const dispatch = useDispatch();
-
-  const { post, error, loading } = useSelector(state => state.singlePostGet);
-
-  useEffect(() => {
-    dispatch(getSinglePostDetails(id));
-  }, [id, dispatch]);
-
-  if (loading) return <Loader />;
-  if (error) return <ErrorPage />;
 
   return (
-    <div className='single-posy-page page is-flexed'>
+    <div className='single-post-page page is-flexed'>
       <div className='page-center'>
-        <SinglePost uniqudId={id} />
+        <SinglePost uniqueId={id} />
       </div>
     </div>
   );

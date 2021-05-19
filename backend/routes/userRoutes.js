@@ -22,8 +22,8 @@ router.route('/profile').put(protect, updateUserProfile);
 router.route('/profile/password').put(protect, updateUserPassword);
 router.route('/post/:id').get(getPostUserImage);
 router.route('/:id').get(getUserProfileDetails);
-router.route('/follow/:username').put(protect, followUser);
-router.route('/unfollow/:username').put(protect, unfollowUser);
+router.route('/follow/:id').put(protect, followUser);
+router.route('/unfollow/:id').put(protect, unfollowUser);
 router.route('/save/:id').post(protect, addPostToSaved);
 
 export default router;
