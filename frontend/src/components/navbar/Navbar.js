@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { IoIosSettings, IoIosPerson } from 'react-icons/io';
-import { SearchBar } from '../components';
-import logo from '../assets/leet-logo.png';
-import { logout } from '../actions/userActions';
+import { SearchBar } from '../../components';
+import logo from '../../assets/leet-logo.png';
+import { logout } from '../../actions/userActions';
 
 const Navbar = () => {
   const [showSettings, setShowSettings] = useState(false);
@@ -23,6 +23,12 @@ const Navbar = () => {
     dispatch(logout());
     history.push('/login');
   };
+
+  useEffect(() => {
+    document.addEventListener('click', () => {
+      setShowSettings(false);
+    });
+  });
 
   return (
     <nav className='navbar'>

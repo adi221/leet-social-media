@@ -8,6 +8,8 @@ import {
   userDetailsReducer,
   userUpdateProfileReducer,
   userUpdatePasswordReducer,
+  userSuggestionsReducer,
+  userSearchReducer,
 } from '../reducers/userReducers';
 import {
   postCreateReducer,
@@ -26,6 +28,8 @@ const rootReducer = combineReducers({
   userUpdateProfile: userUpdateProfileReducer,
   userUpdatePassword: userUpdatePasswordReducer,
   userDetails: userDetailsReducer,
+  userSuggestions: userSuggestionsReducer,
+  userSearch: userSearchReducer,
   postCreate: postCreateReducer,
   postsGet: postsGetReducer,
   postDelete: postDeleteReducer,

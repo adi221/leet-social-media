@@ -25,6 +25,12 @@ import {
   USER_UPDATE_PASSWORD_REQUEST,
   USER_UPDATE_PASSWORD_SUCCESS,
   USER_UPDATE_PASSWORD_FAIL,
+  USER_SUGGESTIONS_REQUEST,
+  USER_SUGGESTIONS_SUCCESS,
+  USER_SUGGESTIONS_FAIL,
+  USER_SEARCH_REQUEST,
+  USER_SEARCH_SUCCESS,
+  USER_SEARCH_FAIL,
 } from '../constants/userConstants';
 
 export const login = (email, password) => async dispatch => {
@@ -252,3 +258,35 @@ export const updateUserPassword =
       });
     }
   };
+
+export const getUserSuggestions = id => async dispatch => {
+  try {
+    dispatch({ type: USER_SUGGESTIONS_REQUEST });
+    const { data } = await axios.get(`/api/users/suggest/${id}`);
+    dispatch({ type: USER_SUGGESTIONS_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: USER_SUGGESTIONS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const getUserSearch = keyword => async dispatch => {
+  try {
+    dispatch({ type: USER_SEARCH_REQUEST });
+    const { data } = await axios.get(`/api/users?keyword=${keyword}`);
+    dispatch({ type: USER_SEARCH_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: USER_SEARCH_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};

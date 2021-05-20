@@ -12,11 +12,13 @@ const registerUser = asyncHandler(async (req, res) => {
   const userNameExists = await User.findOne({ username });
 
   if (userEmailExists) {
-    res.status(400);
+    res.status(400).json({ success: false, message: 'Email already exists' });
     throw new Error('Email already exists');
   }
   if (userNameExists) {
-    res.status(400);
+    res
+      .status(400)
+      .json({ success: false, message: 'Username already exists' });
     throw new Error('Username already exists');
   }
   const user = await User.create({ username, name, email, password });
@@ -55,7 +57,9 @@ const authUser = asyncHandler(async (req, res) => {
       token: generateToken(user._id),
     });
   } else {
-    res.status(401);
+    res
+      .status(400)
+      .json({ success: false, message: 'Invalid email or password' });
     throw new Error('Invalid email or password');
   }
 });
@@ -70,7 +74,7 @@ const getPostUserImage = asyncHandler(async (req, res) => {
     const { profileImage, username } = user;
     res.json({ profileImage, username });
   } else {
-    res.status(401);
+    res.status(401).json({ success: false, message: 'Invalid Id' });
     throw new Error('Invalid id');
   }
 });
@@ -144,7 +148,7 @@ const getUserProfileDetails = asyncHandler(async (req, res) => {
       username,
     });
   } else {
-    res.status(401);
+    res.status(401).json({ success: false, message: 'User not found' });
     throw new Error('Invalid id');
   }
 });
@@ -155,7 +159,9 @@ const getUserProfileDetails = asyncHandler(async (req, res) => {
 const followUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
   if (id === req.user._id) {
-    res.status(401).send('User cannot follow himself');
+    res
+      .status(401)
+      .json({ success: false, message: 'User cannot follow himself' });
     throw new Error('User cannot follow himself');
   }
   const followedUser = await User.findById(id);
@@ -178,7 +184,7 @@ const followUser = asyncHandler(async (req, res) => {
 
     res.status(200).json({ success: true });
   } else {
-    res.status(401).send('Invalid username');
+    res.status(401).json({ success: false, message: 'User not found' });
     throw new Error('Invalid username');
   }
 });
@@ -344,6 +350,38 @@ const addPostToSaved = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc Get user suggestions to follow
+// @route GET /api/users/suggest
+// @access User
+const getUserSuggestions = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const users = await User.find({ _id: { $ne: id } }).limit(5);
+  const updatedUsers = users.map(user => {
+    const { _id, name, username, profileImage } = user;
+    return { _id, name, username, profileImage };
+  });
+  res.json(updatedUsers);
+});
+
+// @desc Get users from search query
+// @route GET /api/users?keyowrd=${keyword}
+// @access User
+const getUserSearch = asyncHandler(async (req, res) => {
+  const { keyword } = req.query;
+  if (!keyword) {
+    res.json({ success: false, message: 'No search query' });
+  }
+  console.log(keyword);
+
+  const key = { username: { $regex: keyword, $options: 'i' } };
+  const users = await User.find({ ...key });
+  const updatedUsers = users.map(user => {
+    const { _id, name, username, profileImage } = user;
+    return { _id, name, username, profileImage };
+  });
+  res.json(updatedUsers);
+});
+
 export {
   registerUser,
   authUser,
@@ -355,4 +393,6 @@ export {
   updateUserProfile,
   updateUserPassword,
   addPostToSaved,
+  getUserSuggestions,
+  getUserSearch,
 };

@@ -90,7 +90,8 @@ const ProfilePage = () => {
             </div>
             <div className='profile-page-header-follow is-flexed'>
               <p className='margin-right64'>
-                <span className='bold'>{numPosts} </span> posts
+                <span className='bold'>{userPosts && userPosts.length} </span>{' '}
+                posts
               </p>
               <p className='margin-right64'>
                 <span className='bold'>{numFollowers} </span> followers

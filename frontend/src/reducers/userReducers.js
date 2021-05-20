@@ -28,6 +28,12 @@ import {
   USER_UPDATE_PASSWORD_SUCCESS,
   USER_UPDATE_PASSWORD_FAIL,
   USER_UPDATE_PASSWORD_RESET,
+  USER_SUGGESTIONS_REQUEST,
+  USER_SUGGESTIONS_SUCCESS,
+  USER_SUGGESTIONS_FAIL,
+  USER_SEARCH_REQUEST,
+  USER_SEARCH_SUCCESS,
+  USER_SEARCH_FAIL,
 } from '../constants/userConstants';
 
 export const userLoginReducer = (state = { userInfo: null }, action) => {
@@ -139,6 +145,32 @@ export const userUpdatePasswordReducer = (state = {}, action) => {
       return { loading: false, error: action.payload };
     case USER_UPDATE_PASSWORD_RESET:
       return {};
+    default:
+      return state;
+  }
+};
+
+export const userSuggestionsReducer = (state = { suggestions: [] }, action) => {
+  switch (action.type) {
+    case USER_SUGGESTIONS_REQUEST:
+      return { loading: false, suggestions: [] };
+    case USER_SUGGESTIONS_SUCCESS:
+      return { loading: false, suggestions: action.payload };
+    case USER_SUGGESTIONS_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const userSearchReducer = (state = { users: [] }, action) => {
+  switch (action.type) {
+    case USER_SEARCH_REQUEST:
+      return { loading: false, users: [] };
+    case USER_SEARCH_SUCCESS:
+      return { loading: false, users: action.payload };
+    case USER_SEARCH_FAIL:
+      return { loading: false, error: action.payload };
     default:
       return state;
   }

@@ -1,5 +1,5 @@
-import Navbar from './Navbar';
-import SearchBar from './SearchBar';
+import Navbar from './navbar/Navbar';
+import SearchBar from './navbar/SearchBar';
 import RootModal from './modals/RootModal';
 import HomeSidebar from './HomeSidebar';
 import SinglePost from './singlePost/SinglePost';
