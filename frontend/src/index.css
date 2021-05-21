@@ -120,7 +120,7 @@ input {
   margin-right: 4rem;
 }
 .underline:hover {
-  text-decoration: underline;
+  text-decoration: underline rgb(38, 38, 38);
 }
 .blue {
   color: var(--clr-primary-1);
@@ -235,7 +235,7 @@ nav {
 }
 
 @media (max-width: 600px) {
-  .search {
+  .search-bar {
     display: none;
   }
 }
@@ -416,9 +416,10 @@ div.ReactTags__selected a.ReactTags__remove {
 /* Single Post */
 .single-post {
   width: 740px;
+  max-width: 90vw;
   margin: 2rem 0;
   background-color: var(--clr-white);
-  min-height: 1002px;
+  height: auto;
   position: relative;
 }
 
@@ -427,8 +428,8 @@ div.ReactTags__selected a.ReactTags__remove {
 }
 
 .single-post > img {
-  width: 740px;
-  height: 740px;
+  width: 100%;
+  height: auto;
   padding: 0.1rem;
 }
 
@@ -794,6 +795,29 @@ div.ReactTags__selected a.ReactTags__remove {
 
 .modal ul li:not(:last-child) {
   border-bottom: 1px solid var(--clr-border-light);
+}
+
+.user-modal-item {
+  display: flex;
+  align-items: center;
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.user-modal-item:hover {
+  background-color: #f7f7f7;
+}
+
+.user-modal-item img {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-modal-item p {
+  font-size: 12px;
+  text-align: left;
 }
 
 .overlay {

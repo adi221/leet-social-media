@@ -67,12 +67,12 @@ const authUser = asyncHandler(async (req, res) => {
 // @desc Get image of post owner
 // @route POST /api/users/post/:id
 // @access Public
-const getPostUserImage = asyncHandler(async (req, res) => {
+const getPostUserDetails = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const user = await User.findById(id);
   if (user) {
-    const { profileImage, username } = user;
-    res.json({ profileImage, username });
+    const { profileImage, username, name, _id } = user;
+    res.json({ profileImage, username, name, _id });
   } else {
     res.status(401).json({ success: false, message: 'Invalid Id' });
     throw new Error('Invalid id');
@@ -307,8 +307,6 @@ const addPostToSaved = asyncHandler(async (req, res) => {
 
   const post = await Post.findById(id);
   const user = await User.findById(_id);
-  console.log(user);
-  console.log(user.savedPosts);
 
   if (post) {
     const isAlreadySavedIndex = user.savedPosts.findIndex(
@@ -371,7 +369,6 @@ const getUserSearch = asyncHandler(async (req, res) => {
   if (!keyword) {
     res.json({ success: false, message: 'No search query' });
   }
-  console.log(keyword);
 
   const key = { username: { $regex: keyword, $options: 'i' } };
   const users = await User.find({ ...key });
@@ -385,7 +382,7 @@ const getUserSearch = asyncHandler(async (req, res) => {
 export {
   registerUser,
   authUser,
-  getPostUserImage,
+  getPostUserDetails,
   getUserProfileDetails,
   followUser,
   unfollowUser,

@@ -12,9 +12,7 @@ const HomeSidebar = () => {
   );
 
   useEffect(() => {
-    if (window.matchMedia('(min-width:1064px)').matches) {
-      dispatch(getUserSuggestions(userInfo._id));
-    }
+    dispatch(getUserSuggestions(userInfo._id));
   }, [dispatch, userInfo]);
 
   if (loading)

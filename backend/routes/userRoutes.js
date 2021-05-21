@@ -2,7 +2,7 @@ import express from 'express';
 import {
   registerUser,
   authUser,
-  getPostUserImage,
+  getPostUserDetails,
   getUserProfileDetails,
   followUser,
   unfollowUser,
@@ -22,7 +22,7 @@ router.route('/settings').put(protect, getUserDetails);
 router.route('/login').post(authUser);
 router.route('/profile').put(protect, updateUserProfile);
 router.route('/profile/password').put(protect, updateUserPassword);
-router.route('/post/:id').get(getPostUserImage);
+router.route('/post/:id').get(getPostUserDetails);
 router.route('/:id').get(getUserProfileDetails);
 router.route('/follow/:id').put(protect, followUser);
 router.route('/unfollow/:id').put(protect, unfollowUser);

@@ -32,6 +32,7 @@ const SinglePost = ({ uniqueId }) => {
   const commentRef = useRef(null);
 
   const dispatch = useDispatch();
+  console.log(post);
 
   const getPostData = async id => {
     try {
@@ -153,6 +154,28 @@ const SinglePost = ({ uniqueId }) => {
     setLoading(false);
   };
 
+  const openLikesModal = async () => {
+    if (likes.length === 0) return;
+    const usersList = [];
+
+    for (const likeUser of likes) {
+      const { data: likeUserData } = await axios.get(
+        `/api/users/post/${likeUser.user}`
+      );
+      if (likeUserData) {
+        usersList.push(likeUserData);
+      }
+    }
+
+    dispatch({
+      type: SHOW_MODAL,
+      payload: {
+        modalType: 'USER_LIST',
+        modalProps: { usersList },
+      },
+    });
+  };
+
   const openModalHandler = () => {
     dispatch({
       type: SHOW_MODAL,
@@ -208,7 +231,13 @@ const SinglePost = ({ uniqueId }) => {
           <FaRegBookmark className='single-icon' onClick={addToSavedHandler} />
         )}
       </div>
-      <div className='single-post-likes bold'>{numLikes} likes</div>
+      <div
+        style={{ cursor: `${likes.length > 0 ? 'pointer' : 'auto'}` }}
+        className='single-post-likes bold'
+        onClick={openLikesModal}
+      >
+        {numLikes} likes
+      </div>
       <div className='single-post-description'>
         <p>
           <Link

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Loader } from '../../components';
 import { getUserSearch } from '../../actions/userActions';
 
 const SearchBar = () => {
@@ -10,7 +9,7 @@ const SearchBar = () => {
   const dispatch = useDispatch();
   const inputRef = useRef();
 
-  const { users, loading, error } = useSelector(state => state.userSearch);
+  const { users } = useSelector(state => state.userSearch);
 
   const queryHandler = e => {
     setQuery(e.target.value);
