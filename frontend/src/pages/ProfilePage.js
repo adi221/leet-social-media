@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
 import { BsGrid3X3, BsBookmark, BsHeart } from 'react-icons/bs';
 import { ErrorPage } from '../pages';
 import { Loader } from '../components';
+import { SHOW_MODAL } from '../constants/utilConstants';
 import {
   getUserProfileDetails,
   followUser,
@@ -33,9 +35,6 @@ const ProfilePage = () => {
     description,
     numFollowers,
     numFollowing,
-    numPosts,
-    numSavedPosts,
-    numLikedPosts,
     following,
     followers,
     userPosts,
@@ -66,6 +65,28 @@ const ProfilePage = () => {
     history.push(`/posts/${username}/${id}`);
   };
 
+  const openFollowingModal = async (users, title) => {
+    if (users.length === 0) return;
+    const usersList = [];
+
+    for (const user of users) {
+      const { data: userData } = await axios.get(
+        `/api/users/post/${user.user}`
+      );
+      if (userData) {
+        usersList.push(userData);
+      }
+    }
+
+    dispatch({
+      type: SHOW_MODAL,
+      payload: {
+        modalType: 'USER_LIST',
+        modalProps: { usersList, title },
+      },
+    });
+  };
+
   return (
     <div className='profile-page page'>
       <div className='page-center'>
@@ -93,10 +114,17 @@ const ProfilePage = () => {
                 <span className='bold'>{userPosts && userPosts.length} </span>{' '}
                 posts
               </p>
-              <p className='margin-right64'>
+              <p
+                className='margin-right64'
+                style={{ cursor: `${numFollowers > 0 ? 'pointer' : 'auto'}` }}
+                onClick={() => openFollowingModal(followers, 'Followers')}
+              >
                 <span className='bold'>{numFollowers} </span> followers
               </p>
-              <p>
+              <p
+                onClick={() => openFollowingModal(following, 'Following')}
+                style={{ cursor: `${numFollowing > 0 ? 'pointer' : 'auto'}` }}
+              >
                 <span className='bold'>{numFollowing} </span> following
               </p>
             </div>

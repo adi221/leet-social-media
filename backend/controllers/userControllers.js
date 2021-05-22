@@ -369,7 +369,6 @@ const getUserSearch = asyncHandler(async (req, res) => {
   if (!keyword) {
     res.json({ success: false, message: 'No search query' });
   }
-
   const key = { username: { $regex: keyword, $options: 'i' } };
   const users = await User.find({ ...key });
   const updatedUsers = users.map(user => {
@@ -377,6 +376,26 @@ const getUserSearch = asyncHandler(async (req, res) => {
     return { _id, name, username, profileImage };
   });
   res.json(updatedUsers);
+});
+
+// @desc Delete user
+// @route DELETE /api/users/:id
+// @access User
+const deleteUser = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  console.log(req.params);
+  res.send(id);
+  // await Promise.all([
+  //   Post.deleteMany({ user: id }),
+  //   User.findOneAndRemove({ _id: id }),
+  // ]);
+  // res.json({ success: true, message: 'User Deleted' });
+  // .then(() => res.json({ success: true, message: 'User Deleted' }))
+  // .catch(err =>
+  //   res
+  //     .status(500)
+  //     .json({ success: false, message: 'Could not delete user ' })
+  // );
 });
 
 export {
@@ -392,4 +411,5 @@ export {
   addPostToSaved,
   getUserSuggestions,
   getUserSearch,
+  deleteUser,
 };

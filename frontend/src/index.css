@@ -22,6 +22,7 @@
   --radius: 4px;
   --max-width: 1180px;
   --transition: all 0.3s linear;
+  --width: clamp(90vw, 90vw, 500px);
 }
 
 /* Global Styles */
@@ -61,11 +62,11 @@ input {
 
 /* Global Classes */
 .page-container {
-  padding: 3.5rem;
+  padding-top: 3.5rem;
 }
 
 .page {
-  padding: 3rem;
+  padding: 3rem 0;
   position: relative;
 }
 
@@ -416,7 +417,7 @@ div.ReactTags__selected a.ReactTags__remove {
 /* Single Post */
 .single-post {
   width: 740px;
-  max-width: 90vw;
+  max-width: var(--width);
   margin: 2rem 0;
   background-color: var(--clr-white);
   height: auto;

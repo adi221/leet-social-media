@@ -171,7 +171,7 @@ const SinglePost = ({ uniqueId }) => {
       type: SHOW_MODAL,
       payload: {
         modalType: 'USER_LIST',
-        modalProps: { usersList },
+        modalProps: { usersList, title: 'Likes' },
       },
     });
   };
