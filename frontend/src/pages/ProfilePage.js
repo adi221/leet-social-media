@@ -58,6 +58,7 @@ const ProfilePage = () => {
   const allLists = [userPosts, userLikedPosts, userSavedPosts];
 
   const followHandler = () => {
+    if (id === userInfo._id) return;
     isFollowing ? dispatch(unfollowUser(id)) : dispatch(followUser(id));
   };
 
@@ -103,7 +104,7 @@ const ProfilePage = () => {
                 <Link
                   to='/settings'
                   className='button is-light'
-                  onClick={followHandler}
+                  onClick={() => followHandler()}
                 >
                   Edit Profile
                 </Link>

@@ -748,7 +748,14 @@ div.ReactTags__selected a.ReactTags__remove {
 .settings-form-control button {
   justify-self: start;
   margin: 1rem 1.5rem;
-  width: 100px;
+  padding: 0.5rem 1rem;
+}
+
+.settings-form-control div {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
 }
 
 /* Modal */
@@ -766,8 +773,17 @@ div.ReactTags__selected a.ReactTags__remove {
   flex-direction: column;
 }
 
-.modal h2 {
-  padding: 1.5rem 1rem 2rem;
+.modal-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  border-bottom: 1px solid #a8a8a8;
+  padding: 1.2rem 1.5rem;
+}
+
+.modal-title svg {
+  vertical-align: middle;
 }
 
 .modal input[type='file'] {

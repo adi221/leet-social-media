@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateUserProfile } from '../../actions/userActions';
+import { updateUserProfile, deleteUser } from '../../actions/userActions';
 
 const EditProfile = ({ currentSettings }) => {
   const { descriptionCurr, nameCurr, usernameCurr, emailCurr } =
@@ -12,9 +12,18 @@ const EditProfile = ({ currentSettings }) => {
 
   const dispatch = useDispatch();
 
+  const { userInfo } = useSelector(state => state.userLogin);
+
   const submitHandler = e => {
     e.preventDefault();
     dispatch(updateUserProfile({ name, username, description, email }));
+  };
+
+  const deleteHandler = () => {
+    let lastConfirmation = window.confirm('Are you sure you want to delete ?');
+    if (lastConfirmation) {
+      dispatch(deleteUser(userInfo._id));
+    }
   };
 
   return (
@@ -64,10 +73,15 @@ const EditProfile = ({ currentSettings }) => {
         />
       </div>
       <div className=' settings-form-control'>
-        <p></p>
-        <button className='button is-primary' type='submit'>
-          Submit
-        </button>
+        <label></label>
+        <div>
+          <button className='button is-primary' type='submit'>
+            Submit
+          </button>
+          <button className='button red is-bordered' onClick={deleteHandler}>
+            Delete account
+          </button>
+        </div>
       </div>
     </form>
   );

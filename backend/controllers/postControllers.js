@@ -128,11 +128,10 @@ const deletePost = asyncHandler(async (req, res) => {
 
   if (post) {
     await post.remove();
-    // user.posts.filter(post => post.post !== postId);
+    // user.posts = user.posts.filter(post => post.post !== postId);
     user.posts.pull({ post: postId });
     user.numPosts = user.posts.length;
     await user.save();
-    console.log(user);
     res.json({ success: true, message: 'Post was removed' });
   } else {
     res.status(404).json({ success: false, message: 'Post was not found' });

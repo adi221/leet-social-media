@@ -383,19 +383,17 @@ const getUserSearch = asyncHandler(async (req, res) => {
 // @access User
 const deleteUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  console.log(req.params);
-  res.send(id);
-  // await Promise.all([
-  //   Post.deleteMany({ user: id }),
-  //   User.findOneAndRemove({ _id: id }),
-  // ]);
-  // res.json({ success: true, message: 'User Deleted' });
-  // .then(() => res.json({ success: true, message: 'User Deleted' }))
-  // .catch(err =>
-  //   res
-  //     .status(500)
-  //     .json({ success: false, message: 'Could not delete user ' })
-  // );
+  Promise.all([
+    Post.deleteMany({ user: id }),
+    User.findOneAndRemove({ _id: id }),
+  ])
+    .then(() => res.json({ success: true, message: 'User Deleted' }))
+    .catch(err =>
+      res.status(500).json({
+        success: false,
+        message: 'Server error',
+      })
+    );
 });
 
 export {

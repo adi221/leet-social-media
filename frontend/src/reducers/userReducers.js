@@ -34,6 +34,9 @@ import {
   USER_SEARCH_REQUEST,
   USER_SEARCH_SUCCESS,
   USER_SEARCH_FAIL,
+  USER_DELETE_REQUEST,
+  USER_DELETE_SUCCESS,
+  USER_DELETE_FAIL,
 } from '../constants/userConstants';
 
 export const userLoginReducer = (state = { userInfo: null }, action) => {
@@ -170,6 +173,19 @@ export const userSearchReducer = (state = { users: [] }, action) => {
     case USER_SEARCH_SUCCESS:
       return { loading: false, users: action.payload };
     case USER_SEARCH_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const userDeleteReducer = (state = { }, action) => {
+  switch (action.type) {
+    case USER_DELETE_REQUEST:
+      return { loading: false};
+    case USER_DELETE_SUCCESS:
+      return { loading: false, success: true };
+    case USER_DELETE_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;

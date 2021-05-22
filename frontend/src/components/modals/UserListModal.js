@@ -1,6 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { GrClose } from 'react-icons/gr';
 import { CLOSE_MODAL } from '../../constants/utilConstants';
 
 const UserListModal = ({ usersList, title }) => {
@@ -13,7 +14,12 @@ const UserListModal = ({ usersList, title }) => {
 
   return (
     <>
-      <h2>{title}</h2>
+      <div className='modal-title'>
+        <h2>{title}</h2>
+        <button onClick={() => dispatch({ type: CLOSE_MODAL })}>
+          <GrClose />
+        </button>
+      </div>
       <ul>
         {usersList.map(user => {
           const { name, username, profileImage, _id } = user;

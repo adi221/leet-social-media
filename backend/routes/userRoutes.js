@@ -24,7 +24,7 @@ router.route('/login').post(authUser);
 router.route('/profile').put(protect, updateUserProfile);
 router.route('/profile/password').put(protect, updateUserPassword);
 router.route('/post/:id').get(getPostUserDetails);
-router.route('/:id').get(getUserProfileDetails).delete(protect, deleteUser);
+router.route('/:id').get(getUserProfileDetails).delete(deleteUser);
 router.route('/follow/:id').put(protect, followUser);
 router.route('/unfollow/:id').put(protect, unfollowUser);
 router.route('/save/:id').post(protect, addPostToSaved);

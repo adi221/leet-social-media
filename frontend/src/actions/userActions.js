@@ -31,6 +31,9 @@ import {
   USER_SEARCH_REQUEST,
   USER_SEARCH_SUCCESS,
   USER_SEARCH_FAIL,
+  USER_DELETE_REQUEST,
+  USER_DELETE_SUCCESS,
+  USER_DELETE_FAIL,
 } from '../constants/userConstants';
 
 export const login = (email, password) => async dispatch => {
@@ -283,6 +286,24 @@ export const getUserSearch = keyword => async dispatch => {
   } catch (error) {
     dispatch({
       type: USER_SEARCH_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const deleteUser = userId => async dispatch => {
+  try {
+    dispatch({ type: USER_DELETE_REQUEST });
+    await axios.delete(`/api/users/${userId}`);
+    dispatch({ type: USER_DELETE_SUCCESS });
+    dispatch({ type: USER_LOGOUT });
+    localStorage.removeItem('userInfoLeet');
+  } catch (error) {
+    dispatch({
+      type: USER_DELETE_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

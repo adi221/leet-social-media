@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { GrClose } from 'react-icons/gr';
 import { CLOSE_MODAL } from '../../constants/utilConstants';
 import { updateUserProfile } from '../../actions/userActions';
 
@@ -41,7 +42,12 @@ const EditImageModal = () => {
 
   return (
     <>
-      <h2>Change Profile Photo</h2>
+      <div className='modal-title'>
+        <h2>Change Profile Photo</h2>
+        <button onClick={() => dispatch({ type: CLOSE_MODAL })}>
+          <GrClose />
+        </button>
+      </div>
       <ul>
         <li className='blue bold'>
           <label htmlFor='file'>
