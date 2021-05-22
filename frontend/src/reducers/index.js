@@ -10,6 +10,7 @@ import {
   userUpdatePasswordReducer,
   userSuggestionsReducer,
   userSearchReducer,
+  userDeleteReducer,
 } from '../reducers/userReducers';
 import {
   postCreateReducer,
@@ -30,6 +31,7 @@ const rootReducer = combineReducers({
   userDetails: userDetailsReducer,
   userSuggestions: userSuggestionsReducer,
   userSearch: userSearchReducer,
+  userDelete: userDeleteReducer,
   postCreate: postCreateReducer,
   postsGet: postsGetReducer,
   postDelete: postDeleteReducer,

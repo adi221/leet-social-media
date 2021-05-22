@@ -299,8 +299,8 @@ export const deleteUser = userId => async dispatch => {
     dispatch({ type: USER_DELETE_REQUEST });
     await axios.delete(`/api/users/${userId}`);
     dispatch({ type: USER_DELETE_SUCCESS });
-    dispatch({ type: USER_LOGOUT });
     localStorage.removeItem('userInfoLeet');
+    dispatch({ type: USER_LOGOUT });
   } catch (error) {
     dispatch({
       type: USER_DELETE_FAIL,
