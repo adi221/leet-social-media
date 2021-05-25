@@ -32,14 +32,12 @@ const SinglePost = ({ uniqueId }) => {
   const commentRef = useRef(null);
 
   const dispatch = useDispatch();
-  console.log(post);
 
   const getPostData = async id => {
     try {
       setLoading(true);
       const { data } = await axios.get(`/api/posts/${id}`);
       setPost(data);
-      console.log(data);
     } catch (error) {
       setError(true);
     }

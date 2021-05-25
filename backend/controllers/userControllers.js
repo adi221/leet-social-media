@@ -64,7 +64,7 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc Get image of post owner
+// @desc Get image, name, id of post owner
 // @route POST /api/users/post/:id
 // @access Public
 const getPostUserDetails = asyncHandler(async (req, res) => {
@@ -240,7 +240,6 @@ const getUserDetails = asyncHandler(async (req, res) => {
 // @access User
 const updateUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
-  console.log(req.body);
   if (user) {
     user.name = req.body.name || user.name;
     user.username = req.body.username || user.username;

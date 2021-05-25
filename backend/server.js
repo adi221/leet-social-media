@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
+import cors from 'cors';
 import colors from 'colors';
 import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
@@ -16,6 +17,7 @@ if (process.env.NODE_ENV === 'development') {
 
 // allows us to accept json data in the body
 app.use(express.json({ limit: '200mb' }));
+app.use(cors());
 
 app.use('/api/users', userRoutes);
 app.use('/api/posts', postRoutes);
