@@ -13,7 +13,7 @@ const SinglePostPage = () => {
   }, [dispatch]);
 
   return (
-    <div className='single-post-page page is-flexed'>
+    <div className='single-post-page page '>
       <div className='page-center'>
         <SinglePost uniqueId={id} />
       </div>

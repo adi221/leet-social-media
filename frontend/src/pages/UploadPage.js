@@ -81,7 +81,10 @@ const UploadPage = () => {
 
   return (
     <div className='page upload-page'>
-      <form className='is-bordered form is-flexed' onSubmit={submitHandler}>
+      <form
+        className='is-bordered auth-form is-flexed'
+        onSubmit={submitHandler}
+      >
         <h2>Upload</h2>
 
         <label htmlFor='uploadFile' className='upload-file'>
@@ -94,7 +97,7 @@ const UploadPage = () => {
           <span>{filename} </span>
         </label>
 
-        {file && <img src={URL.createObjectURL(file)} alt='uploaded-icon' />}
+        {file && <img src={URL.createObjectURL(file)} alt='uploaded-file' />}
 
         <ReactTags
           tags={tags}

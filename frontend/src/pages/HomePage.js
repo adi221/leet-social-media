@@ -27,7 +27,7 @@ const HomePage = () => {
         <div className='posts-container is-flexed'>
           {posts &&
             posts.map(id => {
-              return <SinglePost key={id} uniqueId={id} />;
+              return <SinglePost key={id} uniqueId={id} simple />;
             })}
         </div>
         <aside className='sidebar'>

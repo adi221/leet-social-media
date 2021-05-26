@@ -89,11 +89,6 @@ const getUserProfileDetails = asyncHandler(async (req, res) => {
     const {
       profileImage,
       description,
-      numFollowers,
-      numFollowing,
-      numPosts,
-      numSavedPosts,
-      numLikedPosts,
       following,
       followers,
       posts,
@@ -115,7 +110,7 @@ const getUserProfileDetails = asyncHandler(async (req, res) => {
       }
     }
 
-    for (let i = 0; i < numLikedPosts; i++) {
+    for (let i = 0; i < likedPosts.length; i++) {
       const id = likedPosts[i].post;
       const post = await Post.findById(id);
       if (post) {
@@ -123,7 +118,7 @@ const getUserProfileDetails = asyncHandler(async (req, res) => {
       }
     }
 
-    for (let i = 0; i < numSavedPosts; i++) {
+    for (let i = 0; i < savedPosts.length; i++) {
       const id = savedPosts[i].post;
       const post = await Post.findById(id).populate('post', 'image');
       if (post) {
@@ -135,11 +130,6 @@ const getUserProfileDetails = asyncHandler(async (req, res) => {
       profileImage,
       name,
       description,
-      numFollowers,
-      numFollowing,
-      numPosts,
-      numSavedPosts,
-      numLikedPosts,
       following,
       followers,
       userPosts,
@@ -172,14 +162,14 @@ const followUser = asyncHandler(async (req, res) => {
       user: req.user._id,
       username: req.user.username,
     });
-    followedUser.numFollowers = followedUser.followers.length;
+    
     await followedUser.save();
 
     followingUser.following.push({
       user: followedUser._id,
       username: followedUser.username,
     });
-    followingUser.numFollowing = followingUser.following.length;
+    
     await followingUser.save();
 
     res.status(200).json({ success: true });
@@ -205,13 +195,13 @@ const unfollowUser = asyncHandler(async (req, res) => {
     unFollowedUser.followers = unFollowedUser.followers.filter(
       follower => follower.user.toString() !== req.user._id.toString()
     );
-    unFollowedUser.numFollowers = unFollowedUser.followers.length;
+    
     await unFollowedUser.save();
 
     unFollowingUser.following = unFollowingUser.following.filter(
       follower => follower.user.toString() !== unFollowedUser._id.toString()
     );
-    unFollowingUser.numFollowing = unFollowingUser.following.length;
+    
     await unFollowingUser.save();
 
     res.status(200).json({ success: true });
@@ -313,11 +303,9 @@ const addPostToSaved = asyncHandler(async (req, res) => {
     );
     if (isAlreadySavedIndex > -1) {
       user.savedPosts.splice(isAlreadySavedIndex, 1);
-      user.numSavedPosts = user.savedPosts.length;
       await user.save();
     } else {
       user.savedPosts.push({ post: id });
-      user.numSavedPosts = user.savedPosts.length;
       await user.save();
     }
 

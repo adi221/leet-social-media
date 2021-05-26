@@ -4,6 +4,7 @@ import {
   SINGLE_POST_GET_SUCCESS,
   SINGLE_POST_AUTHOR_DETAILS_SUCCESS,
   SINGLE_POST_LIKE_SUCCESS,
+  SINGLE_POST_COMMENT_SUCCESS,
 } from '../../constants/singlePostConstants';
 
 const defaultProfileImage =
@@ -40,6 +41,14 @@ export const singlePostReducer = (state, action) => {
       return { ...state, loading: false, author: action.payload };
     case SINGLE_POST_LIKE_SUCCESS:
       return { ...state, post: { ...state.post, likes: action.payload } };
+    case SINGLE_POST_COMMENT_SUCCESS:
+      return {
+        ...state,
+        post: {
+          ...state.post,
+          comments: [...state.post.comments, action.payload],
+        },
+      };
     default:
       return state;
   }

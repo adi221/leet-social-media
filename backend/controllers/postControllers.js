@@ -29,14 +29,12 @@ const createPost = asyncHandler(async (req, res) => {
     tags,
     image: file,
     likes: [],
-    numLikes: 0,
     comments: [],
-    numComments: 0,
   });
   const createdPost = await post.save();
 
   user.posts.push({ post: post._id });
-  user.numPosts = user.posts.length;
+
   await user.save();
 
   res.status(201).json(createdPost);
@@ -56,11 +54,10 @@ const commentPost = asyncHandler(async (req, res) => {
     comment,
   };
   post.comments.push(newComment);
-  post.numComments = post.comments.length;
 
   await post.save();
 
-  res.status(201).json({ success: true, message: 'Review added' });
+  res.status(201).json(newComment);
 });
 
 // @desc Like or remove like from a post
@@ -73,30 +70,26 @@ const likePost = asyncHandler(async (req, res) => {
   const post = await Post.findById(id);
   const user = await User.findById(_id);
 
-  console.log(post.likes);
-
   if (post) {
     const alreadyLikedIndex = post.likes.findIndex(
       like => like.user.toString() === req.user._id.toString()
     );
     if (alreadyLikedIndex > -1) {
       post.likes.splice(alreadyLikedIndex, 1);
-      post.numLikes = post.likes.length;
       await post.save();
+
       user.likedPosts = user.likedPosts.filter(
         p => p.post.toString() !== post._id.toString()
       );
-      user.numLikedPosts = user.likedPosts.length;
       await user.save();
     } else {
       post.likes.push({ user: _id, username });
-      post.numLikes = post.likes.length;
       await post.save();
+
       user.likedPosts.push({ post: post._id });
-      user.numLikedPosts = user.likedPosts.length;
       await user.save();
     }
-    console.log(post.likes);
+
     res.status(201).json(post.likes);
   } else {
     res.status(401);
@@ -129,7 +122,6 @@ const deletePost = asyncHandler(async (req, res) => {
     await post.remove();
     // user.posts = user.posts.filter(post => post.post !== postId);
     user.posts.pull({ post: postId });
-    user.numPosts = user.posts.length;
     await user.save();
     res.json({ success: true, message: 'Post was removed' });
   } else {

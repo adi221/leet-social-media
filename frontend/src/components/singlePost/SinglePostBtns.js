@@ -71,7 +71,7 @@ const SinglePostBtns = ({ uniqueId, likes, commentRef, dispatch }) => {
   };
 
   return (
-    <div className='single-post__btns is-flexed '>
+    <div className='single-post__content--btns is-flexed '>
       <div className='is-flexed'>
         {isLiked ? (
           <FaHeart

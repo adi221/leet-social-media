@@ -1,5 +1,28 @@
-// MEDIA QUERY MANAGER
+@mixin simpleSinglePost($component) {
+  @if $component == singlePost {
+    grid-template-columns: 100%;
+    grid-template-rows: min-content auto auto;
+    border: 1px solid $clr-border;
+    overflow: hidden;
+    max-width: 740px;
+    width: 100%;
+  }
+  @if $component == image {
+    grid-row: 2 / span 1;
+    border-right: none;
+  }
+  @if $component == content {
+    grid-row: 3 / -1;
+    display: block;
+    padding-top: 0;
+  }
+  @if $component == header {
+    grid-row: 1 / span 1;
+    padding: 0.5rem 1.5rem;
+  }
+}
 
+// MEDIA QUERY MANAGER
 @mixin respond($breakpoint) {
   @if $breakpoint == phone {
     @media only screen and (max-width: 600px) {

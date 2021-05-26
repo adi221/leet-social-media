@@ -1,10 +1,16 @@
-import React, { useEffect, useState, useRef, useReducer } from 'react';
+import React, { useEffect, useRef, useReducer } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import moment from 'moment';
 import { BsThreeDots } from 'react-icons/bs';
-import { Tags, Comments, Loader } from '..';
+import {
+  Tags,
+  Comments,
+  SkeletonLoader,
+  SinglePostForm,
+  SinglePostBtns,
+} from '..';
 import { ErrorPage } from '../../pages';
 import { SHOW_MODAL } from '../../constants/utilConstants';
 import {
@@ -14,14 +20,12 @@ import {
   SINGLE_POST_AUTHOR_DETAILS_SUCCESS,
 } from '../../constants/singlePostConstants';
 import { INITIAL_STATE, singlePostReducer } from './singlePostReducer';
-import SinglePostBtns from './SinglePostBtns';
 
-const SinglePost = ({ uniqueId }) => {
-  const [addedComment, setAddedComment] = useState('');
-  const commentRef = useRef(null);
-
+const SinglePost = ({ uniqueId, simple = false }) => {
   const [state, dispatch] = useReducer(singlePostReducer, INITIAL_STATE);
   const dispatchRedux = useDispatch();
+
+  const commentRef = useRef(null);
 
   const getPostData = async id => {
     try {
@@ -61,33 +65,10 @@ const SinglePost = ({ uniqueId }) => {
     _id: postId,
   } = state.post;
   const { profileImage, username } = state.author;
-  const { userInfo } = useSelector(state => state.userLogin);
 
   useEffect(() => {
     userId && getAuthorDetails(userId);
   }, [userId]);
-
-  const commentHandler = async e => {
-    e.preventDefault();
-    try {
-      // setLoading(true);
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
-      await axios.post(
-        `/api/posts/comment/${uniqueId}`,
-        { comment: addedComment },
-        config
-      );
-    } catch (error) {
-      console.log('Hey');
-    }
-    // setLoading(false);
-    setAddedComment('');
-  };
 
   const openLikesModal = async () => {
     if (likes.length === 0) return;
@@ -123,15 +104,39 @@ const SinglePost = ({ uniqueId }) => {
 
   if (state.loading)
     return (
-      <article className='single-post is-bordered'>
-        <Loader />
+      <article className='single-post'>
+        <header
+          className={`single-post__header ${
+            simple && 'single-post__header--simple'
+          }`}
+        >
+          <SkeletonLoader style={{ height: '4rem', width: '4rem' }} />
+        </header>
+        <div
+          className={`single-post__image ${
+            simple && 'single-post__image--simple'
+          }`}
+        >
+          <SkeletonLoader animated />
+        </div>
+        <div
+          className={`single-post__content ${
+            simple && 'single-post__content--simple'
+          }`}
+        >
+          <SkeletonLoader animated />
+        </div>
       </article>
     );
-  if (state.error) return <ErrorPage />;
+  if (state.error) return null;
 
   return (
-    <article className='single-post is-bordered'>
-      <header className='single-post__header'>
+    <article className={`single-post ${simple && 'single-post--simple'}`}>
+      <header
+        className={`single-post__header ${
+          simple && 'single-post__header--simple'
+        }`}
+      >
         <div className='is-flexed '>
           <img src={profileImage} alt={username} />
           <Link to={`/profile/${userId}`} className='bold underline'>
@@ -140,45 +145,50 @@ const SinglePost = ({ uniqueId }) => {
         </div>
         <BsThreeDots className='single-icon' onClick={openModalHandler} />
       </header>
-      <img className='width100' src={image} alt={description} />
-      <SinglePostBtns
-        dispatch={dispatch}
-        commentRef={commentRef}
-        uniqueId={uniqueId}
-        likes={likes}
-      />
       <div
-        style={{ cursor: `${likes.length > 0 ? 'pointer' : 'auto'}` }}
-        className='bold'
-        onClick={openLikesModal}
+        className={`single-post__image ${
+          simple && 'single-post__image--simple'
+        }`}
       >
-        {likes.length} likes
+        <img src={image} alt={description} />
       </div>
-      <div className='single-post__description'>
-        <p>
-          <Link to={`/profile/${userId}`} className='bold mr-sm underline'>
-            {username}
-          </Link>
-          {description}
-        </p>
-      </div>
-      {tags && tags.length > 0 && <Tags tags={tags} />}
-      {comments.length > 0 && <Comments comments={comments} />}
-      <div className='single-post__created-at'>
-        {moment(createdAt).fromNow()}
-      </div>
-      <form className='single-post-add-comment' onSubmit={commentHandler}>
-        <input
-          type='text'
-          placeholder='Add a comment..'
-          ref={commentRef}
-          value={addedComment}
-          onChange={e => setAddedComment(e.target.value)}
+      <div
+        className={`single-post__content ${
+          simple && 'single-post__content--simple'
+        }`}
+      >
+        <SinglePostBtns
+          dispatch={dispatch}
+          commentRef={commentRef}
+          uniqueId={uniqueId}
+          likes={likes}
         />
-        <button className='bold' disabled={addedComment.length === 0}>
-          Post
-        </button>
-      </form>
+        <div
+          style={{ cursor: `${likes.length > 0 ? 'pointer' : 'auto'}` }}
+          className='bold'
+          onClick={openLikesModal}
+        >
+          {likes.length} likes
+        </div>
+        <div className='single-post__-description'>
+          <p>
+            <Link to={`/profile/${userId}`} className='bold mr-sm underline'>
+              {username}
+            </Link>
+            {description}
+          </p>
+        </div>
+        {tags && tags.length > 0 && <Tags tags={tags} />}
+        <Comments comments={comments} simple={simple} />
+        <div className='single-post__content--created-at'>
+          {moment(createdAt).fromNow()}
+        </div>
+        <SinglePostForm
+          dispatch={dispatch}
+          uniqueId={uniqueId}
+          commentRef={commentRef}
+        />
+      </div>
     </article>
   );
 };

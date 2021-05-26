@@ -33,8 +33,6 @@ const ProfilePage = () => {
 
   const {
     description,
-    numFollowers,
-    numFollowing,
     following,
     followers,
     userPosts,
@@ -117,16 +115,26 @@ const ProfilePage = () => {
               </p>
               <p
                 className='margin-right64'
-                style={{ cursor: `${numFollowers > 0 ? 'pointer' : 'auto'}` }}
+                style={{
+                  cursor: `${
+                    followers && followers.length > 0 ? 'pointer' : 'auto'
+                  }`,
+                }}
                 onClick={() => openFollowingModal(followers, 'Followers')}
               >
-                <span className='bold'>{numFollowers} </span> followers
+                <span className='bold'>{followers && followers.length} </span>{' '}
+                followers
               </p>
               <p
                 onClick={() => openFollowingModal(following, 'Following')}
-                style={{ cursor: `${numFollowing > 0 ? 'pointer' : 'auto'}` }}
+                style={{
+                  cursor: `${
+                    following && following.length > 0 ? 'pointer' : 'auto'
+                  }`,
+                }}
               >
-                <span className='bold'>{numFollowing} </span> following
+                <span className='bold'>{following && following.length} </span>{' '}
+                following
               </p>
             </div>
             <div className='profile-page-header-description'>{description}</div>

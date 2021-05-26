@@ -81,35 +81,10 @@ const userSchema = mongoose.Schema(
       default: 'No Description Yet',
     },
     following: [followingSchema],
-    numFollowing: {
-      type: Number,
-      default: 0,
-      required: true,
-    },
     followers: [followersSchema],
-    numFollowers: {
-      type: Number,
-      default: 0,
-      required: true,
-    },
     posts: [postsSchema],
-    numPosts: {
-      type: Number,
-      default: 0,
-      required: true,
-    },
     savedPosts: [savedPostsSchema],
-    numSavedPosts: {
-      type: Number,
-      default: 0,
-      required: true,
-    },
     likedPosts: [likedPostsSchema],
-    numLikedPosts: {
-      type: Number,
-      default: 0,
-      required: true,
-    },
   },
   {
     timestamps: true,
