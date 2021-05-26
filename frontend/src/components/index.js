@@ -1,7 +1,8 @@
 import Navbar from './navbar/Navbar';
 import SearchBar from './navbar/SearchBar';
 import RootModal from './modals/RootModal';
-import HomeSidebar from './HomeSidebar';
+import HomeSidebar from './home/HomeSidebar';
+import Feed from './home/Feed';
 import SinglePost from './singlePost/SinglePost';
 import Tags from './singlePost/Tags';
 import Comments from './singlePost/Comments';
@@ -18,6 +19,7 @@ export {
   SearchBar,
   RootModal,
   HomeSidebar,
+  Feed,
   SinglePost,
   Tags,
   Comments,

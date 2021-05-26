@@ -43,7 +43,10 @@ const SignUpPage = () => {
 
   return (
     <div className='page signup-page '>
-      <form className='is-bordered form is-flexed' onSubmit={submitHandler}>
+      <form
+        className='is-bordered auth-form is-flexed'
+        onSubmit={submitHandler}
+      >
         <h2>Sign Up</h2>
         <input
           className='form-control is-bordered'

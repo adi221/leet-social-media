@@ -1,0 +1,18 @@
+.home-grid {
+  display: grid;
+  justify-content: center;
+  justify-items: center;
+  padding-left: 0.6rem;
+  column-gap: 1.5rem;
+  grid-template-columns: 1fr 270px;
+
+  @include respond(tab-port) {
+    display: block;
+    padding-left: 0;
+  }
+}
+
+.posts-container {
+  flex-direction: column;
+  width: 100%;
+}

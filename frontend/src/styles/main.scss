@@ -1,5 +1,26 @@
 @import './abstracts/variables';
+@import './abstracts/mixins';
 
 @import './base/animations';
 @import './base/base';
 @import './base/utilities';
+
+@import './components/home-sidebar';
+@import './components/loader';
+@import './components/message';
+@import './components/modal';
+@import './components/search-bar';
+@import './components/single-post';
+@import './components/tags';
+
+@import './layout/app';
+@import './layout/navbar';
+@import './layout/sidebar';
+
+@import './pages/authPages';
+@import './pages/errorPage';
+@import './pages/homePage';
+@import './pages/profilePage';
+@import './pages/settingsPage';
+@import './pages/singlePostPage';
+@import './pages/uploadPage';

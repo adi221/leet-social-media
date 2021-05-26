@@ -289,7 +289,7 @@ nav {
 
 /* Form */
 
-.form {
+.auth-form {
   padding: 1rem;
   flex-direction: column;
   width: 100vw;
@@ -297,7 +297,7 @@ nav {
   margin: 0 auto;
 }
 
-.form h2 {
+.auth-form h2 {
   margin-bottom: 2rem;
 }
 
@@ -314,7 +314,7 @@ nav {
   margin-bottom: 2rem;
 }
 
-.form img {
+.auth-form img {
   width: 100%;
   object-fit: cover;
   margin: 2rem 0 1rem;

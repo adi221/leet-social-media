@@ -1,0 +1,63 @@
+.home-sidebar {
+  header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    img {
+      border-radius: 50%;
+      object-fit: cover;
+      width: 67px;
+      height: 67px;
+    }
+    p {
+      color: #888888;
+    }
+  }
+
+  &__suggestions {
+    h4 {
+      margin-top: 1.2rem;
+      color: #b9b9b9;
+    }
+
+    &-suggestion {
+      display: flex;
+      align-items: center;
+      justify-content: stretch;
+      margin: 0.5rem 0;
+
+      img {
+        border-radius: 50%;
+        object-fit: cover;
+        width: 35px;
+        height: 35px;
+      }
+
+      a {
+        font-size: 14px;
+      }
+
+      p {
+        color: #888888;
+        font-size: 12px;
+      }
+    }
+  }
+
+  footer {
+    color: $clr-border;
+    text-transform: uppercase;
+    margin-top: 1.2rem;
+    font-size: 12px;
+
+    a {
+      color: $clr-border;
+      transition: $transition;
+
+      &:hover {
+        color: #888888;
+      }
+    }
+  }
+}

@@ -26,7 +26,11 @@ const HomePage = () => {
               return <SinglePost key={id} uniqueId={id} />;
             })}
         </div>
-        <HomeSidebar />
+        <aside className='sidebar'>
+          <div className='sidebar__content'>
+            <HomeSidebar />
+          </div>
+        </aside>
       </div>
     </div>
   );

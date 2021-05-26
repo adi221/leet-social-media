@@ -194,7 +194,7 @@ const SinglePost = ({ uniqueId }) => {
 
   return (
     <article className='single-post is-bordered'>
-      <header className='single-post-header'>
+      <header className='single-post__header'>
         <div className='is-flexed '>
           <img src={userImage} alt={postUsername} />
           <Link to={`/profile/${userId}`} className='bold underline'>
@@ -204,19 +204,16 @@ const SinglePost = ({ uniqueId }) => {
         <BsThreeDots className='single-icon' onClick={openModalHandler} />
       </header>
       <img className='width100' src={image} alt={description} />
-      <div className='single-post-btns is-flexed '>
+      <div className='single-post__btns is-flexed '>
         <div className='is-flexed'>
           {isLiked ? (
             <FaHeart
               onClick={likeHandler}
-              className='single-icon margin-right16'
+              className='single-icon mr-sm'
               style={{ fill: 'red' }}
             />
           ) : (
-            <FaRegHeart
-              onClick={likeHandler}
-              className='single-icon margin-right16'
-            />
+            <FaRegHeart onClick={likeHandler} className='single-icon mr-sm' />
           )}
           <FaRegComment
             onClick={() => commentRef.current.focus()}
@@ -231,17 +228,14 @@ const SinglePost = ({ uniqueId }) => {
       </div>
       <div
         style={{ cursor: `${likes.length > 0 ? 'pointer' : 'auto'}` }}
-        className='single-post-likes bold'
+        className='bold'
         onClick={openLikesModal}
       >
         {numLikes} likes
       </div>
-      <div className='single-post-description'>
+      <div className='single-post__description'>
         <p>
-          <Link
-            to={`/profile/${userId}`}
-            className='bold margin-right16 underline'
-          >
+          <Link to={`/profile/${userId}`} className='bold mr-sm underline'>
             {postUsername}
           </Link>
           {description}
@@ -249,7 +243,7 @@ const SinglePost = ({ uniqueId }) => {
       </div>
       {tags && tags.length > 0 && <Tags tags={tags} />}
       {numComments > 0 && <Comments comments={comments} />}
-      <div className='single-post-created-at'>
+      <div className='single-post__created-at'>
         {moment(createdAt).fromNow()}
       </div>
       <form className='single-post-add-comment' onSubmit={commentHandler}>

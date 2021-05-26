@@ -1,0 +1,67 @@
+.page {
+  padding: 3rem 0;
+  position: relative;
+}
+
+.page-center {
+  margin: 0 auto;
+  max-width: $max-width;
+}
+
+.button {
+  padding: 0.4rem 0.8rem;
+  margin: 0 0.5rem;
+  border-radius: $radius;
+  height: 2.2rem;
+}
+
+.is-primary {
+  background-color: $clr-primary-1;
+  color: $clr-white;
+}
+
+.is-light {
+  border: 1px solid $clr-border;
+  background-color: $clr-white;
+}
+
+.is-bordered {
+  border: 1px solid $clr-border;
+}
+
+.is-radius {
+  border-radius: $radius;
+}
+
+.width100 {
+  width: 100%;
+}
+
+.is-flexed {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.mr-sm,
+.margin-right16 {
+  margin-right: 1rem;
+}
+
+.mr-md,
+.margin-right32 {
+  margin-right: 2rem;
+}
+
+.mr-lg,
+.margin-right64 {
+  margin-right: 4rem;
+}
+
+.pulse {
+  animation: pulse 300ms;
+}

@@ -1,0 +1,86 @@
+.modal {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 10px;
+  width: 420px;
+  transition: $transition;
+  z-index: 100;
+  background-color: $clr-white;
+  flex-direction: column;
+}
+
+.modal-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  border-bottom: 1px solid #a8a8a8;
+  padding: 1.2rem 1.5rem;
+}
+
+.modal-title svg {
+  vertical-align: middle;
+}
+
+.modal input[type='file'] {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.modal button,
+.modal label {
+  cursor: pointer;
+}
+
+.modal ul {
+  width: 100%;
+  text-align: center;
+}
+
+.modal ul li {
+  width: 100%;
+  padding: 0.7rem;
+}
+
+.modal ul li:not(:last-child) {
+  border-bottom: 1px solid $clr-border-light;
+}
+
+.user-modal-item {
+  display: flex;
+  align-items: center;
+  transition: $transition;
+  cursor: pointer;
+}
+
+.user-modal-item:hover {
+  background-color: #f7f7f7;
+}
+
+.user-modal-item img {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-modal-item p {
+  font-size: 12px;
+  text-align: left;
+}
+
+.overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 10;
+}
