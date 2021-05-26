@@ -4,8 +4,9 @@
 }
 
 .page-center {
-  margin: 0 auto;
+  display: block;
   max-width: $max-width;
+  margin: 0 auto;
 }
 
 .button {
@@ -45,6 +46,10 @@
 
 .bold {
   font-weight: bold;
+}
+
+.underline:hover {
+  text-decoration: underline rgba(32, 32, 32, 0.4);
 }
 
 .mr-sm,

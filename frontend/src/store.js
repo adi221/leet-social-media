@@ -10,7 +10,9 @@ const userInfoFromStorage = localStorage.getItem('userInfoLeet')
   : null;
 
 const initialState = {
-  userLogin: { userInfo: userInfoFromStorage },
+  userLogin: {
+    userInfo: userInfoFromStorage,
+  },
 };
 
 const store = createStore(

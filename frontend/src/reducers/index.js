@@ -11,11 +11,11 @@ import {
   userSuggestionsReducer,
   userSearchReducer,
   userDeleteReducer,
+  userBookmarksReducer,
 } from '../reducers/userReducers';
 import {
   postCreateReducer,
   postsGetReducer,
-  singlePostGetReducer,
   postDeleteReducer,
 } from '../reducers/postReducers';
 import { modalReducer } from '../reducers/utilReducers';
@@ -32,10 +32,10 @@ const rootReducer = combineReducers({
   userSuggestions: userSuggestionsReducer,
   userSearch: userSearchReducer,
   userDelete: userDeleteReducer,
+  userBookmarks: userBookmarksReducer,
   postCreate: postCreateReducer,
   postsGet: postsGetReducer,
   postDelete: postDeleteReducer,
-  singlePostGet: singlePostGetReducer,
   modal: modalReducer,
 });
 

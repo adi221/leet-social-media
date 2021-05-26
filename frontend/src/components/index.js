@@ -6,7 +6,7 @@ import Feed from './home/Feed';
 import SinglePost from './singlePost/SinglePost';
 import Tags from './singlePost/Tags';
 import Comments from './singlePost/Comments';
-import Loader from './Loader';
+import Loader from './loaders/Loader';
 import Message from './Message';
 import EditProfile from './settings/EditProfile';
 import EditImageProfile from './settings/EditImageProfile';

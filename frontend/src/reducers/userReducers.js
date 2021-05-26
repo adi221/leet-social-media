@@ -37,9 +37,15 @@ import {
   USER_DELETE_REQUEST,
   USER_DELETE_SUCCESS,
   USER_DELETE_FAIL,
+  USER_BOOKMARKS_REQUEST,
+  USER_BOOKMARKS_SUCCESS,
+  USER_BOOKMARKS_FAIL,
 } from '../constants/userConstants';
 
-export const userLoginReducer = (state = { userInfo: null }, action) => {
+export const userLoginReducer = (
+  state = { userInfo: null},
+  action
+) => {
   switch (action.type) {
     case USER_LOGIN_REQUEST:
       return { ...state, loading: true };
@@ -179,10 +185,10 @@ export const userSearchReducer = (state = { users: [] }, action) => {
   }
 };
 
-export const userDeleteReducer = (state = { }, action) => {
+export const userDeleteReducer = (state = {}, action) => {
   switch (action.type) {
     case USER_DELETE_REQUEST:
-      return { loading: false};
+      return { loading: false };
     case USER_DELETE_SUCCESS:
       return { loading: false, success: true };
     case USER_DELETE_FAIL:
@@ -191,3 +197,16 @@ export const userDeleteReducer = (state = { }, action) => {
       return state;
   }
 };
+
+export const userBookmarksReducer = (state = {bookmarks: []}, action) => {
+  switch (action.type) {
+    case USER_BOOKMARKS_REQUEST:
+      return { loading: false };
+    case USER_BOOKMARKS_SUCCESS:
+      return { loading: false, bookmarks: action.payload};
+    case USER_BOOKMARKS_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+}

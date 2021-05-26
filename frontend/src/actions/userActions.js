@@ -34,6 +34,9 @@ import {
   USER_DELETE_REQUEST,
   USER_DELETE_SUCCESS,
   USER_DELETE_FAIL,
+  USER_BOOKMARKS_REQUEST,
+  USER_BOOKMARKS_SUCCESS,
+  USER_BOOKMARKS_FAIL,
 } from '../constants/userConstants';
 
 export const login = (email, password) => async dispatch => {
@@ -270,6 +273,22 @@ export const getUserSuggestions = id => async dispatch => {
   } catch (error) {
     dispatch({
       type: USER_SUGGESTIONS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const getUserBookmarks = id => async dispatch => {
+  try {
+    dispatch({ type: USER_BOOKMARKS_REQUEST });
+    const { data } = await axios.get(`/api/users/bookmark/${id}`);
+    dispatch({ type: USER_BOOKMARKS_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: USER_BOOKMARKS_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

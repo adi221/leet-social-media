@@ -1,69 +1,57 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useReducer } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import moment from 'moment';
 import { BsThreeDots } from 'react-icons/bs';
-import {
-  FaRegHeart,
-  FaHeart,
-  FaRegComment,
-  FaRegBookmark,
-  FaBookmark,
-} from 'react-icons/fa';
 import { Tags, Comments, Loader } from '..';
 import { ErrorPage } from '../../pages';
-import { USER_LOGIN_SUCCESS } from '../../constants/userConstants';
 import { SHOW_MODAL } from '../../constants/utilConstants';
-
-const defaultImage =
-  'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/600px-No_image_available.svg.png';
+import {
+  SINGLE_POST_LOADING,
+  SINGLE_POST_ERROR,
+  SINGLE_POST_GET_SUCCESS,
+  SINGLE_POST_AUTHOR_DETAILS_SUCCESS,
+} from '../../constants/singlePostConstants';
+import { INITIAL_STATE, singlePostReducer } from './singlePostReducer';
+import SinglePostBtns from './SinglePostBtns';
 
 const SinglePost = ({ uniqueId }) => {
-  const [post, setPost] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-  const [successAction, setSuccessAction] = useState(false);
-  const [userImage, setUserImage] = useState(defaultImage);
-  const [postUsername, setPostUsername] = useState('');
-  const [isLiked, setIsLiked] = useState(false);
-  const [isSaved, setIsSaved] = useState(false);
   const [addedComment, setAddedComment] = useState('');
   const commentRef = useRef(null);
 
-  const dispatch = useDispatch();
+  const [state, dispatch] = useReducer(singlePostReducer, INITIAL_STATE);
+  const dispatchRedux = useDispatch();
 
   const getPostData = async id => {
     try {
-      setLoading(true);
+      dispatch({ type: SINGLE_POST_LOADING });
       const { data } = await axios.get(`/api/posts/${id}`);
-      setPost(data);
+      dispatch({ type: SINGLE_POST_GET_SUCCESS, payload: data });
     } catch (error) {
-      setError(true);
+      dispatch({
+        type: SINGLE_POST_ERROR,
+        payload: error.response.data.message,
+      });
     }
-    setLoading(false);
   };
 
-  const getUserImageName = async id => {
+  const getAuthorDetails = async id => {
     const {
       data: { profileImage, username },
     } = await axios.get(`/api/users/post/${id}`);
-
-    setUserImage(profileImage);
-    setPostUsername(username);
+    dispatch({
+      type: SINGLE_POST_AUTHOR_DETAILS_SUCCESS,
+      payload: { profileImage, username },
+    });
   };
 
   useEffect(() => {
     getPostData(uniqueId);
-    if (successAction) {
-      setSuccessAction(false);
-    }
-  }, [uniqueId, successAction]);
+  }, [uniqueId]);
 
   const {
     tags,
-    numLikes,
-    numComments,
     description,
     image,
     likes,
@@ -71,45 +59,18 @@ const SinglePost = ({ uniqueId }) => {
     createdAt,
     user: userId,
     _id: postId,
-    username,
-  } = post;
-
+  } = state.post;
+  const { profileImage, username } = state.author;
   const { userInfo } = useSelector(state => state.userLogin);
 
   useEffect(() => {
-    getUserImageName(userId);
-    const savedOrNot =
-      userInfo.savedPosts && userInfo.savedPosts.some(p => p.post === uniqueId);
-    setIsSaved(savedOrNot);
-  }, [userId, uniqueId, userInfo]);
-
-  useEffect(() => {
-    const likedOrNot =
-      numLikes > 0 ? likes.some(like => like.user === userInfo._id) : false;
-    setIsLiked(likedOrNot);
-  }, [likes, userInfo, numLikes]);
-
-  const likeHandler = async () => {
-    try {
-      setLoading(true);
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
-      await axios.post(`/api/posts/like/${uniqueId}`, {}, config);
-      setSuccessAction(true);
-    } catch (error) {
-      setError(error);
-    }
-    setLoading(false);
-  };
+    userId && getAuthorDetails(userId);
+  }, [userId]);
 
   const commentHandler = async e => {
     e.preventDefault();
     try {
-      setLoading(true);
+      // setLoading(true);
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -121,35 +82,11 @@ const SinglePost = ({ uniqueId }) => {
         { comment: addedComment },
         config
       );
-      setSuccessAction(true);
     } catch (error) {
-      setError(error);
+      console.log('Hey');
     }
-    setLoading(false);
+    // setLoading(false);
     setAddedComment('');
-  };
-
-  const addToSavedHandler = async () => {
-    try {
-      setLoading(true);
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
-      const { data } = await axios.post(
-        `/api/users/save/${uniqueId}`,
-        {},
-        config
-      );
-      setSuccessAction(true);
-      dispatch({ type: USER_LOGIN_SUCCESS, payload: data.userInfo });
-      localStorage.setItem('userInfoLeet', JSON.stringify(data.userInfo));
-    } catch (error) {
-      setError(error);
-    }
-    setLoading(false);
   };
 
   const openLikesModal = async () => {
@@ -165,7 +102,7 @@ const SinglePost = ({ uniqueId }) => {
       }
     }
 
-    dispatch({
+    dispatchRedux({
       type: SHOW_MODAL,
       payload: {
         modalType: 'USER_LIST',
@@ -175,7 +112,7 @@ const SinglePost = ({ uniqueId }) => {
   };
 
   const openModalHandler = () => {
-    dispatch({
+    dispatchRedux({
       type: SHOW_MODAL,
       payload: {
         modalType: 'SINGLE_POST',
@@ -184,65 +121,49 @@ const SinglePost = ({ uniqueId }) => {
     });
   };
 
-  if (loading)
+  if (state.loading)
     return (
       <article className='single-post is-bordered'>
         <Loader />
       </article>
     );
-  if (error) return <ErrorPage />;
+  if (state.error) return <ErrorPage />;
 
   return (
     <article className='single-post is-bordered'>
       <header className='single-post__header'>
         <div className='is-flexed '>
-          <img src={userImage} alt={postUsername} />
+          <img src={profileImage} alt={username} />
           <Link to={`/profile/${userId}`} className='bold underline'>
-            {postUsername}
+            {username}
           </Link>
         </div>
         <BsThreeDots className='single-icon' onClick={openModalHandler} />
       </header>
       <img className='width100' src={image} alt={description} />
-      <div className='single-post__btns is-flexed '>
-        <div className='is-flexed'>
-          {isLiked ? (
-            <FaHeart
-              onClick={likeHandler}
-              className='single-icon mr-sm'
-              style={{ fill: 'red' }}
-            />
-          ) : (
-            <FaRegHeart onClick={likeHandler} className='single-icon mr-sm' />
-          )}
-          <FaRegComment
-            onClick={() => commentRef.current.focus()}
-            className='single-icon'
-          />
-        </div>
-        {isSaved ? (
-          <FaBookmark className='single-icon' onClick={addToSavedHandler} />
-        ) : (
-          <FaRegBookmark className='single-icon' onClick={addToSavedHandler} />
-        )}
-      </div>
+      <SinglePostBtns
+        dispatch={dispatch}
+        commentRef={commentRef}
+        uniqueId={uniqueId}
+        likes={likes}
+      />
       <div
         style={{ cursor: `${likes.length > 0 ? 'pointer' : 'auto'}` }}
         className='bold'
         onClick={openLikesModal}
       >
-        {numLikes} likes
+        {likes.length} likes
       </div>
       <div className='single-post__description'>
         <p>
           <Link to={`/profile/${userId}`} className='bold mr-sm underline'>
-            {postUsername}
+            {username}
           </Link>
           {description}
         </p>
       </div>
       {tags && tags.length > 0 && <Tags tags={tags} />}
-      {numComments > 0 && <Comments comments={comments} />}
+      {comments.length > 0 && <Comments comments={comments} />}
       <div className='single-post__created-at'>
         {moment(createdAt).fromNow()}
       </div>

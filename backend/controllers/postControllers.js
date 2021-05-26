@@ -73,6 +73,8 @@ const likePost = asyncHandler(async (req, res) => {
   const post = await Post.findById(id);
   const user = await User.findById(_id);
 
+  console.log(post.likes);
+
   if (post) {
     const alreadyLikedIndex = post.likes.findIndex(
       like => like.user.toString() === req.user._id.toString()
@@ -94,11 +96,8 @@ const likePost = asyncHandler(async (req, res) => {
       user.numLikedPosts = user.likedPosts.length;
       await user.save();
     }
-
-    res.status(201).json({
-      success: true,
-      message: `like ${alreadyLikedIndex > -1 ? 'removed' : 'added'}`,
-    });
+    console.log(post.likes);
+    res.status(201).json(post.likes);
   } else {
     res.status(401);
     throw new Error('Post not found');

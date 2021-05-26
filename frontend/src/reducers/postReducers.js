@@ -6,9 +6,6 @@ import {
   POST_CREATE_SUCCESS,
   POST_CREATE_FAIL,
   POST_CREATE_RESET,
-  SINGLE_POST_GET_REQUEST,
-  SINGLE_POST_GET_SUCCESS,
-  SINGLE_POST_GET_FAIL,
   POST_DELETE_REQUEST,
   POST_DELETE_SUCCESS,
   POST_DELETE_FAIL,
@@ -38,19 +35,6 @@ export const postCreateReducer = (state = {}, action) => {
       return { loading: false, error: action.payload };
     case POST_CREATE_RESET:
       return {};
-    default:
-      return state;
-  }
-};
-
-export const singlePostGetReducer = (state = { post: {} }, action) => {
-  switch (action.type) {
-    case SINGLE_POST_GET_REQUEST:
-      return { loading: true };
-    case SINGLE_POST_GET_SUCCESS:
-      return { loading: false, post: action.payload };
-    case SINGLE_POST_GET_FAIL:
-      return { loading: false, error: action.payload };
     default:
       return state;
   }

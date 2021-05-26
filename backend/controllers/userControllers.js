@@ -321,23 +321,7 @@ const addPostToSaved = asyncHandler(async (req, res) => {
       await user.save();
     }
 
-    res.status(201).json({
-      success: true,
-      userInfo: {
-        _id: user._id,
-        username: user.username,
-        name: user.name,
-        email: user.email,
-        profileImage: user.profileImage,
-        description: user.description,
-        savedPosts: user.savedPosts,
-        following: user.following,
-        token: generateToken(user._id),
-      },
-      message: `Post ${
-        isAlreadySavedIndex > -1 ? 'removed' : 'added'
-      } from saved posts`,
-    });
+    res.status(201).json(user.savedPosts);
   } else {
     res.status(404).json({
       success: false,
@@ -347,8 +331,21 @@ const addPostToSaved = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc Get bookmarked posts of user
+// @route GET /api/users/bookmarks/:id
+// @access User
+const getUserBookmarks = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findById(id);
+  if (user) {
+    res.status(201).json(user.savedPosts);
+  } else {
+    res.status(404).json({ success: false, message: 'User not found' });
+  }
+});
+
 // @desc Get user suggestions to follow
-// @route GET /api/users/suggest
+// @route GET /api/users/suggest/:id
 // @access User
 const getUserSuggestions = asyncHandler(async (req, res) => {
   const { id } = req.params;
@@ -409,4 +406,5 @@ export {
   getUserSuggestions,
   getUserSearch,
   deleteUser,
+  getUserBookmarks,
 };

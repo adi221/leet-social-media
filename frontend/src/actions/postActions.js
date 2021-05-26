@@ -6,9 +6,6 @@ import {
   POST_CREATE_REQUEST,
   POST_CREATE_SUCCESS,
   POST_CREATE_FAIL,
-  SINGLE_POST_GET_REQUEST,
-  SINGLE_POST_GET_SUCCESS,
-  SINGLE_POST_GET_FAIL,
   POST_DELETE_REQUEST,
   POST_DELETE_SUCCESS,
   POST_DELETE_FAIL,
@@ -59,22 +56,6 @@ export const createPost =
       });
     }
   };
-
-export const getSinglePostDetails = id => async dispatch => {
-  try {
-    dispatch({ type: SINGLE_POST_GET_REQUEST });
-    const { data } = await axios.get(`/api/posts/${id}`);
-    dispatch({ type: SINGLE_POST_GET_SUCCESS, payload: data });
-  } catch (error) {
-    dispatch({
-      type: SINGLE_POST_GET_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    });
-  }
-};
 
 export const deletePost = (postId, userId) => async (dispatch, getState) => {
   try {
