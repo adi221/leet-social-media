@@ -1,53 +1,60 @@
-.profile-page-header {
-  width: 100%;
-  display: grid;
-  grid-template-columns: 300px 1fr;
-  justify-content: center;
-  justify-items: center;
-  column-gap: 2rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid #d6d6d6;
-}
+.profile-page {
+  &__header {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 19rem 1fr;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+    column-gap: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #d6d6d6;
 
-.profile-page-header img {
-  width: 160px;
-  height: 160px;
-  object-fit: cover;
-  border-radius: 50%;
-}
+    img {
+      width: 10rem;
+      height: 10rem;
+      object-fit: cover;
+      border-radius: 50%;
+    }
 
-.profile-page-header-content {
-  padding-top: 1rem;
-  justify-self: start;
-}
+    &--content {
+      padding-top: 1rem;
+      justify-self: start;
 
-.profile-page-header-content > * {
-  justify-content: stretch;
-  margin-bottom: 1.5rem;
-}
+      h1 {
+        font-weight: 400;
+        font-size: 2rem;
+      }
 
-.profile-page-header-heading h1 {
-  font-weight: 400;
-  font-size: 2rem;
-}
+      & > * {
+        justify-content: stretch;
+        margin-bottom: 1.5rem;
+      }
+    }
 
-.profile-page-header-follow p {
-  font-size: 18px;
-}
+    &--follow {
+      p {
+        font-size: 1.1rem;
+      }
+    }
+  }
 
-.profile-page-btns button {
-  text-transform: uppercase;
-  font-size: 14px;
-  color: #8e8e8e;
-  background-color: transparent;
-  padding: 1rem 0;
-  transition: var(--transition);
-  letter-spacing: (--spacing);
-  border-top: 1px solid transparent;
-}
+  &__btns {
+    button {
+      text-transform: uppercase;
+      font-size: 1rem;
+      color: #8e8e8e;
+      background-color: transparent;
+      padding: 1rem 0;
+      transition: $transition;
+      letter-spacing: $spacing;
+      border-top: 1px solid transparent;
+    }
 
-.profile-page-btns button svg {
-  margin-right: 5px;
+    svg {
+      margin-right: 0.3rem;
+    }
+  }
 }
 
 .active-btn {

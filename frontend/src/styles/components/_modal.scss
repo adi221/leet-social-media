@@ -5,74 +5,83 @@
   transform: translate(-50%, -50%);
   border-radius: 10px;
   width: 420px;
+  max-width: 95vw;
   transition: $transition;
   z-index: 100;
   background-color: $clr-white;
   flex-direction: column;
-}
 
-.modal-title {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  border-bottom: 1px solid #a8a8a8;
-  padding: 1.2rem 1.5rem;
-}
+  button,
+  label {
+    cursor: pointer;
+  }
 
-.modal-title svg {
-  vertical-align: middle;
-}
+  &__title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    border-bottom: 1px solid #a8a8a8;
+    padding: 1.2rem 1.5rem;
 
-.modal input[type='file'] {
-  width: 0.1px;
-  height: 0.1px;
-  opacity: 0;
-  overflow: hidden;
-  position: absolute;
-  z-index: -1;
-}
+    svg {
+      vertical-align: middle;
+    }
+  }
 
-.modal button,
-.modal label {
-  cursor: pointer;
-}
+  ul {
+    width: 100%;
 
-.modal ul {
-  width: 100%;
-  text-align: center;
-}
+    li {
+      width: 100%;
+      padding: 0.7rem;
+      text-align: center;
 
-.modal ul li {
-  width: 100%;
-  padding: 0.7rem;
-}
+      &:not(:last-child) {
+        border-bottom: 1px solid $clr-border-light;
+      }
+    }
+  }
 
-.modal ul li:not(:last-child) {
-  border-bottom: 1px solid $clr-border-light;
-}
+  input[type='file'] {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+  }
 
-.user-modal-item {
-  display: flex;
-  align-items: center;
-  transition: $transition;
-  cursor: pointer;
-}
+  &__users {
+    padding: 0;
+    &--item {
+      display: flex;
+      align-items: center;
+      transition: $transition;
+      cursor: pointer;
 
-.user-modal-item:hover {
-  background-color: #f7f7f7;
-}
+      img {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
 
-.user-modal-item img {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  object-fit: cover;
-}
+      p {
+        font-size: 12px;
+        text-align: left;
+      }
 
-.user-modal-item p {
-  font-size: 12px;
-  text-align: left;
+      &:hover {
+        background-color: #f7f7f7;
+      }
+
+      &:last-child {
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+      }
+    }
+  }
 }
 
 .overlay {

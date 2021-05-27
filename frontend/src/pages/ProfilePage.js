@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useHistory, Link } from 'react-router-dom';
+import { useParams, useHistory, Link, NavLink, Switch } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { BsGrid3X3, BsBookmark, BsHeart } from 'react-icons/bs';
@@ -89,32 +89,28 @@ const ProfilePage = () => {
   return (
     <div className='profile-page page'>
       <div className='page-center'>
-        <header className='profile-page-header '>
+        <header className='profile-page__header '>
           <img src={profileImage} alt={username} />
-          <section className='profile-page-header-content'>
-            <div className='profile-page-header-heading is-flexed'>
-              <h1 className='margin-right32'>{username}</h1>
+          <section className='profile-page__header--content'>
+            <div className='profile-page__header--heading is-flexed'>
+              <h1 className='mr-md'>{username}</h1>
               {userInfo.username !== username ? (
                 <button className='button is-primary' onClick={followHandler}>
                   {isFollowing ? 'Unfollow' : 'Follow'}
                 </button>
               ) : (
-                <Link
-                  to='/settings'
-                  className='button is-light'
-                  onClick={() => followHandler()}
-                >
+                <Link to='/settings/edit' className='button is-light'>
                   Edit Profile
                 </Link>
               )}
             </div>
-            <div className='profile-page-header-follow is-flexed'>
-              <p className='margin-right64'>
+            <div className='profile-page__header--follow is-flexed'>
+              <p className='mr-lg'>
                 <span className='bold'>{userPosts && userPosts.length} </span>{' '}
                 posts
               </p>
               <p
-                className='margin-right64'
+                className='mr-lg'
                 style={{
                   cursor: `${
                     followers && followers.length > 0 ? 'pointer' : 'auto'
@@ -137,22 +133,20 @@ const ProfilePage = () => {
                 following
               </p>
             </div>
-            <div className='profile-page-header-description'>{description}</div>
+            <div className='profile-page__header--description'>
+              {description}
+            </div>
           </section>
         </header>
-        <div className='profile-page-btns is-flexed'>
+        <div className='profile-page__btns is-flexed'>
           <button
-            className={`margin-right64 is-flexed ${
-              listIndex === 0 && 'active-btn'
-            }`}
+            className={`mr-lg is-flexed ${listIndex === 0 && 'active-btn'}`}
             onClick={() => setListIndex(0)}
           >
             <BsGrid3X3 /> posts
           </button>
           <button
-            className={`margin-right64 is-flexed ${
-              listIndex === 1 && 'active-btn'
-            }`}
+            className={`mr-lg is-flexed ${listIndex === 1 && 'active-btn'}`}
             onClick={() => setListIndex(1)}
           >
             <BsHeart /> liked

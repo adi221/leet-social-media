@@ -22,6 +22,7 @@ const SinglePostModal = props => {
   const { success: successDelete } = useSelector(state => state.postDelete);
 
   useEffect(() => {
+    if (userInfo._id === userId) return;
     const isUserFollowing = userInfo.following.some(
       follower => follower.user === userId
     );
@@ -66,7 +67,7 @@ const SinglePostModal = props => {
         </li>
       ) : (
         <li>
-          <button className='red bold' onClick={followHandler}>
+          <button className='bold' onClick={followHandler}>
             {isFollowing ? 'Unfollow' : 'Follow'}
           </button>
         </li>

@@ -14,18 +14,22 @@ const UserListModal = ({ usersList, title }) => {
 
   return (
     <>
-      <div className='modal-title'>
+      <div className='modal__title'>
         <h2>{title}</h2>
         <button onClick={() => dispatch({ type: CLOSE_MODAL })}>
           <GrClose />
         </button>
       </div>
-      <ul>
+      <ul className='modal__users'>
         {usersList.map(user => {
           const { name, username, profileImage, _id } = user;
           return (
-            <li className='user-modal-item' onClick={() => userHandler(_id)}>
-              <img src={profileImage} alt={name} className='margin-right16' />
+            <li
+              className='modal__users--item'
+              key={_id}
+              onClick={() => userHandler(_id)}
+            >
+              <img src={profileImage} alt={name} className='mr-sm' />
               <div>
                 <p className='bold underline'>{username}</p>
                 <p>{name}</p>

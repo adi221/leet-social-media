@@ -13,11 +13,9 @@ import { getUserDetails } from '../actions/userActions';
 
 const SettingsPage = () => {
   const history = useHistory();
-  console.log(history);
   const {
     location: { pathname },
   } = useHistory();
-  console.log(pathname);
 
   const dispatch = useDispatch();
   const { success } = useSelector(state => state.userUpdateProfile);

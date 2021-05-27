@@ -42,7 +42,7 @@ const EditImageModal = () => {
 
   return (
     <>
-      <div className='modal-title'>
+      <div className='modal__title'>
         <h2>Change Profile Photo</h2>
         <button onClick={() => dispatch({ type: CLOSE_MODAL })}>
           <GrClose />
