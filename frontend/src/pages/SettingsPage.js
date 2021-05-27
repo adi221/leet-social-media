@@ -1,21 +1,32 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { NavLink, Switch, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { ErrorPage } from '../pages';
 import {
   Loader,
   EditProfile,
-  EditImageProfile,
   ChangePassword,
-  SettingsHeader,
+  PrivateRoute,
 } from '../components';
 import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants';
 import { getUserDetails } from '../actions/userActions';
 
 const SettingsPage = () => {
-  const [activeItem, setActiveItem] = useState(0);
+  const history = useHistory();
+  console.log(history);
+  const {
+    location: { pathname },
+  } = useHistory();
+  console.log(pathname);
 
   const dispatch = useDispatch();
   const { success } = useSelector(state => state.userUpdateProfile);
+
+  useEffect(() => {
+    if (pathname === '/settings') {
+      history.push('/settings/edit');
+    }
+  }, [pathname, history]);
 
   useEffect(() => {
     dispatch(getUserDetails());
@@ -33,48 +44,51 @@ const SettingsPage = () => {
     email: emailCurr,
     name: nameCurr,
     username: usernameCurr,
-    password,
     profileImage,
   } = user;
 
-  const content =
-    activeItem === 0 ? (
-      <article className='settings-content'>
-        <EditImageProfile username={usernameCurr} image={profileImage} />
-        <EditProfile
-          currentSettings={{
-            descriptionCurr,
-            nameCurr,
-            usernameCurr,
-            emailCurr,
-          }}
-        />
-      </article>
-    ) : (
-      <article className='settings-content'>
-        <SettingsHeader username={usernameCurr} image={profileImage} />
-        <ChangePassword currPassword={password} />
-      </article>
-    );
-
   return (
-    <div className='page'>
-      <div className='page-center settings-container'>
-        <ul className='settings-list '>
-          <li
-            className={activeItem === 0 ? 'settings-list-item-active' : ''}
-            onClick={() => setActiveItem(0)}
+    <div className='page settings-page'>
+      <div className='page-center settings-page__container'>
+        <ul className='settings-page__container--list '>
+          <NavLink
+            to='/settings/edit'
+            activeClassName='settings-page__container--list-link-active'
+            className='settings-page__container--list-link'
           >
             Edit Profile
-          </li>
-          <li
-            className={activeItem === 1 ? 'settings-list-item-active' : ''}
-            onClick={() => setActiveItem(1)}
+          </NavLink>
+          <NavLink
+            to='/settings/password'
+            activeClassName='settings-page__container--list-link-active'
+            className='settings-page__container--list-link'
           >
             Change Password
-          </li>
+          </NavLink>
         </ul>
-        {content}
+        <article className='settings-page__container--content'>
+          <Switch>
+            <PrivateRoute path='/settings/edit'>
+              <EditProfile
+                currSettings={{
+                  descriptionCurr,
+                  emailCurr,
+                  nameCurr,
+                  usernameCurr,
+                  profileImage,
+                }}
+              />
+            </PrivateRoute>
+            <PrivateRoute path='/settings/password'>
+              <ChangePassword
+                currSettings={{
+                  usernameCurr,
+                  profileImage,
+                }}
+              />
+            </PrivateRoute>
+          </Switch>
+        </article>
       </div>
     </div>
   );

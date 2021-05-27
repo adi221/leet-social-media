@@ -3,9 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Message } from '../../components';
 import { USER_UPDATE_PASSWORD_RESET } from '../../constants/userConstants';
 import { updateUserPassword } from '../../actions/userActions';
+import SettingsHeader from './SettingsHeader';
 
-const ChangePassword = ({ currPassword }) => {
-  console.log(currPassword);
+const ChangePassword = ({ currSettings }) => {
+  const { usernameCurr, profileImage } = currSettings;
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
@@ -43,52 +44,55 @@ const ChangePassword = ({ currPassword }) => {
   };
 
   return (
-    <form onSubmit={submitHandler} className='settings-form is-flexed'>
-      <div className=' settings-form-control'>
-        <label htmlFor='name' className='bold margin-right32'>
-          Old Password
-        </label>
-        <input
-          type='password'
-          placeholder='Old Password'
-          value={oldPassword}
-          onChange={e => setOldPassword(e.target.value)}
-        />
-      </div>
-      <div className=' settings-form-control'>
-        <label htmlFor='name' className='bold margin-right32'>
-          New Password
-        </label>
-        <input
-          type='password'
-          placeholder='New Password'
-          value={newPassword}
-          onChange={e => setNewPassword(e.target.value)}
-        />
-      </div>
-      <div className=' settings-form-control'>
-        <label htmlFor='name' className='bold margin-right32'>
-          Confirm New Password
-        </label>
-        <input
-          type='password'
-          placeholder='Confirm New Password'
-          value={newPasswordConfirm}
-          onChange={e => setNewPasswordConfirm(e.target.value)}
-        />
-      </div>
-      <div className=' settings-form-control'>
-        <p></p>
-        <button className='button is-primary' type='submit'>
-          Submit
-        </button>
-      </div>
-      {loading && <Message type='info' text='Loading...' />}
-      {success && (
-        <Message type='success' text='Password successfully changed' />
-      )}
-      {error && <Message type='danger' text={error} />}
-    </form>
+    <>
+      <SettingsHeader username={usernameCurr} image={profileImage} />
+      <form onSubmit={submitHandler} className='settings-form is-flexed'>
+        <div className=' settings-form__control'>
+          <label htmlFor='name' className='bold mr-md'>
+            Old Password
+          </label>
+          <input
+            type='password'
+            placeholder='Old Password'
+            value={oldPassword}
+            onChange={e => setOldPassword(e.target.value)}
+          />
+        </div>
+        <div className=' settings-form__control'>
+          <label htmlFor='name' className='bold mr-md'>
+            New Password
+          </label>
+          <input
+            type='password'
+            placeholder='New Password'
+            value={newPassword}
+            onChange={e => setNewPassword(e.target.value)}
+          />
+        </div>
+        <div className=' settings-form__control'>
+          <label htmlFor='name' className='bold mr-md'>
+            Confirm New Password
+          </label>
+          <input
+            type='password'
+            placeholder='Confirm New Password'
+            value={newPasswordConfirm}
+            onChange={e => setNewPasswordConfirm(e.target.value)}
+          />
+        </div>
+        <div className=' settings-form__control'>
+          <p></p>
+          <button className='button is-primary' type='submit'>
+            Submit
+          </button>
+        </div>
+        {loading && <Message type='info' text='Loading...' />}
+        {success && (
+          <Message type='success' text='Password successfully changed' />
+        )}
+        {error && <Message type='danger' text={error} />}
+      </form>
+    </>
   );
 };
 

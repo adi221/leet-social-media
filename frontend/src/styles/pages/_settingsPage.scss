@@ -1,38 +1,50 @@
-.settings-container {
-  border: 1px solid $clr-border-light;
-  background-color: $clr-white;
-  max-width: 1100px;
-  display: grid;
-  grid-template-columns: 235px 1fr;
-  justify-content: center;
-  min-height: 500px;
-}
+.settings-page {
+  &__container {
+    border: 1px solid $clr-border-light;
+    background-color: $clr-white;
+    width: minmax(100vw, 1000px);
+    display: grid;
+    grid-template-columns: 14rem 1fr;
+    justify-content: center;
+    min-height: 31rem;
 
-.settings-list {
-  border-right: 1px solid $clr-border-light;
-}
+    &--list {
+      border-right: 1px solid $clr-border-light;
+      display: flex;
+      flex-direction: column;
+      justify-content: stretch;
 
-.settings-list li {
-  cursor: pointer;
-  width: 100%;
-  padding: 1.1rem 2rem;
-}
+      &-link {
+        cursor: pointer;
+        width: 100%;
+        padding: 1.1rem 2rem;
 
-.settings-list-item-active {
-  border-left: 2px solid #262626;
-  color: #262626;
-  font-weight: bold;
-}
+        &-active {
+          border-left: 2px solid #262626;
+          color: #262626;
+          font-weight: bold;
+        }
+      }
+    }
 
-.settings-content {
-  width: 100%;
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 1.5rem 0;
-}
+    &--content {
+      width: 100%;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 1.5rem 0;
+    }
+  }
 
-.settings-form {
-  flex-direction: column;
+  @include respond(phone) {
+    &__container {
+      display: block;
+      margin: 0 auto;
+
+      &--list {
+        display: none;
+      }
+    }
+  }
 }
 
 .settings-content-header img {
@@ -68,49 +80,9 @@
 .settings-form-control {
   width: 100%;
   display: grid;
-  grid-template-columns: 150px 1fr;
+  grid-template-columns: 7rem 1fr;
   justify-content: center;
   justify-items: end;
   align-items: baseline;
   margin: 0.5rem 0;
-}
-
-.settings-form-control textarea,
-.settings-form-control input {
-  border: 1px solid $clr-border-light;
-  justify-self: center;
-  max-width: 500px;
-  width: 100%;
-  height: 2rem;
-  padding: 0.5rem;
-  border-radius: $radius;
-  color: initial;
-  margin: 0.5rem;
-}
-
-.settings-form-control textarea {
-  height: 70px;
-}
-
-.settings-form-control button {
-  justify-self: start;
-  margin: 1rem 1.5rem;
-  padding: 0.5rem 1rem;
-  white-space: nowrap;
-}
-
-.settings-form-control div {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  align-items: center;
-}
-
-@media (max-width: 1132px) {
-  .settings-container {
-    grid-template-columns: none;
-  }
-  .settings-list {
-    display: none;
-  }
 }

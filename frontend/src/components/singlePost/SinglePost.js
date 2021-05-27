@@ -11,7 +11,6 @@ import {
   SinglePostForm,
   SinglePostBtns,
 } from '..';
-import { ErrorPage } from '../../pages';
 import { SHOW_MODAL } from '../../constants/utilConstants';
 import {
   SINGLE_POST_LOADING,

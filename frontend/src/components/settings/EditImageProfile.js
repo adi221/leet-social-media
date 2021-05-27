@@ -13,7 +13,7 @@ const EditImageProfile = ({ image, username }) => {
   };
 
   return (
-    <div className='settings-content-header'>
+    <div className='settings-content__header'>
       <img src={image} alt={username} />
       <div className='is-flexed'>
         <h2>{username}</h2>
