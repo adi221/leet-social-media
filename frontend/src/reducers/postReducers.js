@@ -2,6 +2,7 @@ import {
   POSTS_GET_REQUEST,
   POSTS_GET_SUCCESS,
   POSTS_GET_FAIL,
+  POSTS_ADD_LOADED,
   POST_CREATE_REQUEST,
   POST_CREATE_SUCCESS,
   POST_CREATE_FAIL,
@@ -12,14 +13,31 @@ import {
   POST_DELETE_RESET,
 } from '../constants/postConstants';
 
-export const postsGetReducer = (state = { posts: [] }, action) => {
+export const postsGetReducer = (
+  state = { posts: [], loadedPosts: [] },
+  action
+) => {
   switch (action.type) {
     case POSTS_GET_REQUEST:
       return { loading: true };
     case POSTS_GET_SUCCESS:
-      return { loading: false, posts: action.payload };
+      return {
+        loading: false,
+        posts: action.payload.slice(3),
+        loadedPosts: action.payload.slice(0, 3),
+      };
     case POSTS_GET_FAIL:
       return { loading: false, error: action.payload };
+    case POSTS_ADD_LOADED:
+      let newLoadedPosts = [];
+      const len = state.posts.length;
+      for (let i = 0; i < Math.min(len, 3); i++) {
+        newLoadedPosts.push(state.posts.shift());
+      }
+      return {
+        ...state,
+        loadedPosts: [...state.loadedPosts, ...newLoadedPosts],
+      };
     default:
       return state;
   }

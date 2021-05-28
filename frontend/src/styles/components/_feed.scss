@@ -1,0 +1,43 @@
+.feed {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+
+  &__bottom {
+    text-align: center;
+    width: 100%;
+
+    &--dividor {
+      display: grid;
+      grid-template-columns: 1fr min-content 1fr;
+      align-items: center;
+      column-gap: 1.5rem;
+      padding: 2rem 0 1.2rem;
+
+      &::before {
+        grid-column: 1;
+        content: '';
+        background-color: $clr-border;
+        height: 1px;
+        display: block;
+      }
+      &::after {
+        grid-column: 3;
+        content: '';
+        background-color: $clr-border;
+        height: 1px;
+        display: block;
+      }
+
+      svg {
+        fill: $clr-primary-1;
+        font-size: 4.5rem;
+      }
+    }
+
+    h4 {
+      color: $clr-grey-1;
+    }
+  }
+}

@@ -24,13 +24,11 @@ const RootModal = () => {
   const SpecificModal = MODAL_COMPONENTS[modalType];
 
   return (
-    <>
-      <div className='overlay' onClick={closeModal}>
-        <div className='modal is-flexed'>
-          <SpecificModal {...modalProps} />
-        </div>
+    <div className='overlay' onClick={closeModal}>
+      <div className='modal is-flexed'>
+        <SpecificModal {...modalProps} />
       </div>
-    </>
+    </div>
   );
 };
 

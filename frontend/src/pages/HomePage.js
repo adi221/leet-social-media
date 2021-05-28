@@ -1,22 +1,33 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ErrorPage } from '../pages';
-import { SinglePost, HomeSidebar, Loader } from '../components';
+import { HomeSidebar, Loader, Feed } from '../components';
+import useScrollPositionThrottled from '../hooks/useScrollPositionThrottled';
 import { getPosts } from '../actions/postActions';
 import { getUserStats } from '../actions/userActions';
+import { POSTS_ADD_LOADED } from '../constants/postConstants';
 
 const HomePage = () => {
   const dispatch = useDispatch();
 
   const { userInfo } = useSelector(state => state.userLogin);
+  const postsGet = useSelector(state => state.postsGet);
+  const { posts, loading, error } = postsGet;
 
   useEffect(() => {
     dispatch(getPosts());
     dispatch(getUserStats(userInfo._id));
   }, [dispatch, userInfo]);
 
-  const postsGet = useSelector(state => state.postsGet);
-  const { posts, loading, error } = postsGet;
+  useScrollPositionThrottled(
+    ({ atBottom }) => {
+      if (atBottom && posts && posts.length > 0) {
+        dispatch({ type: POSTS_ADD_LOADED });
+      }
+    },
+    null,
+    []
+  );
 
   if (loading) return <Loader />;
   if (error) return <ErrorPage />;
@@ -24,12 +35,7 @@ const HomePage = () => {
   return (
     <div className='page home-page'>
       <div className='page-center home-grid'>
-        <div className='posts-container is-flexed'>
-          {posts &&
-            posts.map(id => {
-              return <SinglePost key={id} uniqueId={id} simple />;
-            })}
-        </div>
+        <Feed />
         <aside className='sidebar'>
           <div className='sidebar__content'>
             <HomeSidebar />

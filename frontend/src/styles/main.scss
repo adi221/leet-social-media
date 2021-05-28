@@ -5,6 +5,7 @@
 @import './base/base';
 @import './base/utilities';
 
+@import './components/feed';
 @import './components/home-sidebar';
 @import './components/loader';
 @import './components/message';
@@ -12,6 +13,7 @@
 @import './components/search-bar';
 @import './components/settings-form';
 @import './components/single-post';
+@import './components/skeleton-loader';
 @import './components/tags';
 
 @import './layout/app';
