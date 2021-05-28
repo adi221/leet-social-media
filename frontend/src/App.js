@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {
@@ -15,6 +15,14 @@ import { Navbar, PrivateRoute, RootModal } from './components';
 
 const App = () => {
   const { isShow } = useSelector(state => state.modal);
+  useEffect(() => {
+    if (isShow) {
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isShow]);
 
   return (
     <Router>
@@ -34,7 +42,7 @@ const App = () => {
           <Route path='*' component={ErrorPage} />
         </Switch>
       </div>
-      {isShow && <RootModal />}
+      <RootModal />
     </Router>
   );
 };

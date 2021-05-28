@@ -34,9 +34,10 @@ import {
   USER_DELETE_REQUEST,
   USER_DELETE_SUCCESS,
   USER_DELETE_FAIL,
-  USER_BOOKMARKS_REQUEST,
-  USER_BOOKMARKS_SUCCESS,
-  USER_BOOKMARKS_FAIL,
+  USER_STATS_REQUEST,
+  USER_STATS_SUCCESS,
+  USER_STATS_FAIL,
+  USER_STATS_FOLLOWING,
 } from '../constants/userConstants';
 
 export const login = (email, password) => async dispatch => {
@@ -129,7 +130,8 @@ export const followUser = userId => async (dispatch, getState) => {
       },
     };
 
-    await axios.put(`/api/users/follow/${userId}`, {}, config);
+    const { data } = await axios.put(`/api/users/follow/${userId}`, {}, config);
+    dispatch({ type: USER_STATS_FOLLOWING, payload: data });
     dispatch({ type: USER_FOLLOW_SUCCESS });
   } catch (error) {
     dispatch({
@@ -156,7 +158,12 @@ export const unfollowUser = userId => async (dispatch, getState) => {
       },
     };
 
-    await axios.put(`/api/users/unfollow/${userId}`, {}, config);
+    const { data } = await axios.put(
+      `/api/users/unfollow/${userId}`,
+      {},
+      config
+    );
+    dispatch({ type: USER_STATS_FOLLOWING, payload: data });
     dispatch({ type: USER_UNFOLLOW_SUCCESS });
   } catch (error) {
     dispatch({
@@ -281,14 +288,14 @@ export const getUserSuggestions = id => async dispatch => {
   }
 };
 
-export const getUserBookmarks = id => async dispatch => {
+export const getUserStats = id => async dispatch => {
   try {
-    dispatch({ type: USER_BOOKMARKS_REQUEST });
-    const { data } = await axios.get(`/api/users/bookmark/${id}`);
-    dispatch({ type: USER_BOOKMARKS_SUCCESS, payload: data });
+    dispatch({ type: USER_STATS_REQUEST });
+    const { data } = await axios.get(`/api/users/stats/${id}`);
+    dispatch({ type: USER_STATS_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
-      type: USER_BOOKMARKS_FAIL,
+      type: USER_STATS_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

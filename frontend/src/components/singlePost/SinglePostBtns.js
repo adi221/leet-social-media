@@ -8,7 +8,7 @@ import {
   FaRegBookmark,
   FaBookmark,
 } from 'react-icons/fa';
-import { USER_BOOKMARKS_SUCCESS } from '../../constants/userConstants';
+import { USER_STATS_BOOKMARKS } from '../../constants/userConstants';
 import { SINGLE_POST_LIKE_SUCCESS } from '../../constants/singlePostConstants';
 
 const SinglePostBtns = ({ uniqueId, likes, commentRef, dispatch }) => {
@@ -18,7 +18,7 @@ const SinglePostBtns = ({ uniqueId, likes, commentRef, dispatch }) => {
   const dispatchRedux = useDispatch();
 
   const { userInfo } = useSelector(state => state.userLogin);
-  const { bookmarks } = useSelector(state => state.userBookmarks);
+  const { bookmarks } = useSelector(state => state.userStats);
 
   useEffect(() => {
     const likedOrNot = likes && likes.some(like => like.user === userInfo._id);
@@ -27,7 +27,7 @@ const SinglePostBtns = ({ uniqueId, likes, commentRef, dispatch }) => {
 
   useEffect(() => {
     const bookmarkedOrNot =
-      bookmarks.length > 0 &&
+      bookmarks &&
       bookmarks.some(bookmarkedPost => bookmarkedPost.post === uniqueId);
     setIsBookmarked(bookmarkedOrNot);
   }, [bookmarks, uniqueId]);
@@ -64,7 +64,7 @@ const SinglePostBtns = ({ uniqueId, likes, commentRef, dispatch }) => {
         {},
         config
       );
-      dispatchRedux({ type: USER_BOOKMARKS_SUCCESS, payload: data });
+      dispatchRedux({ type: USER_STATS_BOOKMARKS, payload: data });
     } catch (error) {
       console.log(error);
     }

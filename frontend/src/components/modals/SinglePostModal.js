@@ -17,17 +17,18 @@ const SinglePostModal = props => {
   const dispatch = useDispatch();
 
   const { userInfo } = useSelector(state => state.userLogin);
+  const { following } = useSelector(state => state.userStats);
   const { success: successFollow } = useSelector(state => state.userFollow);
   const { success: successUnfollow } = useSelector(state => state.userUnfollow);
   const { success: successDelete } = useSelector(state => state.postDelete);
 
   useEffect(() => {
     if (userInfo._id === userId) return;
-    const isUserFollowing = userInfo.following.some(
+    const isUserFollowing = following.some(
       follower => follower.user === userId
     );
     setIsFollowing(isUserFollowing);
-  }, [userInfo, userId]);
+  }, [userInfo, userId, following]);
 
   const followHandler = () => {
     isFollowing ? dispatch(unfollowUser(userId)) : dispatch(followUser(userId));
@@ -67,7 +68,10 @@ const SinglePostModal = props => {
         </li>
       ) : (
         <li>
-          <button className='bold' onClick={followHandler}>
+          <button
+            className={`bold ${isFollowing ? 'red' : 'green'}`}
+            onClick={followHandler}
+          >
             {isFollowing ? 'Unfollow' : 'Follow'}
           </button>
         </li>

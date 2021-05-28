@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ErrorPage } from '../pages';
 import { SinglePost, HomeSidebar, Loader } from '../components';
 import { getPosts } from '../actions/postActions';
-import { getUserBookmarks } from '../actions/userActions';
+import { getUserStats } from '../actions/userActions';
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -12,7 +12,7 @@ const HomePage = () => {
 
   useEffect(() => {
     dispatch(getPosts());
-    dispatch(getUserBookmarks(userInfo._id));
+    dispatch(getUserStats(userInfo._id));
   }, [dispatch, userInfo]);
 
   const postsGet = useSelector(state => state.postsGet);

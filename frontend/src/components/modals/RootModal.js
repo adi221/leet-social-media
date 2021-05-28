@@ -25,10 +25,11 @@ const RootModal = () => {
 
   return (
     <>
-      <div className='modal is-flexed'>
-        <SpecificModal {...modalProps} />
+      <div className='overlay' onClick={closeModal}>
+        <div className='modal is-flexed'>
+          <SpecificModal {...modalProps} />
+        </div>
       </div>
-      <div className='overlay' onClick={closeModal}></div>
     </>
   );
 };

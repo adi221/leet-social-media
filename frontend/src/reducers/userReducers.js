@@ -37,15 +37,14 @@ import {
   USER_DELETE_REQUEST,
   USER_DELETE_SUCCESS,
   USER_DELETE_FAIL,
-  USER_BOOKMARKS_REQUEST,
-  USER_BOOKMARKS_SUCCESS,
-  USER_BOOKMARKS_FAIL,
+  USER_STATS_REQUEST,
+  USER_STATS_SUCCESS,
+  USER_STATS_FAIL,
+  USER_STATS_BOOKMARKS,
+  USER_STATS_FOLLOWING,
 } from '../constants/userConstants';
 
-export const userLoginReducer = (
-  state = { userInfo: null},
-  action
-) => {
+export const userLoginReducer = (state = { userInfo: null }, action) => {
   switch (action.type) {
     case USER_LOGIN_REQUEST:
       return { ...state, loading: true };
@@ -198,15 +197,26 @@ export const userDeleteReducer = (state = {}, action) => {
   }
 };
 
-export const userBookmarksReducer = (state = {bookmarks: []}, action) => {
+export const userStatsReducer = (
+  state = { bookmarks: [], following: [] },
+  action
+) => {
   switch (action.type) {
-    case USER_BOOKMARKS_REQUEST:
+    case USER_STATS_REQUEST:
       return { loading: false };
-    case USER_BOOKMARKS_SUCCESS:
-      return { loading: false, bookmarks: action.payload};
-    case USER_BOOKMARKS_FAIL:
+    case USER_STATS_SUCCESS:
+      return {
+        loading: false,
+        bookmarks: action.payload.savedPosts,
+        following: action.payload.following,
+      };
+    case USER_STATS_FAIL:
       return { loading: false, error: action.payload };
+    case USER_STATS_BOOKMARKS:
+      return { ...state, bookmarks: action.payload };
+    case USER_STATS_FOLLOWING:
+      return { ...state, following: action.payload };
     default:
       return state;
   }
-}
+};

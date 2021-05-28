@@ -162,17 +162,17 @@ const followUser = asyncHandler(async (req, res) => {
       user: req.user._id,
       username: req.user.username,
     });
-    
+
     await followedUser.save();
 
     followingUser.following.push({
       user: followedUser._id,
       username: followedUser.username,
     });
-    
+
     await followingUser.save();
 
-    res.status(200).json({ success: true });
+    res.status(200).json(followingUser.following);
   } else {
     res.status(401).json({ success: false, message: 'User not found' });
     throw new Error('Invalid username');
@@ -195,16 +195,16 @@ const unfollowUser = asyncHandler(async (req, res) => {
     unFollowedUser.followers = unFollowedUser.followers.filter(
       follower => follower.user.toString() !== req.user._id.toString()
     );
-    
+
     await unFollowedUser.save();
 
     unFollowingUser.following = unFollowingUser.following.filter(
       follower => follower.user.toString() !== unFollowedUser._id.toString()
     );
-    
+
     await unFollowingUser.save();
 
-    res.status(200).json({ success: true });
+    res.status(200).json(unFollowingUser.following);
   } else {
     res.status(401).send('Invalid username');
     throw new Error('Invalid username');
@@ -319,14 +319,15 @@ const addPostToSaved = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc Get bookmarked posts of user
-// @route GET /api/users/bookmarks/:id
+// @desc Get bookmarked posts of user and following users of user
+// @route GET /api/users/stats/:id
 // @access User
-const getUserBookmarks = asyncHandler(async (req, res) => {
+const getUserStats = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const user = await User.findById(id);
   if (user) {
-    res.status(201).json(user.savedPosts);
+    const { savedPosts, following } = user;
+    res.status(201).json({ savedPosts, following });
   } else {
     res.status(404).json({ success: false, message: 'User not found' });
   }
@@ -394,5 +395,5 @@ export {
   getUserSuggestions,
   getUserSearch,
   deleteUser,
-  getUserBookmarks,
+  getUserStats,
 };

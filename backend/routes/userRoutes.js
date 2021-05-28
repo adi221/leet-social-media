@@ -13,7 +13,7 @@ import {
   getUserSuggestions,
   getUserSearch,
   deleteUser,
-  getUserBookmarks,
+  getUserStats,
 } from '../controllers/userControllers.js';
 import { protect } from '../middleware/authMiddleware.js';
 
@@ -30,6 +30,6 @@ router.route('/follow/:id').put(protect, followUser);
 router.route('/unfollow/:id').put(protect, unfollowUser);
 router.route('/save/:id').post(protect, addPostToSaved);
 router.route('/suggest/:id').get(getUserSuggestions);
-router.route('/bookmark/:id').get(getUserBookmarks);
+router.route('/stats/:id').get(getUserStats);
 
 export default router;
