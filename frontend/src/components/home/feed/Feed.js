@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import FeedBottom from './FeedBottom';
-import { SinglePost } from '../../components';
+import { SinglePost } from '../../../components';
 
 const Feed = () => {
   const postsGet = useSelector(state => state.postsGet);

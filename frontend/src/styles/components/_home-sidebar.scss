@@ -1,5 +1,6 @@
 .home-sidebar {
-  header {
+  width: 20rem;
+  &__header {
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -16,6 +17,7 @@
   }
 
   &__suggestions {
+    width: 100%;
     h4 {
       margin-top: 1.2rem;
       color: #b9b9b9;
@@ -24,23 +26,34 @@
     &-suggestion {
       display: flex;
       align-items: center;
-      justify-content: stretch;
+      padding: 0 0.2rem;
+      justify-content: space-between;
       margin: 0.5rem 0;
 
-      img {
-        border-radius: 50%;
-        object-fit: cover;
-        width: 35px;
-        height: 35px;
-      }
+      &__info {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
 
-      a {
-        font-size: 14px;
-      }
+        img {
+          border-radius: 50%;
+          object-fit: cover;
+          width: 35px;
+          height: 35px;
+        }
 
-      p {
-        color: #888888;
-        font-size: 12px;
+        a {
+          font-size: 14px;
+        }
+
+        p {
+          color: $clr-grey-1;
+          font-size: 12px;
+        }
+      }
+      button {
+        background: transparent;
+        font-size: 0.9rem;
       }
     }
   }
@@ -56,7 +69,7 @@
       transition: $transition;
 
       &:hover {
-        color: #888888;
+        color: $clr-grey-1;
       }
     }
   }

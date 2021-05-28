@@ -10,6 +10,7 @@ import {
   SkeletonLoader,
   SinglePostForm,
   SinglePostBtns,
+  SinglePostSkeleton,
 } from '..';
 import { SHOW_MODAL } from '../../constants/utilConstants';
 import {
@@ -101,32 +102,7 @@ const SinglePost = ({ uniqueId, simple = false }) => {
     });
   };
 
-  if (state.loading)
-    return (
-      <article className='single-post'>
-        <header
-          className={`single-post__header ${
-            simple && 'single-post__header--simple'
-          }`}
-        >
-          <SkeletonLoader style={{ height: '4rem', width: '4rem' }} />
-        </header>
-        <div
-          className={`single-post__image ${
-            simple && 'single-post__image--simple'
-          }`}
-        >
-          <SkeletonLoader animated />
-        </div>
-        <div
-          className={`single-post__content ${
-            simple && 'single-post__content--simple'
-          }`}
-        >
-          <SkeletonLoader animated />
-        </div>
-      </article>
-    );
+  if (state.loading) return <SinglePostSkeleton simple={simple} />;
   if (state.error) return null;
 
   return (

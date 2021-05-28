@@ -34,7 +34,7 @@ const HomePage = () => {
 
   return (
     <div className='page home-page'>
-      <div className='page-center home-grid'>
+      <div className='page-center home-page__container'>
         <Feed />
         <aside className='sidebar'>
           <div className='sidebar__content'>

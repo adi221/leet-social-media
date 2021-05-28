@@ -50,15 +50,19 @@
         border-bottom: 1px solid $clr-border-light;
       }
     }
-  }
+    label {
+      cursor: pointer;
+    }
 
-  input[type='file'] {
-    width: 0.1px;
-    height: 0.1px;
-    opacity: 0;
-    overflow: hidden;
-    position: absolute;
-    z-index: -1;
+    input[type='file'] {
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      z-index: -1;
+      cursor: pointer;
+    }
   }
 
   &__users {
