@@ -4,7 +4,23 @@
 
 ## ✅ Features:
 
-1. User auth - login, signup, signout
-2. User can upload posts, add comments, likes.
-3. User can follow and be followed by others.
-4. User can edit profile details and settings.
+- Login / Registering with Email
+- Uploading photos w/ description
+- Commenting
+- Liking photos
+- Photo Tags
+- Following users
+- Sharing link
+- Searching users
+- Profile page displays uploads / liked / saved photos
+- Changing profile pic, description, username, password...
+- Deleting photos
+- Displaying number of likes for post and the users that liked the pic
+- Displaying number of followers and following in profile
+- Displaying photos from followed users in main
+- Displaying suggestions of users in sidebar
+- Front-end routing
+- Error page redirection
+- Protected routes
+- Express backend connected to react
+- Database with MongoDB

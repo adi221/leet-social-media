@@ -7,7 +7,6 @@ import { BsThreeDots } from 'react-icons/bs';
 import {
   Tags,
   Comments,
-  SkeletonLoader,
   SinglePostForm,
   SinglePostBtns,
   SinglePostSkeleton,
