@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   HomePage,
   LoginPage,
@@ -12,9 +12,21 @@ import {
   ErrorPage,
 } from './pages';
 import { Navbar, PrivateRoute, RootModal } from './components';
+import { connectSocket } from './actions/socketActions';
+import { getNotifications } from './actions/notificationActions';
 
 const App = () => {
+  const dispatch = useDispatch();
+  const { userInfo } = useSelector(state => state.userLogin);
   const { isShow } = useSelector(state => state.modal);
+
+  useEffect(() => {
+    if (userInfo) {
+      dispatch(connectSocket());
+      dispatch(getNotifications());
+    }
+  }, [userInfo, dispatch]);
+
   useEffect(() => {
     if (isShow) {
       document.body.style.overflow = 'hidden';

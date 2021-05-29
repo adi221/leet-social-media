@@ -11,13 +11,9 @@ import {
   POST_DELETE_FAIL,
 } from '../constants/postConstants';
 
-export const getPosts = () => async (dispatch, getState) => {
+export const getPosts = () => async dispatch => {
   try {
     dispatch({ type: POSTS_GET_REQUEST });
-    const {
-      userLogin: { userInfo },
-    } = getState();
-
     const { data } = await axios.get('/api/posts');
     dispatch({ type: POSTS_GET_SUCCESS, payload: data });
   } catch (error) {

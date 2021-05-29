@@ -5,7 +5,7 @@
 ## ✅ Features:
 
 - Login / Registering with Email
-- Uploading photos w/ description
+- Uploading photos with description
 - Commenting
 - Liking photos
 - Photo Tags
@@ -22,5 +22,7 @@
 - Front-end routing
 - Error page redirection
 - Protected routes
-- Express backend connected to react
+- Express backend connected to React
 - Database with MongoDB
+- Skeleton loading
+- Fetching new posts while scrolling

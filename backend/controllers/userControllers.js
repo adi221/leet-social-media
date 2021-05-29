@@ -368,6 +368,36 @@ const getUserSearch = asyncHandler(async (req, res) => {
 // @access User
 const deleteUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
+  const user = await User.findById(id);
+  console.log(user);
+  // Remove all follows from users
+  for (const follow of user.following) {
+    const followedUser = await User.findById(follow.user);
+    if (followedUser) {
+      followedUser.followers = followedUser.followers.filter(
+        follow => follow.user !== id
+      );
+      await followedUser.save();
+    }
+  }
+  for (const follow of user.followers) {
+    const followingUser = await User.findById(follow.user);
+    if (followingUser) {
+      followingUser.following = followingUser.following.filter(
+        follow => follow.user !== id
+      );
+      await followingUser.save();
+    }
+  }
+  // Remove all likes from posts
+  for (const post of user.likedPosts) {
+    const likedPost = await Post.findById(post.post);
+    if (likedPost) {
+      likedPost.likes = likedPost.likes.filter(user => user.user !== id);
+      await likedPost.save();
+    }
+  }
+  // Delete the user and all his post
   Promise.all([
     Post.deleteMany({ user: id }),
     User.findOneAndRemove({ _id: id }),

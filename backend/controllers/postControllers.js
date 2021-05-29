@@ -1,6 +1,8 @@
 import asyncHandler from 'express-async-handler';
 import Post from '../models/postModel.js';
 import User from '../models/userModel.js';
+import Notification from '../models/notificationModel.js';
+import { sendNotification } from '../handlers/socketHandlers.js';
 
 // @desc Get all posts - from followers and user's posts
 // @route GET /api/posts
@@ -88,6 +90,19 @@ const likePost = asyncHandler(async (req, res) => {
 
       user.likedPosts.push({ post: post._id });
       await user.save();
+
+      const notification = new Notification({
+        sender: _id,
+        receiver: post.user,
+        notificationType: 'like',
+        notificationData: {
+          postId: id,
+          userId: _id,
+        },
+      });
+      await notification.save();
+
+      sendNotification(req, { ...notification });
     }
 
     res.status(201).json(post.likes);

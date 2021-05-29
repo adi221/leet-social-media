@@ -19,6 +19,8 @@ import {
   postDeleteReducer,
 } from '../reducers/postReducers';
 import { modalReducer } from '../reducers/utilReducers';
+import { socketReducer } from '../reducers/socketReducers';
+import { notificationsReducer } from '../reducers/notificationReducers';
 
 const rootReducer = combineReducers({
   userLogin: userLoginReducer,
@@ -37,6 +39,8 @@ const rootReducer = combineReducers({
   postsGet: postsGetReducer,
   postDelete: postDeleteReducer,
   modal: modalReducer,
+  socket: socketReducer,
+  notifications: notificationsReducer,
 });
 
 export default rootReducer;
