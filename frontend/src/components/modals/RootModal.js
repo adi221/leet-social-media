@@ -18,8 +18,9 @@ const RootModal = () => {
   if (!isShow) return null;
 
   const closeModal = e => {
-    if (e.target.classList !== 'overlay') return;
-    dispatch({ type: CLOSE_MODAL });
+    if (e.target.classList.contains('overlay')) {
+      dispatch({ type: CLOSE_MODAL });
+    }
   };
 
   const SpecificModal = MODAL_COMPONENTS[modalType];

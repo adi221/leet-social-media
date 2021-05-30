@@ -2,22 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { IoIosSettings, IoIosPerson } from 'react-icons/io';
-import { SearchBar } from '../../components';
+import { FaRegHeart, FaHeart, FaSignOutAlt } from 'react-icons/fa';
+import { SearchBar, NavNotifications } from '../../components';
 import logo from '../../assets/leet-logo.png';
 import { logout } from '../../actions/userActions';
 
 const Navbar = () => {
   const [showSettings, setShowSettings] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
   const { userInfo } = useSelector(state => state.userLogin);
   const dispatch = useDispatch();
   const history = useHistory();
-
-  const displayList = () => {
-    setShowSettings(true);
-  };
-  const hideList = () => {
-    setShowSettings(false);
-  };
 
   const logoutHandler = () => {
     dispatch(logout());
@@ -25,14 +20,17 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    document.addEventListener('click', () => {
+    document.addEventListener('click', e => {
+      // console.log(e.target);
+      if (e.target.classList.contains('drop')) return;
       setShowSettings(false);
+      setShowNotifications(false);
     });
   });
 
   return (
-    <nav className='navbar'>
-      <div className='nav-center'>
+    <nav className='nav'>
+      <div className='nav__center'>
         <div className='is-flexed'>
           <Link to='/'>
             <img src={logo} alt='logo' className='logo' />
@@ -45,33 +43,53 @@ const Navbar = () => {
               <Link className='button is-primary' to='/upload'>
                 Upload
               </Link>
-              <button className='button is-light ' onClick={logoutHandler}>
-                Sign out
-              </button>
-              <div className='dropdown'>
+
+              <div className='drop nav__center--dropdown'>
                 <button
-                  className='dropdown-toggle is-flexed'
-                  onMouseOver={displayList}
+                  className='drop is-flexed'
+                  onClick={() => setShowNotifications(!showNotifications)}
                 >
-                  <img src={userInfo.profileImage} alt={userInfo.username} />
+                  {showNotifications ? (
+                    <FaHeart
+                      className='drop nav__center--dropdown-notification'
+                      style={{ fill: '#262626' }}
+                    />
+                  ) : (
+                    <FaRegHeart className='drop nav__center--dropdown-notification' />
+                  )}
+                </button>
+                {showNotifications && <NavNotifications />}
+              </div>
+
+              <div className='drop nav__center--dropdown'>
+                <button
+                  className='drop  is-flexed'
+                  onClick={() => setShowSettings(!showSettings)}
+                >
+                  <img
+                    className={`drop nav__center--dropdown__image ${
+                      showSettings && 'clicked'
+                    }`}
+                    src={userInfo.profileImage}
+                    alt={userInfo.username}
+                  />
                 </button>
                 {showSettings && (
-                  <ul
-                    className='dropdown-content  '
-                    onMouseOver={displayList}
-                    onMouseLeave={hideList}
-                  >
-                    <li className='dropdown-item '>
+                  <ul className='drop nav__center--dropdown-content'>
+                    <li className='drop'>
                       <Link to={`/profile/${userInfo._id}`}>
-                        {' '}
                         <IoIosPerson /> Profile
                       </Link>
                     </li>
-                    <li className='dropdown-item '>
+                    <li className='drop'>
                       <Link to='/settings'>
-                        {' '}
                         <IoIosSettings /> Settings
                       </Link>
+                    </li>
+                    <li className='drop'>
+                      <button onClick={logoutHandler}>
+                        <FaSignOutAlt /> Sign Out
+                      </button>
                     </li>
                   </ul>
                 )}

@@ -3,6 +3,8 @@ import {
   GET_NOTIFICATIONS_REQUEST,
   GET_NOTIFICATIONS_SUCCESS,
   GET_NOTIFICATIONS_FAIL,
+  GET_NOTIFICATIONS_RESET,
+  READ_NOTIFICATIONS,
 } from '../constants/notificationConstants';
 
 const INITIAL_STATE = {
@@ -35,6 +37,11 @@ export const notificationsReducer = (state = INITIAL_STATE, action) => {
       };
     case GET_NOTIFICATIONS_FAIL:
       return { ...state, loading: false, error: action.payload };
+    case GET_NOTIFICATIONS_RESET: {
+      return { ...state, notifications: [], unreadCount: 0 };
+    }
+    case READ_NOTIFICATIONS:
+      return { ...state, unreadCount: 0 };
     default:
       return state;
   }

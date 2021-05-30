@@ -4,6 +4,8 @@ import User from '../models/userModel.js';
 import Notification from '../models/notificationModel.js';
 import { sendNotification } from '../handlers/socketHandlers.js';
 
+import imageThumbnail from 'image-thumbnail';
+
 // @desc Get all posts - from followers and user's posts
 // @route GET /api/posts
 // @access User
@@ -58,6 +60,21 @@ const commentPost = asyncHandler(async (req, res) => {
   post.comments.push(newComment);
 
   await post.save();
+  if (post.user.toString() !== req.user._id.toString()) {
+    const notification = new Notification({
+      sender: req.user._id,
+      receiver: post.user,
+      notificationType: 'comment',
+      notificationData: {
+        postId: id,
+        postImage: post.image,
+        comment,
+      },
+    });
+    await notification.save();
+
+    sendNotification(req, { ...notification });
+  }
 
   res.status(201).json(newComment);
 });
@@ -84,6 +101,15 @@ const likePost = asyncHandler(async (req, res) => {
         p => p.post.toString() !== post._id.toString()
       );
       await user.save();
+
+      if (post.user !== req.user._id) {
+        // Delete prev receiver's notification for like
+        await Notification.deleteMany({
+          sender: req.user._id,
+          receiver: post.user,
+          notificationType: 'like',
+        });
+      }
     } else {
       post.likes.push({ user: _id, username });
       await post.save();
@@ -91,18 +117,20 @@ const likePost = asyncHandler(async (req, res) => {
       user.likedPosts.push({ post: post._id });
       await user.save();
 
-      const notification = new Notification({
-        sender: _id,
-        receiver: post.user,
-        notificationType: 'like',
-        notificationData: {
-          postId: id,
-          userId: _id,
-        },
-      });
-      await notification.save();
+      if (post.user.toString() !== req.user._id.toString()) {
+        const notification = new Notification({
+          sender: _id,
+          receiver: post.user,
+          notificationType: 'like',
+          notificationData: {
+            postId: id,
+            postImage: post.image,
+          },
+        });
+        await notification.save();
 
-      sendNotification(req, { ...notification });
+        sendNotification(req, { ...notification });
+      }
     }
 
     res.status(201).json(post.likes);

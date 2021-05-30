@@ -1,4 +1,4 @@
-nav {
+.nav {
   position: fixed;
   height: 3.5rem;
   left: 0;
@@ -7,57 +7,65 @@ nav {
   border-bottom: 1px solid #dbdbdb;
   z-index: 5;
   background-color: $clr-white;
-}
 
-.nav-center {
-  display: flex;
-  justify-content: space-between;
-  max-width: $max-width;
-  align-items: center;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
+  &__center {
+    display: flex;
+    justify-content: space-between;
+    max-width: $max-width;
+    align-items: center;
+    margin: 0 auto;
+    padding: 0 1rem;
 
-.logo {
-  width: 6.5rem;
-  margin-right: 1rem;
-}
+    .logo {
+      width: 6.5rem;
+      margin-right: 1rem;
+    }
 
-.dropdown {
-  position: relative;
-}
+    &--dropdown {
+      position: relative;
+      margin: 0.5rem;
 
-.dropdown img {
-  width: 30px;
-  height: 30px;
-  object-fit: cover;
-  border-radius: 50%;
-}
+      &-notification {
+        width: 25px;
+        height: 25px;
+      }
 
-.dropdown-toggle {
-  height: 2.2rem;
-  width: 2.2rem;
-  background-color: $clr-white;
-}
+      &__image {
+        width: 33px;
+        height: 33px;
+        object-fit: cover;
+        border-radius: 50%;
+        padding: 0.05rem;
+        border: 1.5px solid transparent;
+        transition: $transition;
+      }
 
-.dropdown-content {
-  position: absolute;
-  top: 2.9rem;
-  right: 0;
-  z-index: 900;
-  border-radius: $radius;
-  background-color: $clr-white;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2), -2px 0 4px rgba(0, 0, 0, 0.2);
-}
+      .clicked {
+        border-color: #262626;
+      }
 
-.dropdown-item {
-  width: 230px;
-  color: #000;
-  text-align: left;
-  padding: 0.5rem 0.8rem;
-  cursor: pointer;
-}
+      &-content {
+        position: absolute;
+        top: 2.9rem;
+        right: 0;
+        z-index: 900;
+        border-radius: $radius;
+        background-color: $clr-white;
+        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2),
+          -2px 0 4px rgba(0, 0, 0, 0.2);
 
-.dropdown-item svg {
-  margin-right: 0.4rem;
+        li {
+          width: 230px;
+          color: #000;
+          text-align: left;
+          padding: 0.5rem 0.8rem;
+          cursor: pointer;
+
+          svg {
+            margin-right: 0.4rem;
+          }
+        }
+      }
+    }
+  }
 }

@@ -4,10 +4,12 @@ const notificationSchema = mongoose.Schema(
   {
     sender: {
       type: mongoose.Schema.ObjectId,
+      required: true,
       ref: 'User',
     },
     receiver: {
       type: mongoose.Schema.ObjectId,
+      required: true,
       ref: 'User',
     },
     notificationType: {
@@ -18,6 +20,7 @@ const notificationSchema = mongoose.Schema(
     read: {
       type: Boolean,
       default: false,
+      required: true,
     },
   },
   {

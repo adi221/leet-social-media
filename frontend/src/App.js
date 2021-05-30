@@ -13,7 +13,6 @@ import {
 } from './pages';
 import { Navbar, PrivateRoute, RootModal } from './components';
 import { connectSocket } from './actions/socketActions';
-import { getNotifications } from './actions/notificationActions';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -23,7 +22,6 @@ const App = () => {
   useEffect(() => {
     if (userInfo) {
       dispatch(connectSocket());
-      dispatch(getNotifications());
     }
   }, [userInfo, dispatch]);
 

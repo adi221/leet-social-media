@@ -2,6 +2,10 @@ import asyncHandler from 'express-async-handler';
 import generateToken from '../utils/generateToken.js';
 import User from '../models/userModel.js';
 import Post from '../models/postModel.js';
+import Notification from '../models/notificationModel.js';
+import { sendNotification } from '../handlers/socketHandlers.js';
+import mongoose from 'mongoose';
+const ObjectId = mongoose.Types.ObjectId;
 
 // @desc Register a new user
 // @route POST /api/users
@@ -172,6 +176,15 @@ const followUser = asyncHandler(async (req, res) => {
 
     await followingUser.save();
 
+    const notification = new Notification({
+      sender: req.user._id,
+      receiver: id,
+      notificationType: 'follow',
+    });
+    await notification.save();
+
+    sendNotification(req, { ...notification });
+
     res.status(200).json(followingUser.following);
   } else {
     res.status(401).json({ success: false, message: 'User not found' });
@@ -203,6 +216,13 @@ const unfollowUser = asyncHandler(async (req, res) => {
     );
 
     await unFollowingUser.save();
+
+    // Delete prev receiver's notification for follow
+    await Notification.deleteMany({
+      sender: req.user._id,
+      receiver: id,
+      notificationType: 'follow',
+    });
 
     res.status(200).json(unFollowingUser.following);
   } else {

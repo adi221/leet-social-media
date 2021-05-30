@@ -4,12 +4,16 @@ import {
   GET_NOTIFICATIONS_REQUEST,
   GET_NOTIFICATIONS_SUCCESS,
   GET_NOTIFICATIONS_FAIL,
+  GET_NOTIFICATIONS_RESET,
+  READ_NOTIFICATIONS,
 } from '../constants/notificationConstants';
 
 export const addNotification = notification => ({
   type: ADD_NOTIFICATION,
   payload: notification,
 });
+
+export const resetNotifications = () => ({ type: GET_NOTIFICATIONS_RESET });
 
 export const getNotifications = () => async (dispatch, getState) => {
   try {
@@ -28,5 +32,25 @@ export const getNotifications = () => async (dispatch, getState) => {
           ? error.response.data.message
           : error.message,
     });
+  }
+};
+
+export const readNotifications = () => async (dispatch, getState) => {
+  try {
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    await axios.put(`/api/notifications`, {}, config);
+    dispatch({ type: READ_NOTIFICATIONS });
+  } catch (error) {
+    console.error(error);
   }
 };

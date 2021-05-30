@@ -26,3 +26,5 @@
 - Database with MongoDB
 - Skeleton loading
 - Fetching new posts while scrolling
+- Web sockets
+- Getting real time notifications when user gets follow, like
