@@ -51,6 +51,7 @@ const commentPost = asyncHandler(async (req, res) => {
   const { comment } = req.body;
   const { id } = req.params;
   const post = await Post.findById(id);
+  const user = await User.findById(req.user._id);
 
   const newComment = {
     user: req.user._id,
@@ -73,7 +74,14 @@ const commentPost = asyncHandler(async (req, res) => {
     });
     await notification.save();
 
-    sendNotification(req, { ...notification });
+    sendNotification(req, {
+      ...notification.toObject(),
+      senderDetails: {
+        _id: req.user._id,
+        username: user.username,
+        profileImage: user.profileImage,
+      },
+    });
   }
 
   res.status(201).json(newComment);
@@ -129,7 +137,14 @@ const likePost = asyncHandler(async (req, res) => {
         });
         await notification.save();
 
-        sendNotification(req, { ...notification });
+        sendNotification(req, {
+          ...notification.toObject(),
+          senderDetails: {
+            _id: req.user._id,
+            username: user.username,
+            profileImage: user.profileImage,
+          },
+        });
       }
     }
 

@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { IoIosSettings, IoIosPerson } from 'react-icons/io';
-import { FaRegHeart, FaHeart, FaSignOutAlt } from 'react-icons/fa';
-import { SearchBar, NavNotifications } from '../../components';
+import { FaSignOutAlt } from 'react-icons/fa';
+import { SearchBar, NotificationButton } from '../../components';
 import logo from '../../assets/leet-logo.png';
 import { logout } from '../../actions/userActions';
 
 const Navbar = () => {
   const [showSettings, setShowSettings] = useState(false);
-  const [showNotifications, setShowNotifications] = useState(false);
+
   const { userInfo } = useSelector(state => state.userLogin);
   const dispatch = useDispatch();
   const history = useHistory();
@@ -24,7 +24,6 @@ const Navbar = () => {
       // console.log(e.target);
       if (e.target.classList.contains('drop')) return;
       setShowSettings(false);
-      setShowNotifications(false);
     });
   });
 
@@ -43,8 +42,8 @@ const Navbar = () => {
               <Link className='button is-primary' to='/upload'>
                 Upload
               </Link>
-
-              <div className='drop nav__center--dropdown'>
+              <NotificationButton />
+              {/* <div className='drop nav__center--dropdown'>
                 <button
                   className='drop is-flexed'
                   onClick={() => setShowNotifications(!showNotifications)}
@@ -58,8 +57,8 @@ const Navbar = () => {
                     <FaRegHeart className='drop nav__center--dropdown-notification' />
                   )}
                 </button>
-                {showNotifications && <NavNotifications />}
-              </div>
+                {showNotifications && <Notifications />}
+              </div> */}
 
               <div className='drop nav__center--dropdown'>
                 <button

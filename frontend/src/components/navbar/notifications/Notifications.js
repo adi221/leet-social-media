@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { UsersListSkeleton } from '../../../components';
+import { UsersListSkeleton } from '../..';
 import SingleNotification from './SingleNotification';
 import {
   getNotifications,
@@ -8,7 +8,7 @@ import {
   readNotifications,
 } from '../../../actions/notificationActions';
 
-const NavNotifications = () => {
+const Notifications = () => {
   const dispatch = useDispatch();
   const { notifications, unreadCount, loading } = useSelector(
     state => state.notifications
@@ -50,4 +50,4 @@ const NavNotifications = () => {
   );
 };
 
-export default NavNotifications;
+export default Notifications;

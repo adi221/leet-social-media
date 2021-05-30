@@ -6,6 +6,8 @@
   border-radius: $radius;
   background-color: $clr-white;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2), -2px 0 4px rgba(0, 0, 0, 0.2);
+  max-height: 24rem;
+  overflow-y: auto;
 
   &__item {
     width: 33rem;

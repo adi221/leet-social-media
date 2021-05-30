@@ -4,7 +4,7 @@ import { addNotification } from '../actions/notificationActions';
 
 // connect to socket
 const connect = token => {
-  const socket = io({
+  const socket = io('http://localhost:5000', {
     query: { token },
   });
   return socket;

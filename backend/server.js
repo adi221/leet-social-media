@@ -44,7 +44,8 @@ const socketio = new io.Server(expressServer, {
     origin: '*',
   },
 });
-app.set('socketIo', socketio);
+
+app.set('socketio', socketio);
 
 // Authenticate before establishing a socket connection
 socketio
@@ -53,6 +54,7 @@ socketio
     if (token) {
       try {
         const user = jwt.verify(token, process.env.JWT_SECRET);
+
         if (!user) {
           return next(new Error('Not authorized.'));
         }
@@ -66,6 +68,11 @@ socketio
     }
   })
   .on('connection', socket => {
-    socket.join(socket.user.id);
-    console.log(`socket connected  ${socket.id}`.green.bold);
+    socket.join(socket.user.id.toString());
+    console.log(`socket connected  ${socket.user.id}`.green.bold);
+
+    // Listen for new messages
+    socket.on('newNotification', data => {
+      console.log('Sent');
+    });
   });

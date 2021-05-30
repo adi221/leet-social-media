@@ -1,6 +1,7 @@
 import Navbar from './navbar/Navbar';
 import SearchBar from './navbar/SearchBar';
-import NavNotifications from './navbar/notifications/NavNotifications';
+import Notifications from './navbar/notifications/Notifications';
+import NotificationButton from './navbar/notifications/NotificationButton';
 import RootModal from './modals/RootModal';
 import HomeSidebar from './home/homeSidebar/HomeSidebar';
 import Feed from './home/feed/Feed';
@@ -23,7 +24,8 @@ import PrivateRoute from './routing/PrivateRoute';
 export {
   Navbar,
   SearchBar,
-  NavNotifications,
+  Notifications,
+  NotificationButton,
   RootModal,
   HomeSidebar,
   Feed,

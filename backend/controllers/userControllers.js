@@ -183,7 +183,14 @@ const followUser = asyncHandler(async (req, res) => {
     });
     await notification.save();
 
-    sendNotification(req, { ...notification });
+    sendNotification(req, {
+      ...notification.toObject(),
+      senderDetails: {
+        _id: req.user._id,
+        username: followingUser.username,
+        profileImage: followingUser.profileImage,
+      },
+    });
 
     res.status(200).json(followingUser.following);
   } else {

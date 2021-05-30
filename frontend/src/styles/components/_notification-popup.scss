@@ -1,0 +1,40 @@
+.notification-popup {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 2.9rem;
+  padding: 0.8rem 1.2rem;
+  border-radius: 10px;
+  background-color: $clr-red;
+  display: flex;
+
+  & > *:not(:last-child) {
+    margin-right: 0.7rem;
+  }
+
+  & > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $clr-white;
+    & > * {
+      margin-right: 0.5rem;
+      &:not(:last-child) {
+        margin-right: 1rem;
+      }
+    }
+  }
+
+  &::before {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    content: '';
+    background-color: $clr-red;
+    width: 1.4rem;
+    height: 0.6rem;
+    bottom: 98%;
+    position: absolute;
+    clip-path: polygon(50% 0, 100% 100%, 0% 100%); // Triangle
+  }
+}
