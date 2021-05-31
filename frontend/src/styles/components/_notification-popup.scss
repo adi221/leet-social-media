@@ -37,4 +37,15 @@
     position: absolute;
     clip-path: polygon(50% 0, 100% 100%, 0% 100%); // Triangle
   }
+
+  &__dot {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: $clr-red;
+    height: 4px;
+    width: 4px;
+    border-radius: 50%;
+    top: 2rem;
+  }
 }

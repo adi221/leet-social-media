@@ -1,36 +1,34 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import Notifications from './Notifications';
 import NotificationPopup from './NotificationPopup';
 import { FaRegHeart, FaHeart } from 'react-icons/fa';
+import { hidePopup } from '../../../actions/notificationActions';
 
 const NotificationButton = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showNotificationPopup, setShowNotificationPopup] = useState(false);
-  const popupTimer = useRef();
+  const [popupTimer, setPopupTimer] = useState(null);
+  const dispatch = useDispatch();
 
-  const { unreadCount, notifications } = useSelector(
+  const { unreadCount, notifications, showPopup } = useSelector(
     state => state.notifications
   );
 
   useEffect(() => {
-    if (popupTimer.current) {
-      clearTimeout(popupTimer.current);
-      return;
+    if (!showPopup) return;
+    if (popupTimer) {
+      clearTimeout(popupTimer);
     }
-    if (unreadCount > 0) {
-      !showNotificationPopup && setShowNotificationPopup(true);
-      popupTimer.current = setTimeout(
-        () => setShowNotificationPopup(false),
-        7000
-      );
-      console.log(popupTimer.current);
-    }
-  }, [unreadCount, showNotificationPopup]);
+    dispatch(hidePopup());
+    !showNotificationPopup && setShowNotificationPopup(true);
+    setPopupTimer(setTimeout(() => setShowNotificationPopup(false), 7000));
+    return () => clearTimeout(popupTimer);
+  }, [popupTimer, showPopup, dispatch, showNotificationPopup]);
 
   useEffect(() => {
     if (showNotifications) {
-      clearTimeout(popupTimer.current);
+      clearTimeout(popupTimer);
       setShowNotificationPopup(false);
     }
   }, [popupTimer, showNotifications]);
@@ -46,6 +44,9 @@ const NotificationButton = () => {
             numUnreadNotifications={unreadCount}
             notifications={notifications}
           />
+        )}
+        {!showNotificationPopup && !showNotifications && unreadCount > 0 && (
+          <div className='notification-popup__dot'></div>
         )}
         {showNotifications ? (
           <FaHeart

@@ -6,12 +6,15 @@ import {
   GET_NOTIFICATIONS_FAIL,
   GET_NOTIFICATIONS_RESET,
   READ_NOTIFICATIONS,
+  HIDE_NOTIFICATION_POPUP,
 } from '../constants/notificationConstants';
 
 export const addNotification = notification => ({
   type: ADD_NOTIFICATION,
   payload: notification,
 });
+
+export const hidePopup = () => ({ type: HIDE_NOTIFICATION_POPUP });
 
 export const resetNotifications = () => ({ type: GET_NOTIFICATIONS_RESET });
 

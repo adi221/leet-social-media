@@ -5,6 +5,7 @@ import {
   GET_NOTIFICATIONS_FAIL,
   GET_NOTIFICATIONS_RESET,
   READ_NOTIFICATIONS,
+  HIDE_NOTIFICATION_POPUP,
 } from '../constants/notificationConstants';
 
 const INITIAL_STATE = {
@@ -12,6 +13,7 @@ const INITIAL_STATE = {
   unreadCount: 0,
   loading: false,
   error: false,
+  showPopup: false,
 };
 
 export const notificationsReducer = (state = INITIAL_STATE, action) => {
@@ -21,6 +23,7 @@ export const notificationsReducer = (state = INITIAL_STATE, action) => {
         ...state,
         notifications: [action.payload, ...state.notifications],
         unreadCount: state.unreadCount + 1,
+        showPopup: true,
       };
     case GET_NOTIFICATIONS_REQUEST:
       return { ...state, loading: true };
@@ -42,6 +45,8 @@ export const notificationsReducer = (state = INITIAL_STATE, action) => {
     }
     case READ_NOTIFICATIONS:
       return { ...state, unreadCount: 0 };
+    case HIDE_NOTIFICATION_POPUP:
+      return { ...state, showPopup: false };
     default:
       return state;
   }
