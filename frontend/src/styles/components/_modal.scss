@@ -38,6 +38,23 @@
     }
   }
 
+  &__user-details {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem;
+    width: 100%;
+    border-bottom: 1px solid $clr-border-light;
+
+    &--image {
+      height: 60px;
+      width: 60px;
+      object-fit: cover;
+      margin-bottom: 1.6rem;
+    }
+  }
+
   ul {
     width: 100%;
 

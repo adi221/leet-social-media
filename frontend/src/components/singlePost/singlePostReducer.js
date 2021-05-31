@@ -2,7 +2,6 @@ import {
   SINGLE_POST_LOADING,
   SINGLE_POST_ERROR,
   SINGLE_POST_GET_SUCCESS,
-  SINGLE_POST_AUTHOR_DETAILS_SUCCESS,
   SINGLE_POST_LIKE_SUCCESS,
   SINGLE_POST_COMMENT_SUCCESS,
 } from '../../constants/singlePostConstants';
@@ -25,7 +24,7 @@ export const INITIAL_STATE = {
     likes: [],
     comments: [],
     createdAt: '',
-    userId: '',
+    user: '',
   },
 };
 
@@ -36,9 +35,13 @@ export const singlePostReducer = (state, action) => {
     case SINGLE_POST_ERROR:
       return { ...state, loading: false, error: action.payload };
     case SINGLE_POST_GET_SUCCESS:
-      return { ...state, loading: false, post: action.payload };
-    case SINGLE_POST_AUTHOR_DETAILS_SUCCESS:
-      return { ...state, loading: false, author: action.payload };
+      const { author, ...post } = action.payload;
+      return {
+        ...state,
+        loading: false,
+        post,
+        author,
+      };
     case SINGLE_POST_LIKE_SUCCESS:
       return { ...state, post: { ...state.post, likes: action.payload } };
     case SINGLE_POST_COMMENT_SUCCESS:

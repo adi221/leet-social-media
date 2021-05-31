@@ -34,7 +34,7 @@ const SinglePostSkeleton = ({ simple }) => {
         >
           <SkeletonLoader
             animated
-            style={{ width: '100%', minHeight: '40rem' }}
+            style={{ width: '100%', minHeight: '38rem' }}
           />
         </div>
         <div

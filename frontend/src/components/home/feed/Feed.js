@@ -10,8 +10,8 @@ const Feed = () => {
   return (
     <div className='feed'>
       {loadedPosts &&
-        loadedPosts.map(id => {
-          return <SinglePost key={id} uniqueId={id} simple />;
+        loadedPosts.map(post => {
+          return <SinglePost key={post._id} uniqueId={post._id} simple />;
         })}
       {posts.length === 0 && <FeedBottom />}
     </div>

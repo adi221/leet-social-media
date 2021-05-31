@@ -32,7 +32,7 @@
   }
 
   &__header {
-    padding: 1.4rem 1.5rem;
+    padding: 1.6rem 1.2rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -63,6 +63,11 @@
 
     &--comments {
       grid-row: 1 / span 1;
+      overflow-y: auto;
+
+      &-link {
+        color: $clr-grey-1;
+      }
     }
 
     &--simple {

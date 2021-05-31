@@ -3,18 +3,15 @@ import Post from '../models/postModel.js';
 import User from '../models/userModel.js';
 import Notification from '../models/notificationModel.js';
 import { sendNotification } from '../handlers/socketHandlers.js';
-
-import imageThumbnail from 'image-thumbnail';
+import mongoose from 'mongoose';
+const ObjectId = mongoose.Types.ObjectId;
 
 // @desc Get all posts - from followers and user's posts
 // @route GET /api/posts
 // @access User
 const getPosts = asyncHandler(async (req, res) => {
-  const posts = await Post.find({}).sort({ createdAt: -1 });
-  const postsId = posts.map(post => post._id);
-  // [ 60a23419fe5b4a47c4d26d68, 60a233ebfe5b4a47c4d26d66 ]
-  // res.json(posts);
-  res.json(postsId);
+  const posts = await Post.find({}, '_id').sort({ createdAt: -1 });
+  res.json(posts);
 });
 
 // @desc Create a post
@@ -160,9 +157,38 @@ const likePost = asyncHandler(async (req, res) => {
 // @access User
 const getPostDetails = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const post = await Post.findById(id);
+  // const post = await Post.findById(id);
+
+  const post = await Post.aggregate([
+    { $match: { _id: ObjectId(id) } },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'user',
+        foreignField: '_id',
+        as: 'author',
+      },
+    },
+    { $unwind: '$author' },
+    {
+      $project: {
+        _id: true,
+        tags: true,
+        user: true,
+        createdAt: true,
+        description: true,
+        image: true,
+        likes: true,
+        comments: true,
+        'author.username': true,
+        'author.profileImage': true,
+      },
+    },
+  ]);
+
   if (post) {
-    res.json(post);
+    // Aggregate returns an array so destructure
+    res.json(...post);
   } else {
     res.status(404).json({ success: false, message: 'Post was not found' });
   }

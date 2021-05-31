@@ -1,34 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import { FollowButton } from '../../../components';
 import { formatDateDistance } from '../../../helpers/timeHelpers';
-import { useSelector, useDispatch } from 'react-redux';
-import { followUser, unfollowUser } from '../../../actions/userActions';
 
 const SingleNotification = ({ notification }) => {
-  const { following } = useSelector(state => state.userStats);
   const {
     senderDetails: { profileImage, username, _id: senderId },
     createdAt,
     notificationType,
     notificationData,
   } = notification;
-  const [isFollowing, setIsFollowing] = useState(
-    following.some(user => user.user === senderId)
-  );
 
-  const dispatch = useDispatch();
   const date = formatDateDistance(createdAt);
-
-  useEffect(() => {
-    if (notificationType !== 'follow') return;
-    setIsFollowing(following.some(user => user.user === senderId));
-  }, [following, senderId, notificationType]);
-
-  const followHandler = () => {
-    isFollowing
-      ? dispatch(unfollowUser(senderId))
-      : dispatch(followUser(senderId));
-  };
 
   const renderNotification = () => {
     if (notificationType === 'like') {
@@ -72,9 +55,11 @@ const SingleNotification = ({ notification }) => {
               <span className='nav-notifications__item--time'>{date}</span>
             </p>
           </div>
-          <button className='drop button is-primary' onClick={followHandler}>
-            {isFollowing ? 'Unfollow' : 'Follow'}
-          </button>
+          <FollowButton
+            userId={senderId}
+            username={username}
+            profileImage={profileImage}
+          />
         </li>
       );
     } else if (notificationType === 'comment') {

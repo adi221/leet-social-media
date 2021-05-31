@@ -3,12 +3,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import EditProfileImageModal from './EditProfileImageModal';
 import SinglePostModal from './SinglePostModal';
 import UserListModal from './UserListModal';
+import UnfollowUserModal from './UnfollowUserModal';
 import { CLOSE_MODAL } from '../../constants/utilConstants';
 
 const MODAL_COMPONENTS = {
   EDIT_PROFILE_IMAGE: EditProfileImageModal,
   SINGLE_POST: SinglePostModal,
   USER_LIST: UserListModal,
+  UNFOLLOW_USER: UnfollowUserModal,
 };
 
 const RootModal = () => {

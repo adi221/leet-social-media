@@ -4,28 +4,21 @@ import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { BsGrid3X3, BsBookmark, BsHeart } from 'react-icons/bs';
 import { ErrorPage } from '../pages';
-import { Loader } from '../components';
+import { Loader, FollowButton } from '../components';
 import { SHOW_MODAL } from '../constants/utilConstants';
-import {
-  getUserProfileDetails,
-  followUser,
-  unfollowUser,
-} from '../actions/userActions';
+import { getUserProfileDetails } from '../actions/userActions';
 
 const ProfilePage = () => {
   const history = useHistory();
   const { id } = useParams();
   const dispatch = useDispatch();
   const [listIndex, setListIndex] = useState(0);
-  const [isFollowing, setIsFollowing] = useState(false);
 
   const { userInfo } = useSelector(state => state.userLogin);
-  const { success: successFollow } = useSelector(state => state.userFollow);
-  const { success: successUnfollow } = useSelector(state => state.userUnfollow);
 
   useEffect(() => {
     dispatch(getUserProfileDetails(id));
-  }, [dispatch, id, successFollow, successUnfollow]);
+  }, [dispatch, id]);
 
   const { user, loading, error } = useSelector(
     state => state.userDetailsProfile
@@ -42,23 +35,10 @@ const ProfilePage = () => {
     username,
   } = user;
 
-  useEffect(() => {
-    if (!followers) return;
-    const isUserFollowing = followers.some(
-      follower => follower.user === userInfo._id
-    );
-    setIsFollowing(isUserFollowing);
-  }, [userInfo, followers, user]);
-
   if (loading) return <Loader />;
   if (error) return <ErrorPage />;
 
   const allLists = [userPosts, userLikedPosts, userSavedPosts];
-
-  const followHandler = () => {
-    if (id === userInfo._id) return;
-    isFollowing ? dispatch(unfollowUser(id)) : dispatch(followUser(id));
-  };
 
   const imgHandler = (username, id) => {
     history.push(`/posts/${username}/${id}`);
@@ -95,9 +75,11 @@ const ProfilePage = () => {
             <div className='profile-page__header--heading is-flexed'>
               <h1 className='mr-md'>{username}</h1>
               {userInfo.username !== username ? (
-                <button className='button is-primary' onClick={followHandler}>
-                  {isFollowing ? 'Unfollow' : 'Follow'}
-                </button>
+                <FollowButton
+                  userId={id}
+                  username={username}
+                  profileImage={profileImage}
+                />
               ) : (
                 <Link to='/settings/edit' className='button is-light'>
                   Edit Profile

@@ -1,27 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { followUser, unfollowUser } from '../../../actions/userActions';
+import { FollowButton } from '../../../components';
 
 const SingleUserSuggestion = ({ user }) => {
-  const [isFollowing, setIsFollowing] = useState(false);
-  const dispatch = useDispatch();
-
-  const { following } = useSelector(state => state.userStats);
-
-  useEffect(() => {
-    const isUserFollowing =
-      following &&
-      following.some(followedUser => followedUser.user === user._id);
-    setIsFollowing(isUserFollowing);
-  }, [user, following]);
-
-  const followHandler = () => {
-    isFollowing
-      ? dispatch(unfollowUser(user._id))
-      : dispatch(followUser(user._id));
-  };
-
   return (
     <div key={user._id} className='home-sidebar__suggestions-suggestion'>
       <div className='home-sidebar__suggestions-suggestion__info'>
@@ -33,12 +14,16 @@ const SingleUserSuggestion = ({ user }) => {
           <p>{user.name}</p>
         </div>
       </div>
-      <button
-        className={`button bold ${isFollowing ? 'grey' : 'blue'}`}
-        onClick={followHandler}
-      >
-        {isFollowing ? 'Following' : 'Follow'}
-      </button>
+      <FollowButton
+        userId={user._id}
+        username={user.username}
+        profileImage={user.profileImage}
+        style={{
+          backgroundColor: 'transparent',
+          fontWeight: 'bold',
+        }}
+        colored
+      />
     </div>
   );
 };

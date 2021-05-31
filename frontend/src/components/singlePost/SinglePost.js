@@ -16,7 +16,6 @@ import {
   SINGLE_POST_LOADING,
   SINGLE_POST_ERROR,
   SINGLE_POST_GET_SUCCESS,
-  SINGLE_POST_AUTHOR_DETAILS_SUCCESS,
 } from '../../constants/singlePostConstants';
 import { INITIAL_STATE, singlePostReducer } from './singlePostReducer';
 
@@ -39,16 +38,6 @@ const SinglePost = ({ uniqueId, simple = false }) => {
     }
   };
 
-  const getAuthorDetails = async id => {
-    const {
-      data: { profileImage, username },
-    } = await axios.get(`/api/users/post/${id}`);
-    dispatch({
-      type: SINGLE_POST_AUTHOR_DETAILS_SUCCESS,
-      payload: { profileImage, username },
-    });
-  };
-
   useEffect(() => {
     getPostData(uniqueId);
   }, [uniqueId]);
@@ -64,10 +53,6 @@ const SinglePost = ({ uniqueId, simple = false }) => {
     _id: postId,
   } = state.post;
   const { profileImage, username } = state.author;
-
-  useEffect(() => {
-    userId && getAuthorDetails(userId);
-  }, [userId]);
 
   const openLikesModal = async () => {
     if (likes.length === 0) return;
@@ -96,7 +81,7 @@ const SinglePost = ({ uniqueId, simple = false }) => {
       type: SHOW_MODAL,
       payload: {
         modalType: 'SINGLE_POST',
-        modalProps: { username, postId, userId },
+        modalProps: { username, postId, userId, profileImage },
       },
     });
   };
@@ -153,7 +138,12 @@ const SinglePost = ({ uniqueId, simple = false }) => {
           </p>
         </div>
         {tags && tags.length > 0 && <Tags tags={tags} />}
-        <Comments comments={comments} simple={simple} />
+        <Comments
+          comments={comments}
+          simple={simple}
+          username={username}
+          postId={postId}
+        />
         <div className='single-post__content--created-at'>
           {moment(createdAt).fromNow()}
         </div>

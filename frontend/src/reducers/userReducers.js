@@ -203,7 +203,7 @@ export const userStatsReducer = (
 ) => {
   switch (action.type) {
     case USER_STATS_REQUEST:
-      return { loading: false };
+      return { ...state, loading: false };
     case USER_STATS_SUCCESS:
       return {
         loading: false,
@@ -211,7 +211,7 @@ export const userStatsReducer = (
         following: action.payload.following,
       };
     case USER_STATS_FAIL:
-      return { loading: false, error: action.payload };
+      return { ...state, loading: false, error: action.payload };
     case USER_STATS_BOOKMARKS:
       return { ...state, bookmarks: action.payload };
     case USER_STATS_FOLLOWING:
