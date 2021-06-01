@@ -14,6 +14,8 @@ import {
   getUserSearch,
   deleteUser,
   getUserStats,
+  getUserFollowers,
+  getUserFollowing,
 } from '../controllers/userControllers.js';
 import { protect } from '../middleware/authMiddleware.js';
 
@@ -31,5 +33,7 @@ router.route('/unfollow/:id').put(protect, unfollowUser);
 router.route('/save/:id').post(protect, addPostToSaved);
 router.route('/suggest/:id').get(getUserSuggestions);
 router.route('/stats/:id').get(getUserStats);
+router.route('/:userId/:offset/followers').get(getUserFollowers);
+router.route('/:userId/:offset/following').get(getUserFollowing);
 
 export default router;

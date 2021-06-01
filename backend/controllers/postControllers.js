@@ -3,6 +3,7 @@ import Post from '../models/postModel.js';
 import User from '../models/userModel.js';
 import Notification from '../models/notificationModel.js';
 import { sendNotification } from '../handlers/socketHandlers.js';
+import { resizeImage } from '../handlers/imageResizeHandlers.js';
 import mongoose from 'mongoose';
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -58,6 +59,9 @@ const commentPost = asyncHandler(async (req, res) => {
   post.comments.push(newComment);
 
   await post.save();
+
+  const resizedImage = await resizeImage(post.image, 50, 50);
+
   if (post.user.toString() !== req.user._id.toString()) {
     const notification = new Notification({
       sender: req.user._id,
@@ -65,7 +69,7 @@ const commentPost = asyncHandler(async (req, res) => {
       notificationType: 'comment',
       notificationData: {
         postId: id,
-        postImage: post.image,
+        postImage: resizedImage,
         comment,
       },
     });
@@ -122,6 +126,8 @@ const likePost = asyncHandler(async (req, res) => {
       user.likedPosts.push({ post: post._id });
       await user.save();
 
+      const resizedImage = await resizeImage(post.image, 50, 50);
+
       if (post.user.toString() !== req.user._id.toString()) {
         const notification = new Notification({
           sender: _id,
@@ -129,7 +135,7 @@ const likePost = asyncHandler(async (req, res) => {
           notificationType: 'like',
           notificationData: {
             postId: id,
-            postImage: post.image,
+            postImage: resizedImage,
           },
         });
         await notification.save();
@@ -194,6 +200,38 @@ const getPostDetails = asyncHandler(async (req, res) => {
   }
 });
 
+const getRelatedUsers = async (users, offset) => {
+  // same as collection.skip(offset).limit(10)
+  const partitionedUsers = users.slice(offset, offset + 10);
+  let usersArr = [];
+  for (const user of partitionedUsers) {
+    const userData = await User.findById(
+      user.user,
+      '_id name username profileImage'
+    );
+    if (userData) {
+      usersArr.push(userData);
+    }
+  }
+  return usersArr;
+};
+
+// @desc Get list of users that like the post
+// @route GET /api/posts/:postId/:offset/likes
+// @access User
+const getPostLikes = asyncHandler(async (req, res) => {
+  const { postId, offset = 0 } = req.params;
+  const postLikes = await Post.findById(postId).select('likes');
+  const users = await getRelatedUsers(postLikes.likes, offset);
+  if (users) {
+    res.json(users);
+  } else {
+    res
+      .status(201)
+      .json({ success: false, message: 'Could not retrieve users' });
+  }
+});
+
 // @desc Delete single post
 // @route GET /api/posts/delete/:id
 // @access User
@@ -221,4 +259,5 @@ export {
   likePost,
   getPostDetails,
   deletePost,
+  getPostLikes,
 };

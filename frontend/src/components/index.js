@@ -21,6 +21,7 @@ import ChangePassword from './settings/ChangePassword';
 import SettingsHeader from './settings/SettingsHeader';
 import PrivateRoute from './routing/PrivateRoute';
 import FollowButton from './buttons/FollowButton';
+import UsersList from './usersList/UsersList';
 
 export {
   Navbar,
@@ -46,4 +47,5 @@ export {
   EditImageProfile,
   PrivateRoute,
   FollowButton,
+  UsersList,
 };

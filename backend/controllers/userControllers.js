@@ -4,6 +4,7 @@ import User from '../models/userModel.js';
 import Post from '../models/postModel.js';
 import Notification from '../models/notificationModel.js';
 import { sendNotification } from '../handlers/socketHandlers.js';
+import { resizeImage } from '../handlers/imageResizeHandlers.js';
 import mongoose from 'mongoose';
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -73,10 +74,10 @@ const authUser = asyncHandler(async (req, res) => {
 // @access Public
 const getPostUserDetails = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const user = await User.findById(id);
+  const user = await User.findById(id, '_id name username profileImage');
+
   if (user) {
-    const { profileImage, username, name, _id } = user;
-    res.json({ profileImage, username, name, _id });
+    res.json(user);
   } else {
     res.status(401).json({ success: false, message: 'Invalid Id' });
     throw new Error('Invalid id');
@@ -262,7 +263,10 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     user.username = req.body.username || user.username;
     user.email = req.body.email || user.email;
     user.description = req.body.description || user.description;
-    user.profileImage = req.body.image || user.profileImage;
+    if (req.body.image) {
+      const resizedImage = await resizeImage(req.body.image, 75, 75);
+      user.profileImage = resizedImage || user.profileImage;
+    }
     if (req.body.password) {
       user.password = req.body.password;
     }
@@ -365,12 +369,17 @@ const getUserStats = asyncHandler(async (req, res) => {
 // @access User
 const getUserSuggestions = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const users = await User.find({ _id: { $ne: id } }).limit(5);
-  const updatedUsers = users.map(user => {
-    const { _id, name, username, profileImage } = user;
-    return { _id, name, username, profileImage };
-  });
-  res.json(updatedUsers);
+  const users = await User.find(
+    { _id: { $ne: id } },
+    '_id name username profileImage'
+  ).limit(5);
+  if (users) {
+    res.json(users);
+  } else {
+    res
+      .status(201)
+      .json({ success: false, message: 'No suggestions available' });
+  }
 });
 
 // @desc Get users from search query
@@ -381,13 +390,71 @@ const getUserSearch = asyncHandler(async (req, res) => {
   if (!keyword) {
     res.json({ success: false, message: 'No search query' });
   }
-  const key = { username: { $regex: keyword, $options: 'i' } };
-  const users = await User.find({ ...key });
+  const users = await User.find({
+    username: { $regex: keyword, $options: 'i' },
+  });
+  /*
+  Find Users based on name or username.
+  const users = await User.find({
+    $or: [
+      { username: { $regex: keyword, $options: 'i' } },
+      { name: { $regex: keyword, $options: 'i' } },
+    ],
+  });
+  */
   const updatedUsers = users.map(user => {
     const { _id, name, username, profileImage } = user;
     return { _id, name, username, profileImage };
   });
   res.json(updatedUsers);
+});
+
+const getRelatedUsers = async (users, offset) => {
+  // same as collection.skip(offset).limit(10)
+  const partitionedUsers = users.slice(offset, offset + 10);
+  let usersArr = [];
+  for (const user of partitionedUsers) {
+    const userData = await User.findById(
+      user.user,
+      '_id name username profileImage'
+    );
+    if (userData) {
+      usersArr.push(userData);
+    }
+  }
+  return usersArr;
+};
+
+// @desc Get list of user's followers
+// @route GET /api/users/:userId/:offset/followers
+// @access User
+const getUserFollowers = asyncHandler(async (req, res) => {
+  const { userId, offset = 0 } = req.params;
+  const userFollowers = await User.findById(userId).select('followers');
+  const users = await getRelatedUsers(userFollowers.followers, offset);
+  if (users) {
+    res.json(users);
+  } else {
+    res
+      .status(201)
+      .json({ success: false, message: 'Could not retrieve users' });
+  }
+});
+
+// @desc Get list of user's following
+// @route GET /api/users/:userId/:offset/following
+// @access User
+const getUserFollowing = asyncHandler(async (req, res) => {
+  const { userId, offset = 0 } = req.params;
+  const userFollowing = await User.findById(userId).select('following');
+  const users = await getRelatedUsers(userFollowing.following, offset);
+  if (users) {
+    res.json(users);
+  } else {
+    res
+      .status(201)
+      .json({ success: false, message: 'Could not retrieve users' });
+  }
 });
 
 // @desc Delete user
@@ -453,4 +520,6 @@ export {
   getUserSearch,
   deleteUser,
   getUserStats,
+  getUserFollowers,
+  getUserFollowing,
 };

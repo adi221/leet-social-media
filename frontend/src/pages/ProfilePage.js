@@ -44,24 +44,17 @@ const ProfilePage = () => {
     history.push(`/posts/${username}/${id}`);
   };
 
-  const openFollowingModal = async (users, title) => {
-    if (users.length === 0) return;
-    const usersList = [];
-
-    for (const user of users) {
-      const { data: userData } = await axios.get(
-        `/api/users/post/${user.user}`
-      );
-      if (userData) {
-        usersList.push(userData);
-      }
-    }
-
+  const openFollowingModal = async (listType, countUsers) => {
     dispatch({
       type: SHOW_MODAL,
       payload: {
         modalType: 'USER_LIST',
-        modalProps: { usersList, title },
+        modalProps: {
+          userOrPostId: id,
+          listType,
+          countUsers,
+          users: true,
+        },
       },
     });
   };
@@ -98,13 +91,17 @@ const ProfilePage = () => {
                     followers && followers.length > 0 ? 'pointer' : 'auto'
                   }`,
                 }}
-                onClick={() => openFollowingModal(followers, 'Followers')}
+                onClick={() =>
+                  openFollowingModal('followers', followers.length)
+                }
               >
                 <span className='bold'>{followers && followers.length} </span>{' '}
                 followers
               </p>
               <p
-                onClick={() => openFollowingModal(following, 'Following')}
+                onClick={() =>
+                  openFollowingModal('following', following.length)
+                }
                 style={{
                   cursor: `${
                     following && following.length > 0 ? 'pointer' : 'auto'

@@ -21,8 +21,7 @@ const Navbar = () => {
 
   useEffect(() => {
     document.addEventListener('click', e => {
-      // console.log(e.target);
-      if (e.target.classList.contains('drop')) return;
+      if (e.target.closest('nav')) return;
       setShowSettings(false);
     });
   });
@@ -43,30 +42,13 @@ const Navbar = () => {
                 Upload
               </Link>
               <NotificationButton />
-              {/* <div className='drop nav__center--dropdown'>
+              <div className=' nav__center--dropdown'>
                 <button
-                  className='drop is-flexed'
-                  onClick={() => setShowNotifications(!showNotifications)}
-                >
-                  {showNotifications ? (
-                    <FaHeart
-                      className='drop nav__center--dropdown-notification'
-                      style={{ fill: '#262626' }}
-                    />
-                  ) : (
-                    <FaRegHeart className='drop nav__center--dropdown-notification' />
-                  )}
-                </button>
-                {showNotifications && <Notifications />}
-              </div> */}
-
-              <div className='drop nav__center--dropdown'>
-                <button
-                  className='drop  is-flexed'
+                  className='is-flexed'
                   onClick={() => setShowSettings(!showSettings)}
                 >
                   <img
-                    className={`drop nav__center--dropdown__image ${
+                    className={` nav__center--dropdown__image ${
                       showSettings && 'clicked'
                     }`}
                     src={userInfo.profileImage}
@@ -74,18 +56,18 @@ const Navbar = () => {
                   />
                 </button>
                 {showSettings && (
-                  <ul className='drop nav__center--dropdown-content'>
-                    <li className='drop'>
+                  <ul className=' nav__center--dropdown-content'>
+                    <li>
                       <Link to={`/profile/${userInfo._id}`}>
                         <IoIosPerson /> Profile
                       </Link>
                     </li>
-                    <li className='drop'>
+                    <li>
                       <Link to='/settings'>
                         <IoIosSettings /> Settings
                       </Link>
                     </li>
-                    <li className='drop'>
+                    <li>
                       <button onClick={logoutHandler}>
                         <FaSignOutAlt /> Sign Out
                       </button>

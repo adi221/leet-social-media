@@ -32,6 +32,7 @@
     width: 100%;
     border-bottom: 1px solid #a8a8a8;
     padding: 1.2rem 1.5rem;
+    text-transform: capitalize;
 
     svg {
       vertical-align: middle;
@@ -87,6 +88,8 @@
     &--item {
       display: flex;
       align-items: center;
+      justify-content: space-between;
+      padding: 0 0.7rem;
       transition: $transition;
       cursor: pointer;
 

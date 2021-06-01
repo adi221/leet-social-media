@@ -10,9 +10,7 @@ import {
 
 const Notifications = () => {
   const dispatch = useDispatch();
-  const { notifications, unreadCount, loading } = useSelector(
-    state => state.notifications
-  );
+  const { notifications, loading } = useSelector(state => state.notifications);
 
   useEffect(() => {
     dispatch(getNotifications());
@@ -31,7 +29,7 @@ const Notifications = () => {
     );
 
   return (
-    <ul className='drop nav-notifications'>
+    <ul className=' nav-notifications'>
       {notifications.length > 0 ? (
         notifications.map(notification => {
           return (
@@ -42,7 +40,7 @@ const Notifications = () => {
           );
         })
       ) : (
-        <li className='drop nav-notifications__item '>
+        <li className=' nav-notifications__item '>
           You don't have notifications
         </li>
       )}

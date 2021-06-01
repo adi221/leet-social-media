@@ -54,24 +54,17 @@ const SinglePost = ({ uniqueId, simple = false }) => {
   } = state.post;
   const { profileImage, username } = state.author;
 
-  const openLikesModal = async () => {
-    if (likes.length === 0) return;
-    const usersList = [];
-
-    for (const likeUser of likes) {
-      const { data: likeUserData } = await axios.get(
-        `/api/users/post/${likeUser.user}`
-      );
-      if (likeUserData) {
-        usersList.push(likeUserData);
-      }
-    }
-
+  const openLikesModal = () => {
     dispatchRedux({
       type: SHOW_MODAL,
       payload: {
         modalType: 'USER_LIST',
-        modalProps: { usersList, title: 'Likes' },
+        modalProps: {
+          userOrPostId: postId,
+          listType: 'likes',
+          countUsers: likes.length,
+          users: false,
+        },
       },
     });
   };

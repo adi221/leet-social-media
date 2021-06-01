@@ -34,9 +34,9 @@ const NotificationButton = () => {
   }, [popupTimer, showNotifications]);
 
   return (
-    <div className='drop nav__center--dropdown'>
+    <div className='nav__center--dropdown'>
       <button
-        className='drop is-flexed'
+        className='is-flexed'
         onClick={() => setShowNotifications(!showNotifications)}
       >
         {showNotificationPopup && (
@@ -50,11 +50,11 @@ const NotificationButton = () => {
         )}
         {showNotifications ? (
           <FaHeart
-            className='drop nav__center--dropdown-notification'
+            className='nav__center--dropdown-notification'
             style={{ fill: '#262626' }}
           />
         ) : (
-          <FaRegHeart className='drop nav__center--dropdown-notification' />
+          <FaRegHeart className='nav__center--dropdown-notification' />
         )}
       </button>
       {showNotifications && <Notifications />}
