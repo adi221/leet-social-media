@@ -101,35 +101,42 @@ const getUserProfileDetails = asyncHandler(async (req, res) => {
       likedPosts,
       name,
       username,
+      _id,
     } = user;
 
-    const userPosts = [],
-      userLikedPosts = [],
+    const userPosts = await Post.aggregate([
+      {
+        $match: { user: ObjectId(id) },
+      },
+      { $sort: { createdAt: -1 } },
+      {
+        $project: {
+          image: true,
+          comments: { $size: '$comments' },
+          likes: { $size: '$likes' },
+          description: true,
+        },
+      },
+    ]);
+
+    const userLikedPosts = [],
       userSavedPosts = [];
 
-    for (let i = 0; i < posts.length; i++) {
-      const id = posts[i].post;
-      const post = await Post.findById(id);
-      if (post) {
-        userPosts.push(post);
-      }
-    }
+    // for (let i = 0; i < likedPosts.length; i++) {
+    //   const id = likedPosts[i].post;
+    //   const post = await Post.findById(id);
+    //   if (post) {
+    //     userLikedPosts.push(post);
+    //   }
+    // }
 
-    for (let i = 0; i < likedPosts.length; i++) {
-      const id = likedPosts[i].post;
-      const post = await Post.findById(id);
-      if (post) {
-        userLikedPosts.push(post);
-      }
-    }
-
-    for (let i = 0; i < savedPosts.length; i++) {
-      const id = savedPosts[i].post;
-      const post = await Post.findById(id).populate('post', 'image');
-      if (post) {
-        userSavedPosts.push(post);
-      }
-    }
+    // for (let i = 0; i < savedPosts.length; i++) {
+    //   const id = savedPosts[i].post;
+    //   const post = await Post.findById(id).populate('post', 'image');
+    //   if (post) {
+    //     userSavedPosts.push(post);
+    //   }
+    // }
 
     res.json({
       profileImage,
@@ -141,6 +148,7 @@ const getUserProfileDetails = asyncHandler(async (req, res) => {
       userLikedPosts,
       userSavedPosts,
       username,
+      _id,
     });
   } else {
     res.status(401).json({ success: false, message: 'User not found' });

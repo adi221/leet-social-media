@@ -15,21 +15,21 @@ const UserSuggestions = () => {
     state => state.userSuggestions
   );
 
-  if (loading)
-    return <UsersListSkeleton amount={5} style={{ width: '20rem' }} />;
-
   if (error) return null;
 
   return (
     <div className='home-sidebar__suggestions'>
       <h4>Suggestions for you</h4>
       <div className='home-sidebar__suggestions-container'>
-        {suggestions &&
+        {loading ? (
+          <UsersListSkeleton amount={5} style={{ width: '20rem' }} />
+        ) : (
           suggestions.map(suggestion => {
             return (
               <SingleUserSuggestion key={suggestion._id} user={suggestion} />
             );
-          })}
+          })
+        )}
       </div>
     </div>
   );

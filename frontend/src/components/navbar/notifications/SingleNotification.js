@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { FollowButton } from '../../../components';
 import { formatDateDistance } from '../../../helpers/timeHelpers';
 
@@ -10,8 +11,14 @@ const SingleNotification = ({ notification }) => {
     notificationType,
     notificationData,
   } = notification;
-
+  const history = useHistory();
   const date = formatDateDistance(createdAt);
+
+  const { userInfo } = useSelector(state => state.userLogin);
+
+  const linkImgHandler = () => {
+    history.push(`/posts/${userInfo.username}/${notificationData.postId}`);
+  };
 
   const renderNotification = () => {
     if (notificationType === 'like') {
@@ -32,6 +39,7 @@ const SingleNotification = ({ notification }) => {
             </p>
           </div>
           <img
+            onClick={linkImgHandler}
             className='nav-notifications__item--post-image'
             src={notificationData.postImage}
             alt={username}
@@ -83,6 +91,7 @@ const SingleNotification = ({ notification }) => {
             </p>
           </div>
           <img
+            onClick={linkImgHandler}
             className='nav-notifications__item--post-image'
             src={notificationData.postImage}
             alt={username}

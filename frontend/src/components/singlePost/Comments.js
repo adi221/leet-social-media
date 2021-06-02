@@ -5,6 +5,8 @@ const Comments = ({ comments, simple, postId, username }) => {
   if (simple) {
     if (comments.length === 0) return null;
 
+    const commentsToShow = comments.length > 2 ? comments.length - 3 : 0;
+
     return (
       <div className='single-post__content--comments'>
         <Link
@@ -13,7 +15,7 @@ const Comments = ({ comments, simple, postId, username }) => {
         >
           View all {comments.length} comments
         </Link>
-        {comments.slice(0, 3).map(c => {
+        {comments.slice(commentsToShow).map(c => {
           const { _id, username, comment, user } = c;
           return (
             <p key={_id}>

@@ -85,6 +85,9 @@
 
   &__users {
     padding: 0;
+    max-height: 20rem;
+    overflow-y: auto;
+
     &--item {
       display: flex;
       align-items: center;

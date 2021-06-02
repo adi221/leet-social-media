@@ -161,7 +161,7 @@ export const userUpdatePasswordReducer = (state = {}, action) => {
 export const userSuggestionsReducer = (state = { suggestions: [] }, action) => {
   switch (action.type) {
     case USER_SUGGESTIONS_REQUEST:
-      return { loading: false, suggestions: [] };
+      return { loading: true, suggestions: [] };
     case USER_SUGGESTIONS_SUCCESS:
       return { loading: false, suggestions: action.payload };
     case USER_SUGGESTIONS_FAIL:

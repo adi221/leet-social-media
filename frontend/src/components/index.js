@@ -22,6 +22,7 @@ import SettingsHeader from './settings/SettingsHeader';
 import PrivateRoute from './routing/PrivateRoute';
 import FollowButton from './buttons/FollowButton';
 import UsersList from './usersList/UsersList';
+import ProfileHeader from './profile/ProfileHeader';
 
 export {
   Navbar,
@@ -48,4 +49,5 @@ export {
   PrivateRoute,
   FollowButton,
   UsersList,
+  ProfileHeader,
 };
