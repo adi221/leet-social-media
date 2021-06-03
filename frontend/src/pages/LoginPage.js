@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Loader } from '../components';
 import { login } from '../actions/userActions';
+import loginSvg from '../assets/login.svg';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -33,30 +34,30 @@ const LoginPage = () => {
   if (loading) return <Loader />;
 
   return (
-    <div className='page login-page '>
-      <form
-        className='is-bordered auth-form is-flexed'
-        onSubmit={submitHandler}
-      >
-        <h2>Login</h2>
-        <input
-          className='form-control is-bordered'
-          type='text'
-          placeholder='Email'
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-        />
-        <input
-          className='form-control is-bordered'
-          type='password'
-          placeholder='Password'
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-        />
-        <button className='is-primary button width100' type='submit'>
-          Login
-        </button>
-      </form>
+    <div className='page auth-page '>
+      <div className='auth-page__container--login'>
+        <img className='auth-page__container--img' src={loginSvg} alt='login' />
+        <form className='auth-page__container--form' onSubmit={submitHandler}>
+          <h2>Login</h2>
+          <input
+            className='auth-page__container--form-control'
+            type='text'
+            placeholder='Email'
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+          />
+          <input
+            className='auth-page__container--form-control'
+            type='password'
+            placeholder='Password'
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+          />
+          <button className='is-primary button width100' type='submit'>
+            Login
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

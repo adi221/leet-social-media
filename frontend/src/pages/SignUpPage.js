@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Loader } from '../components';
 import { register } from '../actions/userActions';
+import signUpSvg from '../assets/sign-up.svg';
 
 const SignUpPage = () => {
   const [username, setUsername] = useState('');
@@ -42,51 +43,51 @@ const SignUpPage = () => {
   if (loading) return <Loader />;
 
   return (
-    <div className='page signup-page '>
-      <form
-        className='is-bordered auth-form is-flexed'
-        onSubmit={submitHandler}
-      >
-        <h2>Sign Up</h2>
-        <input
-          className='form-control is-bordered'
-          type='text'
-          placeholder='Username'
-          value={username}
-          onChange={e => setUsername(e.target.value)}
-        />
-        <input
-          className='form-control is-bordered'
-          type='text'
-          placeholder='Name'
-          value={name}
-          onChange={e => setName(e.target.value)}
-        />
-        <input
-          className='form-control is-bordered'
-          type='email'
-          placeholder='Email'
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-        />
-        <input
-          className='form-control is-bordered'
-          type='password'
-          placeholder='Password'
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-        />
-        <input
-          className='form-control is-bordered'
-          type='password'
-          placeholder='Confirm Password'
-          value={passwordConfirm}
-          onChange={e => setPasswordConfirm(e.target.value)}
-        />
-        <button className='is-primary button width100' type='submit'>
-          Sign Up
-        </button>
-      </form>
+    <div className='page auth-page'>
+      <div className='auth-page__container--signup'>
+        <img className='auth-page__container--img' src={signUpSvg} alt='sign' />
+        <form className='auth-page__container--form' onSubmit={submitHandler}>
+          <h2>Sign Up</h2>
+          <input
+            className='auth-page__container--form-control'
+            type='text'
+            placeholder='Username'
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+          />
+          <input
+            className='auth-page__container--form-control'
+            type='text'
+            placeholder='Name'
+            value={name}
+            onChange={e => setName(e.target.value)}
+          />
+          <input
+            className='auth-page__container--form-control'
+            type='email'
+            placeholder='Email'
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+          />
+          <input
+            className='auth-page__container--form-control'
+            type='password'
+            placeholder='Password'
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+          />
+          <input
+            className='auth-page__container--form-control'
+            type='password'
+            placeholder='Confirm Password'
+            value={passwordConfirm}
+            onChange={e => setPasswordConfirm(e.target.value)}
+          />
+          <button className='is-primary button width100' type='submit'>
+            Sign Up
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
