@@ -27,6 +27,11 @@ const chatSchema = mongoose.Schema(
   {
     chatUsers: [chatUserSchema],
     messages: [messageSchema],
+    chatType: {
+      type: String,
+      default: 'dual',
+      enum: ['dual', 'group'],
+    },
   },
   {
     timestamps: true,

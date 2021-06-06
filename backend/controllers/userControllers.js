@@ -36,8 +36,6 @@ const registerUser = asyncHandler(async (req, res) => {
       email: user.email,
       profileImage: user.profileImage,
       description: user.description,
-      savedPosts: user.savedPosts,
-      following: user.following,
       token: generateToken(user._id),
     });
   }
@@ -57,8 +55,6 @@ const authUser = asyncHandler(async (req, res) => {
       email: user.email,
       profileImage: user.profileImage,
       description: user.description,
-      savedPosts: user.savedPosts,
-      following: user.following,
       token: generateToken(user._id),
     });
   } else {
@@ -97,8 +93,6 @@ const getUserProfileDetails = asyncHandler(async (req, res) => {
       following,
       followers,
       posts,
-      savedPosts,
-      likedPosts,
       name,
       username,
       _id,
@@ -126,8 +120,6 @@ const getUserProfileDetails = asyncHandler(async (req, res) => {
       following,
       followers,
       userPosts,
-      userLikedPosts,
-      userSavedPosts,
       username,
       _id,
     });

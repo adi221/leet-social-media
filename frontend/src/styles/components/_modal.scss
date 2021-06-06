@@ -135,6 +135,11 @@
       &-next {
         color: $clr-primary-1;
         font-weight: bold;
+
+        &:disabled {
+          opacity: 0.5rem;
+          cursor: default;
+        }
       }
     }
   }

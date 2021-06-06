@@ -1,10 +1,10 @@
 import express from 'express';
-import { createChat, getChatLists } from '../controllers/chatControllers.js';
+import { createChat, getChatList } from '../controllers/chatControllers.js';
 import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-router.route('/:partnerId').post(protect, createChat);
-router.route('/lists').get(protect, getChatLists);
+router.route('/').post(protect, createChat);
+router.route('/list').get(protect, getChatList);
 
 export default router;
