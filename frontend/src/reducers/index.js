@@ -21,6 +21,7 @@ import {
 import { modalReducer } from '../reducers/utilReducers';
 import { socketReducer } from '../reducers/socketReducers';
 import { notificationsReducer } from '../reducers/notificationReducers';
+import { chatListsReducer } from '../reducers/chatReducers';
 
 const rootReducer = combineReducers({
   userLogin: userLoginReducer,
@@ -41,6 +42,7 @@ const rootReducer = combineReducers({
   modal: modalReducer,
   socket: socketReducer,
   notifications: notificationsReducer,
+  chatLists: chatListsReducer,
 });
 
 export default rootReducer;

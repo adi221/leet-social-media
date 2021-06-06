@@ -5,7 +5,13 @@ import SingleUserList from './SingleUserList';
 import { INITIAL_STATE, usersListReducer } from './usersListReducer';
 import useScrollPositionThrottled from '../../hooks/useScrollPositionThrottled';
 
-const UsersList = ({ userOrPostId, listType, countUsers, users }) => {
+const UsersList = ({
+  userOrPostId,
+  listType,
+  countUsers,
+  users,
+  checkButton,
+}) => {
   const [state, dispatch] = useReducer(usersListReducer, INITIAL_STATE);
   const usersOrPosts = users ? 'users' : 'posts';
   const componentRef = useRef();
@@ -53,7 +59,13 @@ const UsersList = ({ userOrPostId, listType, countUsers, users }) => {
         <UsersListSkeleton style={{ width: 'min(420px, 95vw)' }} />
       ) : (
         state.data.map(user => {
-          return <SingleUserList key={user._id} {...user} />;
+          return (
+            <SingleUserList
+              key={user._id}
+              {...user}
+              checkButton={checkButton}
+            />
+          );
         })
       )}
       {state.fetchingAdditional && (

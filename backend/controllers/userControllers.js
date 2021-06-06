@@ -119,25 +119,6 @@ const getUserProfileDetails = asyncHandler(async (req, res) => {
       },
     ]);
 
-    const userLikedPosts = [],
-      userSavedPosts = [];
-
-    // for (let i = 0; i < likedPosts.length; i++) {
-    //   const id = likedPosts[i].post;
-    //   const post = await Post.findById(id);
-    //   if (post) {
-    //     userLikedPosts.push(post);
-    //   }
-    // }
-
-    // for (let i = 0; i < savedPosts.length; i++) {
-    //   const id = savedPosts[i].post;
-    //   const post = await Post.findById(id).populate('post', 'image');
-    //   if (post) {
-    //     userSavedPosts.push(post);
-    //   }
-    // }
-
     res.json({
       profileImage,
       name,
@@ -154,6 +135,52 @@ const getUserProfileDetails = asyncHandler(async (req, res) => {
     res.status(401).json({ success: false, message: 'User not found' });
     throw new Error('Invalid id');
   }
+});
+
+// @desc Get details of user profile
+// @route POST /api/users/post/:username
+// @access User
+const getUserSavedLikedPosts = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findById(id, 'likedPosts savedPosts');
+
+  const { likedPosts, savedPosts } = user;
+
+  const likedPostsIds = likedPosts.map(post => ObjectId(post.post));
+  const savedPostsIds = savedPosts.map(post => ObjectId(post.post));
+
+  const userLikedPosts = [],
+    userSavedPosts = [];
+
+  const getPostData = async id => {
+    return await Post.aggregate([
+      { $match: { _id: id } },
+      {
+        $project: {
+          image: true,
+          comments: { $size: '$comments' },
+          likes: { $size: '$likes' },
+          description: true,
+        },
+      },
+    ]);
+  };
+
+  for (const id of likedPostsIds) {
+    const post = await getPostData(id);
+    if (post) {
+      userLikedPosts.push(post);
+    }
+  }
+
+  for (const id of savedPostsIds) {
+    const post = await getPostData(id);
+    if (post) {
+      userSavedPosts.push(post);
+    }
+  }
+
+  res.json(userSavedPosts, userLikedPosts);
 });
 
 // @desc Follow user & increase your own following
@@ -530,4 +557,5 @@ export {
   getUserStats,
   getUserFollowers,
   getUserFollowing,
+  getUserSavedLikedPosts,
 };

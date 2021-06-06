@@ -6,6 +6,7 @@ import UploadPage from './UploadPage';
 import ProfilePage from './ProfilePage';
 import SinglePostPage from './SinglePostPage';
 import ErrorPage from './ErrorPage';
+import ChatPage from './ChatPage';
 
 export {
   HomePage,
@@ -16,4 +17,5 @@ export {
   ProfilePage,
   SinglePostPage,
   ErrorPage,
+  ChatPage,
 };

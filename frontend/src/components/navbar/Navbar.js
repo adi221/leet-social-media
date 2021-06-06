@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { IoIosSettings, IoIosPerson } from 'react-icons/io';
+import { RiMessengerLine, RiMessengerFill } from 'react-icons/ri';
 import { FaSignOutAlt } from 'react-icons/fa';
 import { SearchBar, NotificationButton } from '../../components';
 import logo from '../../assets/leet-logo.png';
@@ -9,6 +10,7 @@ import { logout } from '../../actions/userActions';
 
 const Navbar = () => {
   const [showSettings, setShowSettings] = useState(false);
+  const { pathname } = useLocation();
 
   const { userInfo } = useSelector(state => state.userLogin);
   const dispatch = useDispatch();
@@ -40,6 +42,13 @@ const Navbar = () => {
             <div className='is-flexed'>
               <Link className='button is-primary' to='/upload'>
                 Upload
+              </Link>
+              <Link to='/direct' className='nav__center--button is-flexed'>
+                {pathname === '/direct' ? (
+                  <RiMessengerFill style={{ fill: '#262626' }} />
+                ) : (
+                  <RiMessengerLine />
+                )}
               </Link>
               <NotificationButton />
               <div className=' nav__center--dropdown'>

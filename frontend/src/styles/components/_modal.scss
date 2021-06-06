@@ -118,4 +118,24 @@
       }
     }
   }
+
+  &__new-message {
+    &--title {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      border-bottom: 1px solid #a8a8a8;
+      padding: 1rem 1.5rem;
+      text-transform: capitalize;
+
+      svg {
+        vertical-align: middle;
+      }
+
+      &-next {
+        color: $clr-primary-1;
+        font-weight: bold;
+      }
+    }
+  }
 }

@@ -1,0 +1,20 @@
+.chat-sidebar {
+  border-right: 1px solid $clr-border-light;
+
+  &__header {
+    width: 100%;
+    padding: 1.2rem;
+    text-align: center;
+    position: relative;
+    border-bottom: 1px solid $clr-border-light;
+
+    &--button {
+      position: absolute;
+      font-size: 1.6rem;
+      color: $clr-black;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+}

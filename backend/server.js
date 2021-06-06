@@ -9,6 +9,7 @@ import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import postRoutes from './routes/postRoutes.js';
 import notificationRoutes from './routes/notificationRoutes.js';
+import chatRoutes from './routes/chatRoutes.js';
 
 dotenv.config();
 connectDB();
@@ -25,6 +26,7 @@ app.use(cors());
 app.use('/api/users', userRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/chats', chatRoutes);
 
 app.get('/', (req, res) => {
   res.send('API is running');
@@ -70,9 +72,4 @@ socketio
   .on('connection', socket => {
     socket.join(socket.user.id.toString());
     console.log(`socket connected  ${socket.user.id}`.green.bold);
-
-    // Listen for new messages
-    socket.on('newNotification', data => {
-      console.log('Sent');
-    });
   });

@@ -1,46 +1,6 @@
 import mongoose from 'mongoose';
 import bcryptjs from 'bcryptjs';
 
-const followingSchema = {
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: 'User',
-  },
-};
-
-const followersSchema = {
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: 'User',
-  },
-};
-
-const postsSchema = {
-  post: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: 'Post',
-  },
-};
-
-const savedPostsSchema = {
-  post: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: 'Post',
-  },
-};
-
-const likedPostsSchema = {
-  post: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: 'Post',
-  },
-};
-
 const userSchema = mongoose.Schema(
   {
     username: {
@@ -74,11 +34,51 @@ const userSchema = mongoose.Schema(
       required: true,
       default: 'No Description Yet',
     },
-    following: [followingSchema],
-    followers: [followersSchema],
-    posts: [postsSchema],
-    savedPosts: [savedPostsSchema],
-    likedPosts: [likedPostsSchema],
+    following: [
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          ref: 'User',
+        },
+      },
+    ],
+    followers: [
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          ref: 'User',
+        },
+      },
+    ],
+    posts: [
+      {
+        post: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          ref: 'Post',
+        },
+      },
+    ],
+    savedPosts: [
+      {
+        post: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          ref: 'Post',
+        },
+      },
+    ],
+    likedPosts: [
+      {
+        post: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          ref: 'Post',
+        },
+      },
+    ],
   },
   {
     timestamps: true,

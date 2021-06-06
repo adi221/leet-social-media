@@ -4,6 +4,7 @@ import EditProfileImageModal from './EditProfileImageModal';
 import SinglePostModal from './SinglePostModal';
 import UserListModal from './UserListModal';
 import UnfollowUserModal from './UnfollowUserModal';
+import NewMessageModal from './NewMessageModal';
 import { CLOSE_MODAL } from '../../constants/utilConstants';
 
 const MODAL_COMPONENTS = {
@@ -11,6 +12,7 @@ const MODAL_COMPONENTS = {
   SINGLE_POST: SinglePostModal,
   USER_LIST: UserListModal,
   UNFOLLOW_USER: UnfollowUserModal,
+  NEW_MESSAGE: NewMessageModal,
 };
 
 const RootModal = () => {

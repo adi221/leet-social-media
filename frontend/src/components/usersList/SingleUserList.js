@@ -2,9 +2,10 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { FollowButton } from '../../components';
+import CheckButton from '../../components/buttons/CheckButton';
 import { CLOSE_MODAL } from '../../constants/utilConstants';
 
-const SingleUserList = ({ name, username, profileImage, _id }) => {
+const SingleUserList = ({ name, username, profileImage, _id, checkButton }) => {
   const history = useHistory();
   const dispatch = useDispatch();
   const { userInfo } = useSelector(state => state.userLogin);
@@ -23,12 +24,16 @@ const SingleUserList = ({ name, username, profileImage, _id }) => {
           <p>{name}</p>
         </div>
       </div>
-      {userInfo._id !== _id && (
-        <FollowButton
-          userId={_id}
-          profileImage={profileImage}
-          username={username}
-        />
+      {!checkButton ? (
+        userInfo._id !== _id && (
+          <FollowButton
+            userId={_id}
+            profileImage={profileImage}
+            username={username}
+          />
+        )
+      ) : (
+        <CheckButton userId={_id} />
       )}
     </li>
   );

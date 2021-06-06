@@ -18,7 +18,7 @@ const ProfileHeader = ({ user }) => {
   const dispatch = useDispatch();
   const { userInfo } = useSelector(state => state.userLogin);
 
-  const openFollowingModal = async (listType, countUsers) => {
+  const openFollowingModal = (listType, countUsers) => {
     dispatch({
       type: SHOW_MODAL,
       payload: {

@@ -23,6 +23,8 @@ import PrivateRoute from './routing/PrivateRoute';
 import FollowButton from './buttons/FollowButton';
 import UsersList from './usersList/UsersList';
 import ProfileHeader from './profile/ProfileHeader';
+import ChatFeed from './chat/ChatFeed';
+import ChatSidebar from './chat/chatSidebar/ChatSidebar';
 
 export {
   Navbar,
@@ -50,4 +52,6 @@ export {
   FollowButton,
   UsersList,
   ProfileHeader,
+  ChatFeed,
+  ChatSidebar,
 };

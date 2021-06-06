@@ -10,6 +10,7 @@ import {
   ProfilePage,
   SinglePostPage,
   ErrorPage,
+  ChatPage,
 } from './pages';
 import { Navbar, PrivateRoute, RootModal } from './components';
 import { connectSocket } from './actions/socketActions';
@@ -44,6 +45,7 @@ const App = () => {
           <PrivateRoute path='/upload' component={UploadPage} />
           <PrivateRoute path='/profile/:id' component={ProfilePage} />
           <PrivateRoute path='/settings' component={SettingsPage} />
+          <PrivateRoute path='/direct' component={ChatPage} />
           <Route path='/signup' component={SignUpPage} />
           <Route path='/login' component={LoginPage} />
           <PrivateRoute

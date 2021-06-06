@@ -4,15 +4,22 @@ import { GrClose } from 'react-icons/gr';
 import { UsersList } from '../../components';
 import { CLOSE_MODAL } from '../../constants/utilConstants';
 
-const UserListModal = props => {
+const NewMessageModal = props => {
   const dispatch = useDispatch();
+  const createNewChatHandler = () => {};
 
   return (
     <>
-      <div className='modal__title'>
-        <h2>{props.listType}</h2>
+      <div className='modal__new-message--title'>
         <button onClick={() => dispatch({ type: CLOSE_MODAL })}>
           <GrClose />
+        </button>
+        <h3>New Message</h3>
+        <button
+          onClick={createNewChatHandler}
+          className='modal__new-message--title-next'
+        >
+          Next
         </button>
       </div>
       <UsersList {...props} />
@@ -20,4 +27,4 @@ const UserListModal = props => {
   );
 };
 
-export default UserListModal;
+export default NewMessageModal;

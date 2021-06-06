@@ -16,6 +16,7 @@ import {
   getUserStats,
   getUserFollowers,
   getUserFollowing,
+  getUserSavedLikedPosts,
 } from '../controllers/userControllers.js';
 import { protect } from '../middleware/authMiddleware.js';
 
@@ -28,6 +29,7 @@ router.route('/profile').put(protect, updateUserProfile);
 router.route('/profile/password').put(protect, updateUserPassword);
 router.route('/post/:id').get(getPostUserDetails);
 router.route('/:id').get(getUserProfileDetails).delete(deleteUser);
+router.route('/relatedposts/:id').get(getUserSavedLikedPosts);
 router.route('/follow/:id').put(protect, followUser);
 router.route('/unfollow/:id').put(protect, unfollowUser);
 router.route('/save/:id').post(protect, addPostToSaved);

@@ -1,0 +1,13 @@
+.chat-page {
+  background-color: $clr-bg;
+
+  &__container {
+    max-width: 1040px;
+    background-color: $clr-white;
+    display: grid;
+    grid-template-columns: 24rem 1fr;
+    justify-content: center;
+    min-height: 85vh;
+    border: 1px solid $clr-border;
+  }
+}
