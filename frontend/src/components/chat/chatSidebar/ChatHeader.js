@@ -7,7 +7,7 @@ const ChatHeader = () => {
   const { userInfo } = useSelector(state => state.userLogin);
   const dispatch = useDispatch();
 
-  const openMessageModalHandler = countUsers => {
+  const openMessageModalHandler = () => {
     dispatch({
       type: SHOW_MODAL,
       payload: {

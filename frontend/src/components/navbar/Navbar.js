@@ -43,8 +43,11 @@ const Navbar = () => {
               <Link className='button is-primary' to='/upload'>
                 Upload
               </Link>
-              <Link to='/direct' className='nav__center--button is-flexed'>
-                {pathname === '/direct' ? (
+              <Link
+                to='/direct/inbox'
+                className='nav__center--button is-flexed'
+              >
+                {pathname.startsWith('/direct/') ? (
                   <RiMessengerFill style={{ fill: '#262626' }} />
                 ) : (
                   <RiMessengerLine />

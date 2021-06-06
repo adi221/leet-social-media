@@ -36,9 +36,8 @@ const createChat = asyncHandler(async (req, res) => {
 // @access User
 const getChatList = asyncHandler(async (req, res) => {
   const { _id } = req.user;
-  console.log(_id);
-  // const userChatLists = await Chat.find({ 'user.chatUsers.user': _id });
 
+  /*
   // db.chat.chatUsers.user
   const userChatLists = await Chat.aggregate([
     {
@@ -55,15 +54,16 @@ const getChatList = asyncHandler(async (req, res) => {
     {
       $lookup: {
         from: 'users',
-        let: { userId: '$chatUsers.user' },
+        let: { userId: { $ne: ['$chatUsers.user', ObjectId(_id)] } },
         pipeline: [
           {
             $match: {
               $expr: {
-                $ne: ['$$userId', ObjectId(_id)],
+                $eq: ['$_id', '$$userId'],
               },
             },
           },
+          { $project: { username: true } },
         ],
         as: 'partnerDetails',
       },
@@ -75,15 +75,13 @@ const getChatList = asyncHandler(async (req, res) => {
       $project: {
         _id: true,
         'partnerDetails.username': true,
-        'partnerDetails.profileImage': true,
+        // 'partnerDetails.profileImage': true,
         'partnerDetails._id': true,
       },
     },
   ]);
+  */
 
-  console.log(userChatLists);
-
-  /*
   const userChatLists = await Chat.aggregate([
     {
       $match: {
@@ -116,17 +114,28 @@ const getChatList = asyncHandler(async (req, res) => {
       },
     },
   ]);
-  */
+
   // find query to skip the user._id in the localField
-  // const filteredUserChatList = userChatLists.filter(
-  //   chat => chat._id !== _id.toString()
-  // );
-  // console.log(filteredUserChatList);
-  if (userChatLists) {
-    res.json(userChatLists);
+  const filteredUserChatList = userChatLists.filter(
+    chat => chat.partnerDetails._id.toString() !== _id.toString()
+  );
+
+  if (filteredUserChatList) {
+    res.json(filteredUserChatList);
   } else {
     res.status(401).json({ success: false, message: 'User has no chat lists' });
   }
 });
 
-export { getChatList, createChat };
+// @desc Get data for single chat feed
+// @route GET /api/chats/:chatId
+// @access User
+const getSingleChatData = asyncHandler(async (req, res) => {
+  const { chatId } = req.params;
+  const chat = await Chat.findById(chatId);
+
+  console.log(chat);
+  res.json(chat);
+});
+
+export { getChatList, createChat, getSingleChatData };

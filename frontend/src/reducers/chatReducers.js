@@ -31,7 +31,7 @@ export const chatListReducer = (state = { chatList: [] }, action) => {
     case GET_CHAT_LIST_REQUEST:
       return { ...state, loading: true };
     case GET_CHAT_LIST_SUCCESS:
-      return { loading: false, chatLists: action.payload };
+      return { loading: false, chatList: action.payload };
     case GET_CHAT_LIST_FAIL:
       return { loading: false, error: action.payload };
     default:
