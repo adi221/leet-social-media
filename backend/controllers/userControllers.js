@@ -84,49 +84,40 @@ const getPostUserDetails = asyncHandler(async (req, res) => {
 // @route POST /api/users/post/:username
 // @access Public
 const getUserProfileDetails = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  const user = await User.findById(id);
-  if (user) {
-    const {
-      profileImage,
-      description,
-      following,
-      followers,
-      posts,
-      name,
-      username,
-      _id,
-    } = user;
+  const { username } = req.params;
+  const user = await User.find({ username });
 
-    const userPosts = await Post.aggregate([
-      {
-        $match: { user: ObjectId(id) },
-      },
-      { $sort: { createdAt: -1 } },
-      {
-        $project: {
-          image: true,
-          comments: { $size: '$comments' },
-          likes: { $size: '$likes' },
-          description: true,
-        },
-      },
-    ]);
+  if (!user)
+    return res.status(404).json({ success: false, message: 'User not found' });
 
-    res.json({
-      profileImage,
-      name,
-      description,
-      following,
-      followers,
-      userPosts,
-      username,
-      _id,
-    });
-  } else {
-    res.status(401).json({ success: false, message: 'User not found' });
-    throw new Error('Invalid id');
-  }
+  const { profileImage, description, following, followers, posts, name, _id } =
+    user[0];
+
+  const userPosts = await Post.aggregate([
+    {
+      $match: { user: ObjectId(_id) },
+    },
+    { $sort: { createdAt: -1 } },
+    {
+      $project: {
+        image: true,
+        comments: { $size: '$comments' },
+        likes: { $size: '$likes' },
+        description: true,
+      },
+    },
+  ]);
+
+  res.json({
+    profileImage,
+    name,
+    description,
+    following,
+    followers,
+    userPosts,
+    username,
+    _id,
+  });
 });
 
 // @desc Get details of user profile

@@ -10,6 +10,6 @@ const router = express.Router();
 
 router.route('/').post(protect, createChat);
 router.route('/list').get(protect, getChatList);
-router.route('/:chatId').get(getSingleChatData);
+router.route('/:chatId').get(protect, getSingleChatData);
 
 export default router;

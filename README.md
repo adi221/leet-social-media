@@ -28,3 +28,5 @@
 - Fetching new posts while scrolling
 - Web sockets
 - Getting real time notifications when user gets follow, like, comment
+- Direct inbox for chat
+- Ability to create chat groups and private dual chat

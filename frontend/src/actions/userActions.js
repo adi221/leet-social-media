@@ -100,10 +100,10 @@ export const register = (username, name, email, password) => async dispatch => {
   }
 };
 
-export const getUserProfileDetails = id => async dispatch => {
+export const getUserProfileDetails = username => async dispatch => {
   try {
     dispatch({ type: USER_DETAILS_PROFILE_GET_REQUEST });
-    const { data } = await axios.get(`/api/users/${id}`);
+    const { data } = await axios.get(`/api/users/${username}`);
     dispatch({ type: USER_DETAILS_PROFILE_GET_SUCCESS, payload: data });
   } catch (error) {
     dispatch({

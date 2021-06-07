@@ -6,13 +6,13 @@ import UserSuggestions from './UserSuggestions';
 const HomeSidebar = () => {
   const { userInfo } = useSelector(state => state.userLogin);
 
-  const { username, profileImage, _id, name } = userInfo;
+  const { username, profileImage, name } = userInfo;
   return (
     <article className='home-sidebar'>
       <header className='home-sidebar__header'>
         <img className='mr-sm' src={profileImage} alt={username} />
         <div>
-          <Link to={`/profile/${_id}`} className='bold '>
+          <Link to={`/profile/${username}`} className='bold '>
             {username}
           </Link>
           <p>{name}</p>

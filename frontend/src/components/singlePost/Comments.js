@@ -16,11 +16,14 @@ const Comments = ({ comments, simple, postId, username }) => {
           View all {comments.length} comments
         </Link>
         {comments.slice(commentsToShow).map(c => {
-          const { _id, username, comment, user } = c;
+          const { _id, username: commentUsername, comment } = c;
           return (
             <p key={_id}>
-              <Link to={`/profile/${user}`} className='bold mr-sm underline'>
-                {username}
+              <Link
+                to={`/profile/${commentUsername}`}
+                className='bold mr-sm underline'
+              >
+                {commentUsername}
               </Link>
               {comment}
             </p>

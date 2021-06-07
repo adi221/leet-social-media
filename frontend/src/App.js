@@ -43,7 +43,7 @@ const App = () => {
       <div className='page-container'>
         <Switch>
           <PrivateRoute path='/upload' component={UploadPage} />
-          <PrivateRoute path='/profile/:id' component={ProfilePage} />
+          <PrivateRoute path='/profile/:username' component={ProfilePage} />
           <PrivateRoute path='/settings' component={SettingsPage} />
           <PrivateRoute path='/direct/inbox' component={ChatPage} />
           <PrivateRoute path='/direct/:chatId' component={ChatPage} />

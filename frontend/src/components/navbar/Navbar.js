@@ -70,7 +70,7 @@ const Navbar = () => {
                 {showSettings && (
                   <ul className=' nav__center--dropdown-content'>
                     <li>
-                      <Link to={`/profile/${userInfo._id}`}>
+                      <Link to={`/profile/${userInfo.username}`}>
                         <IoIosPerson /> Profile
                       </Link>
                     </li>

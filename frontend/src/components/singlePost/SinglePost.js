@@ -91,7 +91,7 @@ const SinglePost = ({ uniqueId, simple = false }) => {
       >
         <div className='is-flexed '>
           <img src={profileImage} alt={username} />
-          <Link to={`/profile/${userId}`} className='bold underline'>
+          <Link to={`/profile/${username}`} className='bold underline'>
             {username}
           </Link>
         </div>
@@ -124,7 +124,7 @@ const SinglePost = ({ uniqueId, simple = false }) => {
         </div>
         <div className='single-post__-description'>
           <p>
-            <Link to={`/profile/${userId}`} className='bold mr-sm underline'>
+            <Link to={`/profile/${username}`} className='bold mr-sm underline'>
               {username}
             </Link>
             {description}

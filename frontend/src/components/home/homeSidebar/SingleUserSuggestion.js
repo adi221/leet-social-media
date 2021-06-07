@@ -8,7 +8,7 @@ const SingleUserSuggestion = ({ user }) => {
       <div className='home-sidebar__suggestions-suggestion__info'>
         <img src={user.profileImage} alt={user.username} className='mr-sm' />
         <div>
-          <Link to={`/profile/${user._id}`} className='bold underline'>
+          <Link to={`/profile/${user.username}`} className='bold underline'>
             {user.username}
           </Link>
           <p>{user.name}</p>

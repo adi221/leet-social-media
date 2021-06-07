@@ -13,8 +13,10 @@ const createChat = asyncHandler(async (req, res) => {
   // else redirect by sending res.send(chat._id)
   const { _id } = req.user;
   const { partnerUsersId } = req.body;
-  let chat;
 
+  // const chatAlreadyExists = await Chat.find({chatUsers: partnerUsersId})
+
+  let chat;
   if (partnerUsersId.length === 0) {
     res.status(401).json({ success: false, message: 'No partner user' });
   } else if (partnerUsersId.length === 1) {
@@ -37,7 +39,6 @@ const createChat = asyncHandler(async (req, res) => {
 const getChatList = asyncHandler(async (req, res) => {
   const { _id } = req.user;
 
-  /*
   // db.chat.chatUsers.user
   const userChatLists = await Chat.aggregate([
     {
@@ -54,51 +55,19 @@ const getChatList = asyncHandler(async (req, res) => {
     {
       $lookup: {
         from: 'users',
-        let: { userId: { $ne: ['$chatUsers.user', ObjectId(_id)] } },
+        let: { userId: '$chatUsers.user', currentUserId: ObjectId(_id) },
         pipeline: [
           {
             $match: {
               $expr: {
-                $eq: ['$_id', '$$userId'],
+                $and: [
+                  { $in: ['$_id', '$$userId'] },
+                  { $ne: ['$_id', '$$currentUserId'] },
+                ],
               },
             },
           },
-          { $project: { username: true } },
         ],
-        as: 'partnerDetails',
-      },
-    },
-    {
-      $unwind: '$partnerDetails',
-    },
-    {
-      $project: {
-        _id: true,
-        'partnerDetails.username': true,
-        // 'partnerDetails.profileImage': true,
-        'partnerDetails._id': true,
-      },
-    },
-  ]);
-  */
-
-  const userChatLists = await Chat.aggregate([
-    {
-      $match: {
-        chatUsers: {
-          $elemMatch: {
-            user: ObjectId(_id),
-          },
-        },
-      },
-    },
-    { $sort: { createdAt: -1 } },
-    // Get partner's image, username
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'chatUsers.user',
-        foreignField: '_id',
         as: 'partnerDetails',
       },
     },
@@ -115,13 +84,10 @@ const getChatList = asyncHandler(async (req, res) => {
     },
   ]);
 
-  // find query to skip the user._id in the localField
-  const filteredUserChatList = userChatLists.filter(
-    chat => chat.partnerDetails._id.toString() !== _id.toString()
-  );
+  console.log(userChatLists);
 
-  if (filteredUserChatList) {
-    res.json(filteredUserChatList);
+  if (userChatLists) {
+    res.json(userChatLists);
   } else {
     res.status(401).json({ success: false, message: 'User has no chat lists' });
   }
@@ -132,10 +98,55 @@ const getChatList = asyncHandler(async (req, res) => {
 // @access User
 const getSingleChatData = asyncHandler(async (req, res) => {
   const { chatId } = req.params;
-  const chat = await Chat.findById(chatId);
-
-  console.log(chat);
-  res.json(chat);
+  const { _id } = req.user;
+  const chat = await Chat.aggregate([
+    {
+      $match: {
+        _id: ObjectId(chatId),
+      },
+    },
+    // Get partner's image, username
+    {
+      $lookup: {
+        from: 'users',
+        let: { userId: '$chatUsers.user', currentUserId: ObjectId(_id) },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  { $in: ['$_id', '$$userId'] },
+                  { $ne: ['$_id', '$$currentUserId'] },
+                ],
+              },
+            },
+          },
+        ],
+        as: 'partnerDetails',
+      },
+    },
+    {
+      $unwind: '$partnerDetails',
+    },
+    {
+      $project: {
+        _id: true,
+        chatType: true,
+        messages: true,
+        'partnerDetails.username': true,
+        'partnerDetails.profileImage': true,
+        'partnerDetails._id': true,
+      },
+    },
+  ]);
+  if (chat) {
+    // returns an array
+    res.json(chat[0]);
+  } else {
+    res
+      .status(404)
+      .json({ success: false, message: 'Chat not found by its id' });
+  }
 });
 
 export { getChatList, createChat, getSingleChatData };

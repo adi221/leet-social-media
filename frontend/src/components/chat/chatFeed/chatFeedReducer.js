@@ -7,14 +7,14 @@ export const INITIAL_STATE = {
   error: false,
   chatPartners: [
     {
+      _id: '',
       username: '',
       profileImage: '',
     },
   ],
-  chat: {
-    messages: [],
-    textInput: '',
-  },
+  chatType: '',
+  messages: [],
+  textInput: '',
 };
 
 export const chatFeedReducer = (state, action) => {
@@ -22,8 +22,19 @@ export const chatFeedReducer = (state, action) => {
     case CHAT_FEED_LOADING:
       return { ...state, loading: true };
     case CHAT_FEED_ERROR:
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, loading: false, error: true };
     case CHAT_FEED_GET_SUCCESS:
+      const { chatType, messages, partnerDetails } = action.payload;
+      console.log(action.payload);
+      if (chatType === 'dual') {
+        return {
+          ...state,
+          loading: false,
+          messages,
+          chatType,
+          chatPartners: { ...partnerDetails },
+        };
+      }
       return { ...state };
     default:
       return state;
