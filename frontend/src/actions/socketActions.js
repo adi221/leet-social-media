@@ -1,7 +1,7 @@
 import io from 'socket.io-client';
 import { CONNECT, DISCONNECT } from '../constants/socketConstants';
 import { addNotification } from '../actions/notificationActions';
-import { receivedMessage } from '../actions/chatActions';
+import { receivedMessage, addChat } from '../actions/chatActions';
 
 // connect to socket
 const connect = token => {
@@ -23,7 +23,11 @@ export const connectSocket = () => (dispatch, getState) => {
     dispatch(addNotification(data));
   });
 
-  socket.on('received', message => {
+  socket.on('newChat', chat => {
+    dispatch(addChat(chat));
+  });
+
+  socket.on('receivedMessage', message => {
     dispatch(receivedMessage(message));
   });
 };

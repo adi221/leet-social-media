@@ -8,6 +8,7 @@ import {
   GET_CHAT_LIST_REQUEST,
   GET_CHAT_LIST_SUCCESS,
   GET_CHAT_LIST_FAIL,
+  ADD_CHAT,
   GET_CHAT_FEED_REQUEST,
   GET_CHAT_FEED_FAIL,
   GET_CHAT_FEED_SUCCESS,
@@ -46,8 +47,8 @@ export const createChat = () => async (dispatch, getState) => {
       },
     };
 
-    await axios.post('/api/chats', { partnerUsersId }, config);
-    dispatch({ type: CREATE_CHAT_SUCCESS });
+    const { data } = await axios.post('/api/chats', { partnerUsersId }, config);
+    dispatch({ type: CREATE_CHAT_SUCCESS, payload: data });
     dispatch({ type: RESET_CHAT_PARTNERS });
   } catch (error) {
     dispatch({
@@ -112,6 +113,10 @@ export const getChatFeed = chatId => async (dispatch, getState) => {
           : error.message,
     });
   }
+};
+
+export const addChat = chat => dispatch => {
+  dispatch({ type: ADD_CHAT, payload: chat });
 };
 
 export const receivedMessage = message => dispatch => {

@@ -3,6 +3,7 @@ import Chat from '../models/chatModel.js';
 import User from '../models/userModel.js';
 import mongoose from 'mongoose';
 const ObjectId = mongoose.Types.ObjectId;
+import { sendNewChat } from '../handlers/socketHandlers.js';
 
 // @desc Create chat
 // @route POST /api/chats
@@ -14,12 +15,48 @@ const createChat = asyncHandler(async (req, res) => {
   const { _id } = req.user;
   const { partnerUsersId } = req.body;
 
-  // const chatAlreadyExists = await Chat.find({chatUsers: partnerUsersId})
+  const doesChatAlreadyExist = async () => {
+    const userChats = await Chat.aggregate([
+      {
+        $match: {
+          $and: [
+            { chatType: 'dual' },
+            {
+              chatUsers: {
+                $elemMatch: {
+                  user: ObjectId(_id),
+                },
+              },
+            },
+            {
+              chatUsers: {
+                $elemMatch: {
+                  user: ObjectId(partnerUsersId[0]),
+                },
+              },
+            },
+          ],
+        },
+      },
+    ]);
+
+    if (userChats) {
+      return userChats[0]._id.toString();
+    } else {
+      return false;
+    }
+  };
 
   let chat;
   if (partnerUsersId.length === 0) {
-    res.status(401).json({ success: false, message: 'No partner user' });
+    return res.status(401).json({ success: false, message: 'No partner user' });
   } else if (partnerUsersId.length === 1) {
+    const doesChatExist = await doesChatAlreadyExist();
+    if (doesChatExist) {
+      // doesChatExist = chatId to redirect
+      return res.send(doesChatExist);
+    }
+
     const chatUsers = [{ user: _id }, { user: partnerUsersId[0] }];
     chat = new Chat({ chatUsers, messages: [], chatType: 'dual' });
     await chat.save();
@@ -30,6 +67,19 @@ const createChat = asyncHandler(async (req, res) => {
     await chat.save();
   }
 
+  const partner = await User.findById(partnerUsersId[0]);
+  const newChatSocket = {
+    _id: chat._id,
+    partnerDetails: {
+      _id: partner._id,
+      profileImage: partner.profileImage,
+      username: partner.username,
+    },
+  };
+
+  sendNewChat(req, newChatSocket, _id);
+
+  // send chatId so i can redirect when I get success message
   res.status(201).send(chat._id);
 });
 
@@ -50,7 +100,7 @@ const getChatList = asyncHandler(async (req, res) => {
         },
       },
     },
-    { $sort: { createdAt: -1 } },
+    { $sort: { updatedAt: -1 } },
     // Get partner's image, username
     {
       $lookup: {

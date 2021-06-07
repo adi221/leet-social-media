@@ -2,29 +2,36 @@ import {
   GET_CHAT_LIST_REQUEST,
   GET_CHAT_LIST_SUCCESS,
   GET_CHAT_LIST_FAIL,
+  ADD_CHAT,
   CREATE_CHAT_REQUEST,
   CREATE_CHAT_SUCCESS,
   CREATE_CHAT_FAIL,
   CHANGE_CHAT_PARTNERS,
   RESET_CHAT_PARTNERS,
+  RESET_CHAT_REDIRECT,
   GET_CHAT_FEED_REQUEST,
   GET_CHAT_FEED_FAIL,
   GET_CHAT_FEED_SUCCESS,
   RECEIVED_MESSAGE,
 } from '../constants/chatConstants';
 
-export const createChatReducer = (state = { partnerUsersId: [] }, action) => {
+export const createChatReducer = (
+  state = { partnerUsersId: [], redirectChatId: null },
+  action
+) => {
   switch (action.type) {
     case CREATE_CHAT_REQUEST:
       return { ...state, loading: true };
     case CREATE_CHAT_SUCCESS:
-      return { loading: false, success: true };
+      return { ...state, loading: false, redirectChatId: action.payload };
     case CREATE_CHAT_FAIL:
-      return { loading: false, error: action.payload };
+      return { ...state, loading: false, error: action.payload };
     case CHANGE_CHAT_PARTNERS:
       return { ...state, partnerUsersId: action.payload };
     case RESET_CHAT_PARTNERS:
       return { ...state, partnerUsersId: [] };
+    case RESET_CHAT_REDIRECT:
+      return { ...state, redirectChatId: null };
     default:
       return state;
   }
@@ -38,6 +45,8 @@ export const chatListReducer = (state = { chatList: [] }, action) => {
       return { loading: false, chatList: action.payload };
     case GET_CHAT_LIST_FAIL:
       return { loading: false, error: action.payload };
+    case ADD_CHAT:
+      return { ...state, chatList: [action.payload, ...state.chatList] };
     default:
       return state;
   }

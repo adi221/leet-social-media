@@ -40,8 +40,12 @@ const socketServer = socketio => {
           chat.messages.push(newMessage);
           await chat.save();
 
-          socketio.sockets.in(fromUser.toString()).emit('received', newMessage);
-          socketio.sockets.in(toUserId.toString()).emit('received', newMessage);
+          socketio.sockets
+            .in(fromUser.toString())
+            .emit('receivedMessage', newMessage);
+          socketio.sockets
+            .in(toUserId.toString())
+            .emit('receivedMessage', newMessage);
         } catch (error) {
           console.log(error);
         }

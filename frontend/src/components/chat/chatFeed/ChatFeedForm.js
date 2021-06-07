@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 const ChatFeedForm = ({ chatId, chatPartners }) => {
   const [addedMessage, setAddedMessage] = useState('');
@@ -10,7 +10,7 @@ const ChatFeedForm = ({ chatId, chatPartners }) => {
   const messageHandler = e => {
     setAddedMessage(e.target.value);
     // emit message action and add to reducer and
-    // empty input
+    // empty input, typing..
   };
 
   const sendMessage = e => {
@@ -29,7 +29,7 @@ const ChatFeedForm = ({ chatId, chatPartners }) => {
   };
 
   return (
-    <div className='chat-feed__buttom'>
+    <div className='chat-feed__bottom'>
       <form className='chat-feed__form' onSubmit={sendMessage}>
         <input
           type='text'
