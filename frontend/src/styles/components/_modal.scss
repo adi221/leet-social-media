@@ -135,6 +135,7 @@
       &-next {
         color: $clr-primary-1;
         font-weight: bold;
+        position: relative;
 
         &:disabled {
           opacity: 0.5rem;

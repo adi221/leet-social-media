@@ -13,6 +13,7 @@ import {
   GET_CHAT_FEED_FAIL,
   GET_CHAT_FEED_SUCCESS,
   RECEIVED_MESSAGE,
+  PARTNER_TYPING,
 } from '../constants/chatConstants';
 
 export const createChatReducer = (
@@ -64,7 +65,7 @@ const chatFeedInitialState = {
   ],
   chatType: '',
   messages: [],
-  textInput: '',
+  chatPartnersTyping: [],
 };
 export const chatFeedReducer = (state = chatFeedInitialState, action) => {
   switch (action.type) {
@@ -86,6 +87,22 @@ export const chatFeedReducer = (state = chatFeedInitialState, action) => {
       return { ...state };
     case RECEIVED_MESSAGE:
       return { ...state, messages: [...state.messages, action.payload] };
+    case PARTNER_TYPING:
+      // filter any typing status from partnersArr and then add if typing true
+      const currentPartnerTyping = action.payload;
+
+      const modifiedTypingPartners = state.chatPartnersTyping.filter(
+        partner => partner.chatId !== currentPartnerTyping.chatId
+      );
+
+      if (currentPartnerTyping.typing) {
+        modifiedTypingPartners.push(currentPartnerTyping);
+      }
+
+      return {
+        ...state,
+        chatPartnersTyping: modifiedTypingPartners,
+      };
     default:
       return state;
   }

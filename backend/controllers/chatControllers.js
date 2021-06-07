@@ -40,7 +40,7 @@ const createChat = asyncHandler(async (req, res) => {
       },
     ]);
 
-    if (userChats) {
+    if (userChats.length > 0) {
       return userChats[0]._id.toString();
     } else {
       return false;

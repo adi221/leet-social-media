@@ -50,6 +50,14 @@ const socketServer = socketio => {
           console.log(error);
         }
       });
+
+      socket.on('partnerTyping', async receiver => {
+        // user is typing if typing is true, otherwise its false
+        const { typing, toUserId, fromUser, chatId } = receiver;
+        socketio.sockets
+          .in(toUserId.toString())
+          .emit('partnerTyping', { chatId, fromUser, typing });
+      });
     });
 };
 

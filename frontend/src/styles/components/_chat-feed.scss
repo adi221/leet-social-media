@@ -33,29 +33,49 @@
 
   &__messages {
     width: 100%;
-    padding: 0.75rem 1.3rem;
+    padding: 0.75rem 1.3rem 0.75rem 2.7rem;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
+    position: static !important;
 
     &--message {
       display: flex;
       width: fit-content;
       max-width: 50%;
-      padding: 1rem;
-      text-align: left;
-      border-radius: 20px;
-      box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.15);
-      word-wrap: break-word;
-      word-break: break-word;
       margin-bottom: 10px;
+      position: relative !important;
+
+      p {
+        word-wrap: break-word;
+        word-break: break-word;
+        padding: 1rem;
+        text-align: left;
+        border-radius: 20px;
+        box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.15);
+      }
 
       &-owner {
-        background-color: #e0e0e0;
         align-self: flex-end;
+
+        p {
+          background-color: #e0e0e0;
+        }
       }
 
       &-other-person {
         align-self: flex-start;
+      }
+
+      &-img {
+        position: absolute;
+        bottom: 2px;
+        left: -30px;
+        width: 25px;
+        height: 25px;
+        object-fit: cover;
+        border-radius: 50%;
+        cursor: pointer;
       }
     }
   }

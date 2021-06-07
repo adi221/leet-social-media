@@ -11,9 +11,10 @@ const ChatUsersList = () => {
 
   return (
     <ul className='chat-sidebar__list'>
-      {chatList.map(chat => {
-        return <SingleChatUser key={chat._id} {...chat} />;
-      })}
+      {chatList &&
+        chatList.map(chat => {
+          return <SingleChatUser key={chat._id} {...chat} />;
+        })}
     </ul>
   );
 };

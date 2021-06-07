@@ -8,9 +8,24 @@ const ChatFeedForm = ({ chatId, chatPartners }) => {
   const { userInfo } = useSelector(state => state.userLogin);
 
   const messageHandler = e => {
-    setAddedMessage(e.target.value);
-    // emit message action and add to reducer and
-    // empty input, typing..
+    const value = e.target.value;
+    setAddedMessage(value);
+
+    const receiver = {
+      chatId,
+      fromUser: userInfo._id,
+      toUserId: chatPartners._id,
+    };
+
+    if (value.length === 1) {
+      receiver.typing = true;
+      socket.emit('partnerTyping', receiver);
+    }
+
+    if (value.length === 0) {
+      receiver.typing = false;
+      socket.emit('partnerTyping', receiver);
+    }
   };
 
   const sendMessage = e => {
@@ -26,6 +41,14 @@ const ChatFeedForm = ({ chatId, chatPartners }) => {
     socket.emit('message', msg);
 
     setAddedMessage('');
+
+    const receiver = {
+      chatId,
+      fromUser: userInfo._id,
+      toUserId: chatPartners._id,
+      typing: false,
+    };
+    socket.emit('partnerTyping', receiver);
   };
 
   return (

@@ -3,13 +3,14 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { GrClose } from 'react-icons/gr';
 import { UsersList } from '../../components';
+import LoaderSvg from '../loaders/LoaderSvg';
 import { CLOSE_MODAL } from '../../constants/utilConstants';
 import { RESET_CHAT_REDIRECT } from '../../constants/chatConstants';
 import { createChat } from '../../actions/chatActions';
 
 const NewMessageModal = props => {
   const dispatch = useDispatch();
-  const { partnerUsersId, redirectChatId } = useSelector(
+  const { partnerUsersId, redirectChatId, loading } = useSelector(
     state => state.createChat
   );
   const history = useHistory();
@@ -33,12 +34,14 @@ const NewMessageModal = props => {
           <GrClose />
         </button>
         <h3>New Message</h3>
+
         <button
           onClick={createNewChatHandler}
           className='modal__new-message--title-next'
           disabled={partnerUsersId && partnerUsersId.length === 0}
         >
           Next
+          {loading && <LoaderSvg />}
         </button>
       </div>
       <UsersList {...props} />

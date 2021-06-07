@@ -13,6 +13,7 @@ import {
   GET_CHAT_FEED_FAIL,
   GET_CHAT_FEED_SUCCESS,
   RECEIVED_MESSAGE,
+  PARTNER_TYPING,
 } from '../constants/chatConstants';
 
 export const changePartnerUsersId = (id, type) => (dispatch, getState) => {
@@ -121,4 +122,8 @@ export const addChat = chat => dispatch => {
 
 export const receivedMessage = message => dispatch => {
   dispatch({ type: RECEIVED_MESSAGE, payload: message });
+};
+
+export const partnerTyping = chatPartnerTyping => dispatch => {
+  dispatch({ type: PARTNER_TYPING, payload: chatPartnerTyping });
 };
