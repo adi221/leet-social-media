@@ -84,8 +84,6 @@ const getChatList = asyncHandler(async (req, res) => {
     },
   ]);
 
-  console.log(userChatLists);
-
   if (userChatLists) {
     res.json(userChatLists);
   } else {

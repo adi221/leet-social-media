@@ -25,7 +25,6 @@ export const chatFeedReducer = (state, action) => {
       return { ...state, loading: false, error: true };
     case CHAT_FEED_GET_SUCCESS:
       const { chatType, messages, partnerDetails } = action.payload;
-      console.log(action.payload);
       if (chatType === 'dual') {
         return {
           ...state,

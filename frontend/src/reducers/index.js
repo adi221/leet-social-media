@@ -21,7 +21,11 @@ import {
 import { modalReducer } from '../reducers/utilReducers';
 import { socketReducer } from '../reducers/socketReducers';
 import { notificationsReducer } from '../reducers/notificationReducers';
-import { chatListReducer, createChatReducer } from '../reducers/chatReducers';
+import {
+  chatListReducer,
+  createChatReducer,
+  chatFeedReducer,
+} from '../reducers/chatReducers';
 
 const rootReducer = combineReducers({
   userLogin: userLoginReducer,
@@ -44,6 +48,7 @@ const rootReducer = combineReducers({
   notifications: notificationsReducer,
   chatList: chatListReducer,
   createChat: createChatReducer,
+  chatFeed: chatFeedReducer,
 });
 
 export default rootReducer;

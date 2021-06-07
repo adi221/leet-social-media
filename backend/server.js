@@ -4,12 +4,12 @@ import morgan from 'morgan';
 import cors from 'cors';
 import * as io from 'socket.io';
 import colors from 'colors';
-import jwt from 'jsonwebtoken';
 import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import postRoutes from './routes/postRoutes.js';
 import notificationRoutes from './routes/notificationRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
+import socketServer from './socket/socket.js';
 
 dotenv.config();
 connectDB();
@@ -48,28 +48,4 @@ const socketio = new io.Server(expressServer, {
 });
 
 app.set('socketio', socketio);
-
-// Authenticate before establishing a socket connection
-socketio
-  .use((socket, next) => {
-    const token = socket.handshake.query.token;
-    if (token) {
-      try {
-        const user = jwt.verify(token, process.env.JWT_SECRET);
-
-        if (!user) {
-          return next(new Error('Not authorized.'));
-        }
-        socket.user = user;
-        return next();
-      } catch (err) {
-        next(err);
-      }
-    } else {
-      return next(new Error('Not authorized.'));
-    }
-  })
-  .on('connection', socket => {
-    socket.join(socket.user.id.toString());
-    console.log(`socket connected  ${socket.user.id}`.green.bold);
-  });
+socketServer(socketio);

@@ -1,18 +1,31 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-const ChatFeedForm = () => {
+const ChatFeedForm = ({ chatId, chatPartners }) => {
   const [addedMessage, setAddedMessage] = useState('');
-  const socket = useSelector(state => state.socket);
+  const { socket } = useSelector(state => state.socket);
+
+  const { userInfo } = useSelector(state => state.userLogin);
 
   const messageHandler = e => {
-    e.preventDefault();
+    setAddedMessage(e.target.value);
     // emit message action and add to reducer and
     // empty input
   };
 
   const sendMessage = e => {
-    setAddedMessage(e.target.value);
+    e.preventDefault();
+    if (!addedMessage) return;
+
+    const msg = {
+      fromUser: userInfo._id,
+      toUserId: chatPartners._id,
+      chatId,
+      message: addedMessage,
+    };
+    socket.emit('message', msg);
+
+    setAddedMessage('');
   };
 
   return (
@@ -20,7 +33,7 @@ const ChatFeedForm = () => {
       <form className='chat-feed__form' onSubmit={sendMessage}>
         <input
           type='text'
-          placeholder='Add a comment..'
+          placeholder='Message..'
           value={addedMessage}
           onChange={messageHandler}
         />

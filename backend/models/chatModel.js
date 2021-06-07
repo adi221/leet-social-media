@@ -1,13 +1,5 @@
 import mongoose from 'mongoose';
 
-const chatUserSchema = mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: 'User',
-  },
-});
-
 const messageSchema = mongoose.Schema(
   {
     fromUser: {
@@ -25,7 +17,15 @@ const messageSchema = mongoose.Schema(
 
 const chatSchema = mongoose.Schema(
   {
-    chatUsers: [chatUserSchema],
+    chatUsers: [
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          ref: 'User',
+        },
+      },
+    ],
     messages: [messageSchema],
     chatType: {
       type: String,

@@ -8,6 +8,10 @@ import {
   GET_CHAT_LIST_REQUEST,
   GET_CHAT_LIST_SUCCESS,
   GET_CHAT_LIST_FAIL,
+  GET_CHAT_FEED_REQUEST,
+  GET_CHAT_FEED_FAIL,
+  GET_CHAT_FEED_SUCCESS,
+  RECEIVED_MESSAGE,
 } from '../constants/chatConstants';
 
 export const changePartnerUsersId = (id, type) => (dispatch, getState) => {
@@ -81,4 +85,35 @@ export const getChatLists = () => async (dispatch, getState) => {
           : error.message,
     });
   }
+};
+
+export const getChatFeed = chatId => async (dispatch, getState) => {
+  try {
+    dispatch({ type: GET_CHAT_FEED_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/api/chats/${chatId}`, config);
+    dispatch({ type: GET_CHAT_FEED_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: GET_CHAT_FEED_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const receivedMessage = message => dispatch => {
+  dispatch({ type: RECEIVED_MESSAGE, payload: message });
 };
