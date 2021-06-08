@@ -64,19 +64,34 @@ const createChat = asyncHandler(async (req, res) => {
     await chat.save();
   }
 
-  /*
-  const partner = await User.findById(partnerUsersId[0]);
-  const newChatSocket = {
+  // Add new chat with sockets
+  const partner1 = await User.findById(partnerUsersId[0]);
+
+  let partner2;
+  if (partnerUsersId.length > 1) {
+    partner2 = await User.findById(partnerUsersId[1]);
+  }
+
+  let newChatSocket = {
     _id: chat._id,
-    partnerDetails: {
-      _id: partner._id,
-      profileImage: partner.profileImage,
-      username: partner.username,
-    },
+    partners: [
+      {
+        _id: partner1._id,
+        profileImage: partner1.profileImage,
+        username: partner1.username,
+      },
+    ],
   };
 
+  if (partner2 !== undefined) {
+    newChatSocket.partners.push({
+      _id: partner2._id,
+      profileImage: partner2.profileImage,
+      username: partner2.username,
+    });
+  }
+
   sendNewChat(req, newChatSocket, _id);
-  */
 
   // send chatId so i can redirect when I get success message
   res.status(201).send(chat._id);
@@ -88,8 +103,8 @@ const createChat = asyncHandler(async (req, res) => {
 const getChatList = asyncHandler(async (req, res) => {
   const { _id } = req.user;
 
-  // db.chat.chatUsers.user
-  const userChatLists2 = await Chat.aggregate([
+  const userChatLists = await Chat.aggregate([
+    // find all user's chats
     {
       $match: {
         chatUsers: {
@@ -131,6 +146,7 @@ const getChatList = asyncHandler(async (req, res) => {
         'partnerDetails._id': true,
       },
     },
+    // group after unwinding by group id and push partners into an array
     {
       $group: {
         _id: '$_id',
@@ -144,54 +160,9 @@ const getChatList = asyncHandler(async (req, res) => {
       },
     },
   ]);
-  console.log(userChatLists2);
-  // db.chat.chatUsers.user
-  const userChatLists = await Chat.aggregate([
-    {
-      $match: {
-        chatUsers: {
-          $elemMatch: {
-            user: ObjectId(_id),
-          },
-        },
-      },
-    },
-    { $sort: { updatedAt: -1 } },
-    // Get partner's image, username
-    {
-      $lookup: {
-        from: 'users',
-        let: { userId: '$chatUsers.user', currentUserId: ObjectId(_id) },
-        pipeline: [
-          {
-            $match: {
-              $expr: {
-                $and: [
-                  { $in: ['$_id', '$$userId'] },
-                  { $ne: ['$_id', '$$currentUserId'] },
-                ],
-              },
-            },
-          },
-        ],
-        as: 'partnerDetails',
-      },
-    },
-    {
-      $unwind: '$partnerDetails',
-    },
-    {
-      $project: {
-        _id: true,
-        'partnerDetails.username': true,
-        'partnerDetails.profileImage': true,
-        'partnerDetails._id': true,
-      },
-    },
-  ]);
 
   if (userChatLists) {
-    res.send(userChatLists2);
+    res.send(userChatLists);
   } else {
     res.status(401).json({ success: false, message: 'User has no chat lists' });
   }
@@ -203,10 +174,18 @@ const getChatList = asyncHandler(async (req, res) => {
 const getSingleChatData = asyncHandler(async (req, res) => {
   const { chatId } = req.params;
   const { _id } = req.user;
+
   const chat = await Chat.aggregate([
+    // find chat by id
     {
       $match: {
         _id: ObjectId(chatId),
+      },
+    },
+    {
+      $addFields: {
+        chatType: '$chatType',
+        messages: '$messages',
       },
     },
     // Get partner's image, username
@@ -235,14 +214,71 @@ const getSingleChatData = asyncHandler(async (req, res) => {
     {
       $project: {
         _id: true,
-        chatType: true,
         messages: true,
+        chatType: true,
         'partnerDetails.username': true,
         'partnerDetails.profileImage': true,
         'partnerDetails._id': true,
       },
     },
+
+    // group after unwinding by group id and push partners into an array
+    {
+      $group: {
+        _id: '$_id',
+        chatType: { $first: '$chatType' },
+        messages: { $first: '$messages' },
+        partners: {
+          $push: {
+            _id: '$partnerDetails._id',
+            profileImage: '$partnerDetails.profileImage',
+            username: '$partnerDetails.username',
+          },
+        },
+      },
+    },
   ]);
+
+  // const chat = await Chat.aggregate([
+  //   {
+  //     $match: {
+  //       _id: ObjectId(chatId),
+  //     },
+  //   },
+  //   // Get partner's image, username
+  //   {
+  //     $lookup: {
+  //       from: 'users',
+  //       let: { userId: '$chatUsers.user', currentUserId: ObjectId(_id) },
+  //       pipeline: [
+  //         {
+  //           $match: {
+  //             $expr: {
+  //               $and: [
+  //                 { $in: ['$_id', '$$userId'] },
+  //                 { $ne: ['$_id', '$$currentUserId'] },
+  //               ],
+  //             },
+  //           },
+  //         },
+  //       ],
+  //       as: 'partnerDetails',
+  //     },
+  //   },
+  //   {
+  //     $unwind: '$partnerDetails',
+  //   },
+  //   {
+  //     $project: {
+  //       _id: true,
+  //       chatType: true,
+  //       messages: true,
+  //       'partnerDetails.username': true,
+  //       'partnerDetails.profileImage': true,
+  //       'partnerDetails._id': true,
+  //     },
+  //   },
+  // ]);
   if (chat) {
     // returns an array
     res.json(chat[0]);

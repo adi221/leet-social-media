@@ -14,14 +14,8 @@ const ChatFeed = () => {
   const [partnerTyping, setPartnerTyping] = useState(false);
 
   const dispatch = useDispatch();
-  const {
-    chatPartners,
-    chatType,
-    messages,
-    loading,
-    error,
-    chatPartnersTyping,
-  } = useSelector(state => state.chatFeed);
+  const { partners, chatType, messages, loading, error, chatPartnersTyping } =
+    useSelector(state => state.chatFeed);
 
   useEffect(() => {
     if (chatId && pathname !== '/direct/inbox') {
@@ -55,14 +49,14 @@ const ChatFeed = () => {
 
   return (
     <div className='chat-feed'>
-      <ChatFeedHeader chatPartners={chatPartners} chatType={chatType} />
+      <ChatFeedHeader chatPartners={partners} chatType={chatType} />
       <ChatFeedMessages
         messages={messages}
-        thumbnail={chatPartners.profileImage}
-        username={chatPartners.username}
+        thumbnail={partners[0].profileImage}
+        username={partners[0].username}
         partnerTyping={partnerTyping}
       />
-      <ChatFeedForm chatId={chatId} chatPartners={chatPartners} />
+      <ChatFeedForm chatId={chatId} chatPartners={partners[0]} />
     </div>
   );
 };

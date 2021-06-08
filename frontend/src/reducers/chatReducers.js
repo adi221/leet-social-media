@@ -56,7 +56,7 @@ export const chatListReducer = (state = { chatList: [] }, action) => {
 const chatFeedInitialState = {
   loading: true,
   error: false,
-  chatPartners: [
+  partners: [
     {
       _id: '',
       username: '',
@@ -74,17 +74,14 @@ export const chatFeedReducer = (state = chatFeedInitialState, action) => {
     case GET_CHAT_FEED_FAIL:
       return { ...state, loading: false, error: true };
     case GET_CHAT_FEED_SUCCESS:
-      const { chatType, messages, partnerDetails } = action.payload;
-      if (chatType === 'dual') {
-        return {
-          ...state,
-          loading: false,
-          messages,
-          chatType,
-          chatPartners: { ...partnerDetails },
-        };
-      }
-      return { ...state };
+      const { chatType, messages, partners } = action.payload;
+      return {
+        ...state,
+        loading: false,
+        messages,
+        chatType,
+        partners,
+      };
     case RECEIVED_MESSAGE:
       return { ...state, messages: [...state.messages, action.payload] };
     case PARTNER_TYPING:
