@@ -5,7 +5,8 @@
     max-width: 1040px;
     background-color: $clr-white;
     display: grid;
-    grid-template-columns: 24rem 1fr;
+    grid-template-columns: 22rem minmax(20rem, 1fr);
+    overflow-x: auto;
     justify-content: center;
     height: 86vh;
     border: 1px solid $clr-border;

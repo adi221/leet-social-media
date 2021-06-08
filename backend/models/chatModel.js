@@ -11,6 +11,7 @@ const messageSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    // messageType : image, text, user leaved/entered group..
   },
   { timestamps: true }
 );

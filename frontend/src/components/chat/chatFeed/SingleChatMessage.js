@@ -23,7 +23,6 @@ const SingleChatMessage = ({
   const addThumbnailOrNot = () => {
     if (userInfo._id === fromUser) return false;
     if (index === messages.length - 1) return true;
-    if (index === 0) return false;
     const nextMessage = messages[index + 1];
 
     if (nextMessage.fromUser !== fromUser) {

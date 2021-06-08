@@ -9,48 +9,45 @@ import { sendNewChat } from '../handlers/socketHandlers.js';
 // @route POST /api/chats
 // @access User
 const createChat = asyncHandler(async (req, res) => {
-  // check if chat is already exists between two users
-  // if not - create a new chat
-  // else redirect by sending res.send(chat._id)
   const { _id } = req.user;
   const { partnerUsersId } = req.body;
-
-  const doesChatAlreadyExist = async () => {
-    const userChats = await Chat.aggregate([
-      {
-        $match: {
-          $and: [
-            { chatType: 'dual' },
-            {
-              chatUsers: {
-                $elemMatch: {
-                  user: ObjectId(_id),
-                },
-              },
-            },
-            {
-              chatUsers: {
-                $elemMatch: {
-                  user: ObjectId(partnerUsersId[0]),
-                },
-              },
-            },
-          ],
-        },
-      },
-    ]);
-
-    if (userChats.length > 0) {
-      return userChats[0]._id.toString();
-    } else {
-      return false;
-    }
-  };
 
   let chat;
   if (partnerUsersId.length === 0) {
     return res.status(401).json({ success: false, message: 'No partner user' });
   } else if (partnerUsersId.length === 1) {
+    const doesChatAlreadyExist = async () => {
+      const userChats = await Chat.aggregate([
+        {
+          $match: {
+            $and: [
+              { chatType: 'dual' },
+              {
+                chatUsers: {
+                  $elemMatch: {
+                    user: ObjectId(_id),
+                  },
+                },
+              },
+              {
+                chatUsers: {
+                  $elemMatch: {
+                    user: ObjectId(partnerUsersId[0]),
+                  },
+                },
+              },
+            ],
+          },
+        },
+      ]);
+
+      if (userChats.length > 0) {
+        return userChats[0]._id.toString();
+      } else {
+        return false;
+      }
+    };
+
     const doesChatExist = await doesChatAlreadyExist();
     if (doesChatExist) {
       // doesChatExist = chatId to redirect
@@ -67,6 +64,7 @@ const createChat = asyncHandler(async (req, res) => {
     await chat.save();
   }
 
+  /*
   const partner = await User.findById(partnerUsersId[0]);
   const newChatSocket = {
     _id: chat._id,
@@ -78,6 +76,7 @@ const createChat = asyncHandler(async (req, res) => {
   };
 
   sendNewChat(req, newChatSocket, _id);
+  */
 
   // send chatId so i can redirect when I get success message
   res.status(201).send(chat._id);
@@ -89,6 +88,63 @@ const createChat = asyncHandler(async (req, res) => {
 const getChatList = asyncHandler(async (req, res) => {
   const { _id } = req.user;
 
+  // db.chat.chatUsers.user
+  const userChatLists2 = await Chat.aggregate([
+    {
+      $match: {
+        chatUsers: {
+          $elemMatch: {
+            user: ObjectId(_id),
+          },
+        },
+      },
+    },
+    { $sort: { updatedAt: -1 } },
+    // Get partner's image, username
+    {
+      $lookup: {
+        from: 'users',
+        let: { userId: '$chatUsers.user', currentUserId: ObjectId(_id) },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  { $in: ['$_id', '$$userId'] },
+                  { $ne: ['$_id', '$$currentUserId'] },
+                ],
+              },
+            },
+          },
+        ],
+        as: 'partnerDetails',
+      },
+    },
+    {
+      $unwind: '$partnerDetails',
+    },
+    {
+      $project: {
+        _id: true,
+        'partnerDetails.username': true,
+        'partnerDetails.profileImage': true,
+        'partnerDetails._id': true,
+      },
+    },
+    {
+      $group: {
+        _id: '$_id',
+        partners: {
+          $push: {
+            _id: '$partnerDetails._id',
+            profileImage: '$partnerDetails.profileImage',
+            username: '$partnerDetails.username',
+          },
+        },
+      },
+    },
+  ]);
+  console.log(userChatLists2);
   // db.chat.chatUsers.user
   const userChatLists = await Chat.aggregate([
     {
@@ -135,7 +191,7 @@ const getChatList = asyncHandler(async (req, res) => {
   ]);
 
   if (userChatLists) {
-    res.json(userChatLists);
+    res.send(userChatLists2);
   } else {
     res.status(401).json({ success: false, message: 'User has no chat lists' });
   }
