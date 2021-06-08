@@ -1,8 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 
 const SingleChatUser = ({ partners, _id: chatId }) => {
+  const [unreadChat, setUnreadChat] = useState(false);
   const { pathname } = useLocation();
+  const { notifications } = useSelector(state => state.chatNotifications);
+
+  useEffect(() => {
+    if (notifications.includes(chatId)) {
+      setUnreadChat(true);
+    } else {
+      setUnreadChat(false);
+    }
+  }, [notifications, chatId]);
 
   return (
     <Link to={`/direct/${chatId}`}>
@@ -42,6 +53,7 @@ const SingleChatUser = ({ partners, _id: chatId }) => {
             );
           })}
         </p>
+        {unreadChat && <div className='chat-sidebar__list--item-unread'></div>}
       </li>
     </Link>
   );

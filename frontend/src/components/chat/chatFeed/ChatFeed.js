@@ -11,23 +11,39 @@ import Loader from '../../loaders/Loader';
 const ChatFeed = () => {
   const { pathname } = useLocation();
   const { chatId } = useParams();
-  const [partnerTyping, setPartnerTyping] = useState(false);
+  const [partnerTypingId, setPartnerTypingId] = useState(null);
 
   const dispatch = useDispatch();
   const { partners, chatType, messages, loading, error, chatPartnersTyping } =
     useSelector(state => state.chatFeed);
+  const { userInfo } = useSelector(state => state.userLogin);
+  const { notifications } = useSelector(state => state.chatNotifications);
+  const { socket } = useSelector(state => state.socket);
 
+  // fetch chat data
   useEffect(() => {
     if (chatId && pathname !== '/direct/inbox') {
       dispatch(getChatFeed(chatId));
     }
   }, [chatId, pathname, dispatch]);
 
+  // remove chat notification
   useEffect(() => {
-    const isTyping = chatPartnersTyping.some(
+    if (notifications.includes(chatId)) {
+      socket.emit('readChat', { chatId, userId: userInfo._id });
+    }
+  }, [notifications, chatId, socket, userInfo]);
+
+  // check if partner is typing
+  useEffect(() => {
+    const isUserTyping = chatPartnersTyping.find(
       partner => partner.chatId === chatId && partner.typing
     );
-    setPartnerTyping(isTyping);
+    if (isUserTyping) {
+      setPartnerTypingId(isUserTyping.fromUser);
+    } else {
+      setPartnerTypingId(null);
+    }
   }, [chatPartnersTyping, chatId]);
 
   if (pathname === '/direct/inbox') return <ChatFeedInbox />;
@@ -49,14 +65,19 @@ const ChatFeed = () => {
 
   return (
     <div className='chat-feed'>
-      <ChatFeedHeader chatPartners={partners} chatType={chatType} />
+      <ChatFeedHeader partners={partners} />
       <ChatFeedMessages
         messages={messages}
-        thumbnail={partners[0].profileImage}
-        username={partners[0].username}
-        partnerTyping={partnerTyping}
+        partnerTypingId={partnerTypingId}
+        chatType={chatType}
+        partners={partners}
       />
-      <ChatFeedForm chatId={chatId} chatPartners={partners[0]} />
+      <ChatFeedForm
+        chatId={chatId}
+        chatPartners={partners[0]}
+        partners={partners}
+        chatType={chatType}
+      />
     </div>
   );
 };

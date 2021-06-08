@@ -64,7 +64,6 @@ const postSchema = mongoose.Schema(
       required: true,
     },
     likes: [likeSchema],
-
     comments: [commentSchema],
   },
   {

@@ -20,7 +20,10 @@ import {
 } from '../reducers/postReducers';
 import { modalReducer } from '../reducers/utilReducers';
 import { socketReducer } from '../reducers/socketReducers';
-import { notificationsReducer } from '../reducers/notificationReducers';
+import {
+  notificationsReducer,
+  chatNotificationsReducer,
+} from '../reducers/notificationReducers';
 import {
   chatListReducer,
   createChatReducer,
@@ -46,6 +49,7 @@ const rootReducer = combineReducers({
   modal: modalReducer,
   socket: socketReducer,
   notifications: notificationsReducer,
+  chatNotifications: chatNotificationsReducer,
   chatList: chatListReducer,
   createChat: createChatReducer,
   chatFeed: chatFeedReducer,

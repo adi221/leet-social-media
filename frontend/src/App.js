@@ -14,7 +14,10 @@ import {
 } from './pages';
 import { Navbar, PrivateRoute, RootModal } from './components';
 import { connectSocket } from './actions/socketActions';
-import { getNotifications } from './actions/notificationActions';
+import {
+  getNotifications,
+  getChatNotifications,
+} from './actions/notificationActions';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -25,6 +28,7 @@ const App = () => {
     if (userInfo) {
       dispatch(connectSocket());
       dispatch(getNotifications());
+      dispatch(getChatNotifications());
     }
   }, [userInfo, dispatch]);
 

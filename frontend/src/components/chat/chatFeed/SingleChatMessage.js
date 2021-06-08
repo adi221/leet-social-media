@@ -7,8 +7,8 @@ const SingleChatMessage = ({
   message,
   index,
   messages,
-  thumbnail,
-  username,
+  partners,
+  chatType,
 }) => {
   const { userInfo } = useSelector(state => state.userLogin);
   const history = useHistory();
@@ -32,20 +32,34 @@ const SingleChatMessage = ({
     }
   };
 
-  const imageHandler = () => {
+  const determineThumbnailDetails = () => {
+    let ownerImg, ownerUsername;
+    if (chatType === 'dual') {
+      ownerImg = partners[0].profileImage;
+      ownerUsername = partners[0].username;
+    } else {
+      let user = partners.find(partner => partner._id === fromUser);
+      ownerImg = user.profileImage;
+      ownerUsername = user.username;
+    }
+
+    return (
+      <img
+        className='chat-feed__messages--message-img '
+        src={ownerImg}
+        alt={ownerUsername}
+        onClick={() => imageHandler(ownerUsername)}
+      />
+    );
+  };
+
+  const imageHandler = username => {
     history.push(`/profile/${username}`);
   };
 
   return (
     <div className={`chat-feed__messages--message ${determineMessageOwner()}`}>
-      {addThumbnailOrNot() && (
-        <img
-          className='chat-feed__messages--message-img '
-          src={thumbnail}
-          alt={username}
-          onClick={imageHandler}
-        />
-      )}
+      {addThumbnailOrNot() && determineThumbnailDetails()}
       <p>{message}</p>
     </div>
   );

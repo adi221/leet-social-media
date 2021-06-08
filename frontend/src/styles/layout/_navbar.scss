@@ -75,5 +75,21 @@
         }
       }
     }
+
+    &--chat {
+      position: relative;
+
+      &-notification {
+        position: absolute;
+        top: -0.5rem;
+        right: -0.2rem;
+        color: $clr-white;
+        background-color: $clr-red;
+        border-radius: 50%;
+        height: 1.2rem;
+        width: 1.2rem;
+        font-size: 0.8rem;
+      }
+    }
   }
 }

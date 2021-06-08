@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-const ChatFeedForm = ({ chatId, chatPartners }) => {
+const ChatFeedForm = ({ chatId, chatPartners, partners, chatType }) => {
   const [addedMessage, setAddedMessage] = useState('');
   const { socket } = useSelector(state => state.socket);
 
@@ -14,7 +14,7 @@ const ChatFeedForm = ({ chatId, chatPartners }) => {
     const receiver = {
       chatId,
       fromUser: userInfo._id,
-      toUserId: chatPartners._id,
+      toUserId: partners.map(p => p._id),
     };
 
     if (value.length === 1) {
@@ -34,7 +34,7 @@ const ChatFeedForm = ({ chatId, chatPartners }) => {
 
     const msg = {
       fromUser: userInfo._id,
-      toUserId: chatPartners._id,
+      toUserId: partners.map(p => p._id),
       chatId,
       message: addedMessage,
     };
@@ -45,7 +45,7 @@ const ChatFeedForm = ({ chatId, chatPartners }) => {
     const receiver = {
       chatId,
       fromUser: userInfo._id,
-      toUserId: chatPartners._id,
+      toUserId: partners.map(p => p._id),
       typing: false,
     };
     socket.emit('partnerTyping', receiver);

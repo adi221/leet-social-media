@@ -56,6 +56,7 @@ export const chatListReducer = (state = { chatList: [] }, action) => {
 const chatFeedInitialState = {
   loading: true,
   error: false,
+  currentChatId: '',
   partners: [
     {
       _id: '',
@@ -74,16 +75,25 @@ export const chatFeedReducer = (state = chatFeedInitialState, action) => {
     case GET_CHAT_FEED_FAIL:
       return { ...state, loading: false, error: true };
     case GET_CHAT_FEED_SUCCESS:
-      const { chatType, messages, partners } = action.payload;
+      const { chatType, messages, partners, _id } = action.payload;
       return {
         ...state,
         loading: false,
         messages,
         chatType,
         partners,
+        currentChatId: _id,
       };
     case RECEIVED_MESSAGE:
-      return { ...state, messages: [...state.messages, action.payload] };
+      const { fromUser, message, chatId } = action.payload;
+      // if chatId doesnt equal current chatId shown to user don't add new message
+      if (chatId === state.currentChatId) {
+        return {
+          ...state,
+          messages: [...state.messages, { fromUser, message }],
+        };
+      }
+      return state;
     case PARTNER_TYPING:
       // filter any typing status from partnersArr and then add if typing true
       const currentPartnerTyping = action.payload;

@@ -239,46 +239,6 @@ const getSingleChatData = asyncHandler(async (req, res) => {
     },
   ]);
 
-  // const chat = await Chat.aggregate([
-  //   {
-  //     $match: {
-  //       _id: ObjectId(chatId),
-  //     },
-  //   },
-  //   // Get partner's image, username
-  //   {
-  //     $lookup: {
-  //       from: 'users',
-  //       let: { userId: '$chatUsers.user', currentUserId: ObjectId(_id) },
-  //       pipeline: [
-  //         {
-  //           $match: {
-  //             $expr: {
-  //               $and: [
-  //                 { $in: ['$_id', '$$userId'] },
-  //                 { $ne: ['$_id', '$$currentUserId'] },
-  //               ],
-  //             },
-  //           },
-  //         },
-  //       ],
-  //       as: 'partnerDetails',
-  //     },
-  //   },
-  //   {
-  //     $unwind: '$partnerDetails',
-  //   },
-  //   {
-  //     $project: {
-  //       _id: true,
-  //       chatType: true,
-  //       messages: true,
-  //       'partnerDetails.username': true,
-  //       'partnerDetails.profileImage': true,
-  //       'partnerDetails._id': true,
-  //     },
-  //   },
-  // ]);
   if (chat) {
     // returns an array
     res.json(chat[0]);

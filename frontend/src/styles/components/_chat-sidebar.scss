@@ -27,6 +27,8 @@
       padding: 0.7rem 1rem;
       align-items: center;
       transition: $transition;
+      position: relative;
+      height: 5rem;
 
       &-single {
         height: 3rem;
@@ -60,6 +62,16 @@
           right: 0.6rem;
           bottom: 0.5rem;
         }
+      }
+
+      &-unread {
+        position: absolute;
+        right: 1rem;
+        top: 2.2rem;
+        background-color: $clr-red;
+        width: 0.6rem;
+        height: 0.6rem;
+        border-radius: 50%;
       }
 
       &:hover {

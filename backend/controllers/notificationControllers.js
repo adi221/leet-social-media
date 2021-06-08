@@ -1,5 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import Notification from '../models/notificationModel.js';
+import ChatNotification from '../models/chatNotificationModel.js';
 import mongoose from 'mongoose';
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -7,11 +8,11 @@ const ObjectId = mongoose.Types.ObjectId;
 // @route GET /api/notifications/:id
 // @access User
 const getNotifications = asyncHandler(async (req, res) => {
-  const { id } = req.params;
+  const { _id } = req.user;
 
   const notifications = await Notification.aggregate([
     {
-      $match: { receiver: ObjectId(id) },
+      $match: { receiver: ObjectId(_id) },
     },
     { $sort: { createdAt: -1 } },
     // Get sender's image, username
@@ -61,4 +62,28 @@ const readNotification = asyncHandler(async (req, res) => {
   }
 });
 
-export { getNotifications, readNotification };
+// @desc Get chat notifications of a user
+// @route GET /api/notifications/chat
+// @access User
+const getChatNotifications = asyncHandler(async (req, res) => {
+  const { _id } = req.user;
+
+  const userChatNotifications = await ChatNotification.aggregate([
+    { $match: { user: ObjectId(_id) } },
+    { $limit: 1 },
+    { $project: { unreadChats: true } },
+  ]);
+
+  const userChatIds = userChatNotifications[0].unreadChats.map(
+    chat => chat.chat
+  );
+
+  if (userChatNotifications) {
+    res.send(userChatIds);
+  } else {
+    // send empty array because user has no document yet
+    res.send([]);
+  }
+});
+
+export { getNotifications, readNotification, getChatNotifications };

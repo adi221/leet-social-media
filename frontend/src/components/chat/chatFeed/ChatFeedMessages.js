@@ -2,10 +2,40 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import SingleChatMessage from './SingleChatMessage';
 
-const ChatFeedMessages = ({ messages, thumbnail, username, partnerTyping }) => {
+const ChatFeedMessages = ({
+  messages,
+
+  partnerTypingId,
+  partners,
+  chatType,
+}) => {
   const history = useHistory();
-  const imageHandler = () => {
+  const imageHandler = username => {
     history.push(`/profile/${username}`);
+  };
+
+  const determinePartnerTyping = () => {
+    let typingImg, typingUsername;
+    if (chatType === 'dual') {
+      typingImg = partners[0].profileImage;
+      typingUsername = partners[0].username;
+    } else {
+      let user = partners.find(partner => partner._id === partnerTypingId);
+      typingImg = user.profileImage;
+      typingUsername = user.username;
+    }
+
+    return (
+      <div className='chat-feed__messages--message chat-feed__messages--message-other-person'>
+        <img
+          className='chat-feed__messages--message-img'
+          src={typingImg}
+          alt={typingUsername}
+          onClick={() => imageHandler(typingUsername)}
+        />
+        <p style={{ color: '#666' }}>Typing...</p>
+      </div>
+    );
   };
 
   return (
@@ -17,22 +47,12 @@ const ChatFeedMessages = ({ messages, thumbnail, username, partnerTyping }) => {
             {...message}
             index={index}
             messages={messages}
-            thumbnail={thumbnail}
-            username={username}
+            partners={partners}
+            chatType={chatType}
           />
         );
       })}
-      {partnerTyping && (
-        <div className='chat-feed__messages--message chat-feed__messages--message-other-person'>
-          <img
-            className='chat-feed__messages--message-img'
-            src={thumbnail}
-            alt={username}
-            onClick={imageHandler}
-          />
-          <p style={{ color: '#666' }}>Typing...</p>
-        </div>
-      )}
+      {partnerTypingId && determinePartnerTyping()}
     </div>
   );
 };

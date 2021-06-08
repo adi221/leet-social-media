@@ -1,7 +1,10 @@
-import * as io from 'socket.io';
 import jwt from 'jsonwebtoken';
 import colors from 'colors';
 import Chat from '../models/chatModel.js';
+import ChatNotification from '../models/chatNotificationModel.js';
+
+// to check online / offline users
+const onlineUsersId = {};
 
 const socketServer = socketio => {
   // Authenticate before establishing a socket connection
@@ -27,6 +30,10 @@ const socketServer = socketio => {
     .on('connection', socket => {
       socket.join(socket.user.id.toString());
       console.log(`socket connected  ${socket.user.id}`.green.bold);
+      if (!onlineUsersId[socket.user.id]) {
+        onlineUsersId[socket.user.id] = socket.user.id;
+      }
+      // console.log(onlineUsersId);
 
       socket.on('message', async msg => {
         try {
@@ -42,10 +49,44 @@ const socketServer = socketio => {
 
           socketio.sockets
             .in(fromUser.toString())
-            .emit('receivedMessage', newMessage);
-          socketio.sockets
-            .in(toUserId.toString())
-            .emit('receivedMessage', newMessage);
+            .emit('receivedMessage', { ...newMessage, chatId });
+
+          toUserId.forEach(userId => {
+            socketio.sockets
+              .in(userId.toString())
+              .emit('receivedMessage', { ...newMessage, chatId });
+          });
+
+          // send chatNotification
+          for (const userId of toUserId) {
+            const userChatNotif = await ChatNotification.findOne({
+              user: userId,
+            });
+
+            if (userChatNotif) {
+              userChatNotif.unreadChats.push({ chat: chatId });
+              await userChatNotif.save();
+            } else {
+              const newChatNotif = new ChatNotification({
+                user: userId,
+                unreadChats: [{ chat: chatId }],
+              });
+              await newChatNotif.save();
+            }
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      });
+
+      socket.on('readChat', async ({ chatId, userId }) => {
+        try {
+          await ChatNotification.updateOne(
+            { user: userId },
+            { $pull: { unreadChats: { chat: chatId } } }
+          );
+
+          socketio.sockets.in(userId.toString()).emit('readChat', chatId);
         } catch (error) {
           console.log(error);
         }
@@ -54,9 +95,20 @@ const socketServer = socketio => {
       socket.on('partnerTyping', async receiver => {
         // user is typing if typing is true, otherwise its false
         const { typing, toUserId, fromUser, chatId } = receiver;
-        socketio.sockets
-          .in(toUserId.toString())
-          .emit('partnerTyping', { chatId, fromUser, typing });
+
+        toUserId.forEach(userId => {
+          socketio.sockets
+            .in(userId.toString())
+            .emit('partnerTyping', { chatId, fromUser, typing });
+        });
+      });
+
+      socket.on('disconnect', () => {
+        console.log(`User disconnected ${socket.user.id}`.brightRed.bold);
+        if (onlineUsersId[socket.user.id]) {
+          delete onlineUsersId[socket.user.id];
+        }
+        // console.log(onlineUsersId);
       });
     });
 };

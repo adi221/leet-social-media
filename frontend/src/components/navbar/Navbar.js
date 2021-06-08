@@ -5,6 +5,7 @@ import { IoIosSettings, IoIosPerson } from 'react-icons/io';
 import { RiMessengerLine, RiMessengerFill } from 'react-icons/ri';
 import { FaSignOutAlt } from 'react-icons/fa';
 import { SearchBar, NotificationButton } from '../../components';
+import ChatButton from './ChatButton';
 import logo from '../../assets/leet-logo.png';
 import { logout } from '../../actions/userActions';
 
@@ -43,16 +44,7 @@ const Navbar = () => {
               <Link className='button is-primary' to='/upload'>
                 Upload
               </Link>
-              <Link
-                to='/direct/inbox'
-                className='nav__center--button is-flexed'
-              >
-                {pathname.startsWith('/direct/') ? (
-                  <RiMessengerFill style={{ fill: '#262626' }} />
-                ) : (
-                  <RiMessengerLine />
-                )}
-              </Link>
+              <ChatButton />
               <NotificationButton />
               <div className=' nav__center--dropdown'>
                 <button
