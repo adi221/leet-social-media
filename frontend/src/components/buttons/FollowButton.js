@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { followUser } from '../../actions/userActions';
+// import { followUser } from '../../actions/userActions';
+import axios from 'axios';
 import { SHOW_MODAL } from '../../constants/utilConstants';
+import { USER_STATS_FOLLOWING } from '../../constants/userConstants';
+import LoaderSvg from '../loaders/LoaderSvg';
 
 const FollowButton = ({
   style = {},
@@ -10,8 +13,11 @@ const FollowButton = ({
   profileImage,
   colored,
 }) => {
+  const { userInfo } = useSelector(state => state.userLogin);
   const { following } = useSelector(state => state.userStats);
-  const [isFollowing, setIsFollowing] = useState();
+
+  const [loading, setLoading] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -32,6 +38,30 @@ const FollowButton = ({
     });
   };
 
+  const followUser = () => async (dispatch, getState) => {
+    try {
+      setLoading(true);
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.put(
+        `/api/users/follow/${userId}`,
+        {},
+        config
+      );
+      setLoading(false);
+      setIsFollowing(!isFollowing);
+      dispatch({ type: USER_STATS_FOLLOWING, payload: data });
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
   const followHandler = () => {
     isFollowing ? unfollowModalHandler() : dispatch(followUser(userId));
   };
@@ -44,9 +74,10 @@ const FollowButton = ({
     <button
       className='drop button is-primary'
       onClick={followHandler}
-      style={{ ...style, ...colorStyle }}
+      style={{ ...style, ...colorStyle, position: 'relative' }}
     >
       {isFollowing ? 'Unfollow' : 'Follow'}
+      {loading && <LoaderSvg />}
     </button>
   );
 };

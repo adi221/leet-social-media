@@ -1,24 +1,32 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { unfollowUser } from '../../actions/userActions';
+import axios from 'axios';
 import { CLOSE_MODAL } from '../../constants/utilConstants';
-import { USER_UNFOLLOW_RESET } from '../../constants/userConstants';
+import { USER_STATS_FOLLOWING } from '../../constants/userConstants';
 
 const UnfollowUserModal = props => {
   const { userId, username, profileImage } = props;
   const dispatch = useDispatch();
+  const { userInfo } = useSelector(state => state.userLogin);
 
-  const { success: successUnfollow } = useSelector(state => state.userUnfollow);
-
-  useEffect(() => {
-    if (successUnfollow) {
+  const unfollowUser = async () => {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+      const { data } = await axios.put(
+        `/api/users/unfollow/${userId}`,
+        {},
+        config
+      );
+      dispatch({ type: USER_STATS_FOLLOWING, payload: data });
       dispatch({ type: CLOSE_MODAL });
-      dispatch({ type: USER_UNFOLLOW_RESET });
+    } catch (error) {
+      console.log(error);
     }
-  }, [successUnfollow, dispatch]);
-
-  const unfollowHandler = () => {
-    dispatch(unfollowUser(userId));
   };
 
   const closeModal = () => {
@@ -37,7 +45,7 @@ const UnfollowUserModal = props => {
       </div>
       <ul>
         <li>
-          <button className='red bold' onClick={unfollowHandler}>
+          <button className='red bold' onClick={unfollowUser}>
             Unfollow
           </button>
         </li>

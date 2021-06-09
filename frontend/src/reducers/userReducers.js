@@ -9,14 +9,6 @@ import {
   USER_DETAILS_PROFILE_GET_REQUEST,
   USER_DETAILS_PROFILE_GET_SUCCESS,
   USER_DETAILS_PROFILE_GET_FAIL,
-  USER_FOLLOW_REQUEST,
-  USER_FOLLOW_SUCCESS,
-  USER_FOLLOW_FAIL,
-  USER_FOLLOW_RESET,
-  USER_UNFOLLOW_REQUEST,
-  USER_UNFOLLOW_SUCCESS,
-  USER_UNFOLLOW_FAIL,
-  USER_UNFOLLOW_RESET,
   USER_DETAILS_GET_REQUEST,
   USER_DETAILS_GET_SUCCESS,
   USER_DETAILS_GET_FAIL,
@@ -80,36 +72,6 @@ export const userDetailsProfileReducer = (state = { user: {} }, action) => {
       return { loading: false, user: action.payload };
     case USER_DETAILS_PROFILE_GET_FAIL:
       return { loading: false, error: action.payload, user: {} };
-    default:
-      return state;
-  }
-};
-
-export const userFollowReducer = (state = {}, action) => {
-  switch (action.type) {
-    case USER_FOLLOW_REQUEST:
-      return { loading: true };
-    case USER_FOLLOW_SUCCESS:
-      return { loading: false, success: true };
-    case USER_FOLLOW_FAIL:
-      return { loading: false, error: action.payload };
-    case USER_FOLLOW_RESET:
-      return {};
-    default:
-      return state;
-  }
-};
-
-export const userUnfollowReducer = (state = {}, action) => {
-  switch (action.type) {
-    case USER_UNFOLLOW_REQUEST:
-      return { loading: true };
-    case USER_UNFOLLOW_SUCCESS:
-      return { loading: false, success: true };
-    case USER_UNFOLLOW_FAIL:
-      return { loading: false, error: action.payload };
-    case USER_UNFOLLOW_RESET:
-      return {};
     default:
       return state;
   }

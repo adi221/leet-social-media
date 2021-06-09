@@ -3,8 +3,6 @@ import {
   userLoginReducer,
   userRegisterReducer,
   userDetailsProfileReducer,
-  userFollowReducer,
-  userUnfollowReducer,
   userDetailsReducer,
   userUpdateProfileReducer,
   userUpdatePasswordReducer,
@@ -34,8 +32,7 @@ const rootReducer = combineReducers({
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
   userDetailsProfile: userDetailsProfileReducer,
-  userFollow: userFollowReducer,
-  userUnfollow: userUnfollowReducer,
+
   userUpdateProfile: userUpdateProfileReducer,
   userUpdatePassword: userUpdatePasswordReducer,
   userDetails: userDetailsReducer,

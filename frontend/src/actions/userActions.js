@@ -10,12 +10,6 @@ import {
   USER_DETAILS_PROFILE_GET_REQUEST,
   USER_DETAILS_PROFILE_GET_SUCCESS,
   USER_DETAILS_PROFILE_GET_FAIL,
-  USER_FOLLOW_REQUEST,
-  USER_FOLLOW_SUCCESS,
-  USER_FOLLOW_FAIL,
-  USER_UNFOLLOW_REQUEST,
-  USER_UNFOLLOW_SUCCESS,
-  USER_UNFOLLOW_FAIL,
   USER_DETAILS_GET_REQUEST,
   USER_DETAILS_GET_SUCCESS,
   USER_DETAILS_GET_FAIL,
@@ -37,7 +31,6 @@ import {
   USER_STATS_REQUEST,
   USER_STATS_SUCCESS,
   USER_STATS_FAIL,
-  USER_STATS_FOLLOWING,
 } from '../constants/userConstants';
 
 export const login = (email, password) => async dispatch => {
@@ -108,66 +101,6 @@ export const getUserProfileDetails = username => async dispatch => {
   } catch (error) {
     dispatch({
       type: USER_DETAILS_PROFILE_GET_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    });
-  }
-};
-
-export const followUser = userId => async (dispatch, getState) => {
-  try {
-    dispatch({ type: USER_FOLLOW_REQUEST });
-    const {
-      userLogin: { userInfo },
-    } = getState();
-
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
-
-    const { data } = await axios.put(`/api/users/follow/${userId}`, {}, config);
-    dispatch({ type: USER_STATS_FOLLOWING, payload: data });
-    dispatch({ type: USER_FOLLOW_SUCCESS });
-  } catch (error) {
-    dispatch({
-      type: USER_FOLLOW_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    });
-  }
-};
-
-export const unfollowUser = userId => async (dispatch, getState) => {
-  try {
-    dispatch({ type: USER_UNFOLLOW_REQUEST });
-    const {
-      userLogin: { userInfo },
-    } = getState();
-
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
-
-    const { data } = await axios.put(
-      `/api/users/unfollow/${userId}`,
-      {},
-      config
-    );
-    dispatch({ type: USER_STATS_FOLLOWING, payload: data });
-    dispatch({ type: USER_UNFOLLOW_SUCCESS });
-  } catch (error) {
-    dispatch({
-      type: USER_UNFOLLOW_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
