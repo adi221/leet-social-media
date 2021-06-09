@@ -97,10 +97,15 @@ export const getChatNotifications = () => async (dispatch, getState) => {
   }
 };
 
-export const addChatNotification = chatId => ({
-  type: ADD_CHAT_NOTIFICATION,
-  payload: chatId,
-});
+export const addChatNotification =
+  (chatId, fromUser) => (dispatch, getState) => {
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    if (userInfo._id === fromUser) return;
+
+    dispatch({ type: ADD_CHAT_NOTIFICATION, payload: chatId });
+  };
 
 export const readChatNotification = chatId => ({
   type: READ_CHAT_NOTIFICATION,

@@ -49,12 +49,20 @@ const socketServer = socketio => {
 
           socketio.sockets
             .in(fromUser.toString())
-            .emit('receivedMessage', { ...newMessage, chatId });
+            .emit('receivedMessage', {
+              ...newMessage,
+              chatId,
+              createdAt: new Date(),
+            });
 
           toUserId.forEach(userId => {
             socketio.sockets
               .in(userId.toString())
-              .emit('receivedMessage', { ...newMessage, chatId });
+              .emit('receivedMessage', {
+                ...newMessage,
+                chatId,
+                createdAt: new Date(),
+              });
           });
 
           // send chatNotification
@@ -64,6 +72,11 @@ const socketServer = socketio => {
             });
 
             if (userChatNotif) {
+              const doesNotificationExist = userChatNotif.unreadChats.some(
+                chat => chat.chat.toString() === chatId
+              );
+              if (doesNotificationExist) return;
+
               userChatNotif.unreadChats.push({ chat: chatId });
               await userChatNotif.save();
             } else {

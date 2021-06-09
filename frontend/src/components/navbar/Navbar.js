@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { IoIosSettings, IoIosPerson } from 'react-icons/io';
-import { RiMessengerLine, RiMessengerFill } from 'react-icons/ri';
 import { FaSignOutAlt } from 'react-icons/fa';
 import { SearchBar, NotificationButton } from '../../components';
 import ChatButton from './ChatButton';
@@ -11,7 +10,6 @@ import { logout } from '../../actions/userActions';
 
 const Navbar = () => {
   const [showSettings, setShowSettings] = useState(false);
-  const { pathname } = useLocation();
 
   const { userInfo } = useSelector(state => state.userLogin);
   const dispatch = useDispatch();

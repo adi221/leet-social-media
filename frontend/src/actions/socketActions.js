@@ -9,6 +9,7 @@ import {
   receivedMessage,
   addChat,
   partnerTyping,
+  updateLastMessage,
 } from '../actions/chatActions';
 
 // connect to socket
@@ -37,7 +38,8 @@ export const connectSocket = () => (dispatch, getState) => {
 
   socket.on('receivedMessage', message => {
     dispatch(receivedMessage(message));
-    dispatch(addChatNotification(message.chatId));
+    dispatch(addChatNotification(message.chatId, message.fromUser));
+    dispatch(updateLastMessage(message));
   });
 
   socket.on('partnerTyping', chatPartnerTyping => {

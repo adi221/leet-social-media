@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
+import { formatDateDistance } from '../../../helpers/timeHelpers';
 
-const SingleChatUser = ({ partners, _id: chatId }) => {
+const SingleChatUser = ({ partners, _id: chatId, lastMessage }) => {
   const [unreadChat, setUnreadChat] = useState(false);
+  const [userTypingId, setUserTypingId] = useState(null);
   const { pathname } = useLocation();
+
+  const { userInfo } = useSelector(state => state.userLogin);
   const { notifications } = useSelector(state => state.chatNotifications);
+  const { chatPartnersTyping } = useSelector(state => state.chatFeed);
 
   useEffect(() => {
     if (notifications.includes(chatId)) {
@@ -14,6 +19,60 @@ const SingleChatUser = ({ partners, _id: chatId }) => {
       setUnreadChat(false);
     }
   }, [notifications, chatId]);
+
+  useEffect(() => {
+    const isTyping = chatPartnersTyping.find(
+      partner => partner.chatId === chatId && partner.typing
+    );
+    if (isTyping) {
+      console.log('HE IS TYPING');
+      setUserTypingId(isTyping.fromUser);
+    } else {
+      setUserTypingId(null);
+    }
+  }, [chatPartnersTyping, chatId]);
+
+  const determineLastMessageOwner = id => {
+    if (id === userInfo._id) return userInfo.username;
+    const lastMessageOwner = partners.find(partner => partner._id === id);
+    return lastMessageOwner ? lastMessageOwner.username : null;
+  };
+
+  const renderLastMessage = () => {
+    if (!lastMessage)
+      return <p className='chat-sidebar__list--item-last'>No messages yet</p>;
+
+    if (partners.length === 1) {
+      return (
+        <p className='chat-sidebar__list--item-last'>
+          {lastMessage.message.length > 30
+            ? lastMessage.message.substring(0, 27) + '...'
+            : lastMessage.message}{' '}
+          · {formatDateDistance(lastMessage.createdAt)}
+        </p>
+      );
+    } else {
+      return (
+        <p className='chat-sidebar__list--item-last'>
+          {determineLastMessageOwner(lastMessage.fromUser)}:{' '}
+          {lastMessage.message.length > 14
+            ? lastMessage.message.substring(0, 11) + '...'
+            : lastMessage.message}{' '}
+          · {formatDateDistance(lastMessage.createdAt)}
+        </p>
+      );
+    }
+  };
+
+  const renderUserTyping = () => {
+    return (
+      <p className='chat-sidebar__list--item-last'>
+        {partners.length === 1
+          ? 'Typing...'
+          : determineLastMessageOwner(userTypingId) + ' typing...'}
+      </p>
+    );
+  };
 
   return (
     <Link to={`/direct/${chatId}`}>
@@ -42,17 +101,19 @@ const SingleChatUser = ({ partners, _id: chatId }) => {
             alt='username'
           />
         )}
-
-        <p>
-          {partners.map((partner, index) => {
-            return (
-              <span key={index}>
-                {partner.username}
-                {index !== partners.length - 1 && ', '}{' '}
-              </span>
-            );
-          })}
-        </p>
+        <div>
+          <p className='chat-sidebar__list--item-partners'>
+            {partners.map((partner, index) => {
+              return (
+                <span key={index}>
+                  {partner.username}
+                  {index !== partners.length - 1 && ', '}{' '}
+                </span>
+              );
+            })}
+          </p>
+          {userTypingId ? renderUserTyping() : renderLastMessage()}
+        </div>
         {unreadChat && <div className='chat-sidebar__list--item-unread'></div>}
       </li>
     </Link>

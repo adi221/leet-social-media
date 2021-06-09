@@ -9,6 +9,7 @@ import {
   CHANGE_CHAT_PARTNERS,
   RESET_CHAT_PARTNERS,
   RESET_CHAT_REDIRECT,
+  UPDATE_LAST_MESSAGE,
   GET_CHAT_FEED_REQUEST,
   GET_CHAT_FEED_FAIL,
   GET_CHAT_FEED_SUCCESS,
@@ -46,6 +47,19 @@ export const chatListReducer = (state = { chatList: [] }, action) => {
       return { loading: false, chatList: action.payload };
     case GET_CHAT_LIST_FAIL:
       return { loading: false, error: action.payload };
+    case UPDATE_LAST_MESSAGE:
+      const updatedLastMessage = action.payload;
+      const { fromUser, message, createdAt, chatId } = updatedLastMessage;
+      let updatedChat = state.chatList.find(chat => chat._id === chatId);
+      updatedChat = {
+        ...updatedChat,
+        lastMessage: { fromUser, message, createdAt },
+      };
+
+      let updatedChatList = state.chatList.filter(chat => chat._id !== chatId);
+      updatedChatList = [updatedChat, ...updatedChatList];
+
+      return { ...state, chatList: updatedChatList };
     case ADD_CHAT:
       return { ...state, chatList: [action.payload, ...state.chatList] };
     default:
@@ -96,6 +110,7 @@ export const chatFeedReducer = (state = chatFeedInitialState, action) => {
       return state;
     case PARTNER_TYPING:
       // filter any typing status from partnersArr and then add if typing true
+      // currentPartnerTyping = {chatId, fromUser, typing}
       const currentPartnerTyping = action.payload;
 
       const modifiedTypingPartners = state.chatPartnersTyping.filter(

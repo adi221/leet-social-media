@@ -6,6 +6,7 @@ import UserListModal from './UserListModal';
 import UnfollowUserModal from './UnfollowUserModal';
 import NewMessageModal from './NewMessageModal';
 import { CLOSE_MODAL } from '../../constants/utilConstants';
+import { RESET_CHAT_PARTNERS } from '../../constants/chatConstants';
 
 const MODAL_COMPONENTS = {
   EDIT_PROFILE_IMAGE: EditProfileImageModal,
@@ -24,6 +25,8 @@ const RootModal = () => {
   const closeModal = e => {
     if (e.target.classList.contains('overlay')) {
       dispatch({ type: CLOSE_MODAL });
+      // For NewMessageModal
+      dispatch({ type: RESET_CHAT_PARTNERS });
     }
   };
 

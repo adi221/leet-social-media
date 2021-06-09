@@ -30,3 +30,5 @@
 - Getting real time notifications when user gets follow, like, comment
 - Direct inbox for chat
 - Ability to create chat groups and private dual chat
+- Notifications for chat
+- See when user is typing

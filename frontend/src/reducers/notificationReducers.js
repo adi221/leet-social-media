@@ -75,7 +75,6 @@ export const chatNotificationsReducer = (
     case GET_CHAT_NOTIFICATIONS_REQUEST:
       return { ...state, loading: true };
     case GET_CHAT_NOTIFICATIONS_SUCCESS:
-      console.log(action.payload);
       return {
         ...state,
         loading: false,

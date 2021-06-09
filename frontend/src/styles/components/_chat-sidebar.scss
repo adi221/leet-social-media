@@ -31,8 +31,8 @@
       height: 5rem;
 
       &-single {
-        height: 3rem;
-        width: 3rem;
+        height: 3.5rem;
+        width: 3.5rem;
         object-fit: cover;
         border-radius: 50%;
         margin-right: 0.7rem;
@@ -40,13 +40,13 @@
 
       &-collage {
         position: relative;
-        height: 3rem;
-        width: 3rem;
+        height: 3.5rem;
+        width: 3.5rem;
         margin-right: 0.7rem;
 
         img {
-          height: 1.5rem;
-          width: 1.5rem;
+          height: 1.7rem;
+          width: 1.7rem;
           object-fit: cover;
           border-radius: 50%;
         }
@@ -59,9 +59,16 @@
 
         &-img2 {
           position: absolute;
-          right: 0.6rem;
+          right: 0.5rem;
           bottom: 0.5rem;
         }
+      }
+
+      &-partners {
+      }
+
+      &-last {
+        color: #7e7e7e;
       }
 
       &-unread {

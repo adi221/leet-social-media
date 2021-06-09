@@ -103,6 +103,102 @@ const createChat = asyncHandler(async (req, res) => {
 const getChatList = asyncHandler(async (req, res) => {
   const { _id } = req.user;
 
+  // Needs to add condition if no messages
+  // const userChatLists2 = await Chat.aggregate([
+  //   // find all user's chats
+  //   {
+  //     $match: {
+  //       chatUsers: {
+  //         $elemMatch: {
+  //           user: ObjectId(_id),
+  //         },
+  //       },
+  //     },
+  //   },
+  //   { $sort: { updatedAt: -1 } },
+  //   // get last message
+  //   { $unwind: '$messages' },
+  //   { $sort: { 'messages.createdAt': -1 } },
+  //   {
+  //     $set: {
+  //       totalMessages: { $sum: '$messages' },
+  //     },
+  //   },
+  //   {
+  //     $group: {
+  //       _id: '$_id',
+  //       lastMessage: {
+  //         $first: {
+  //           $cond: {
+  //             if: { $eq: ['$totalMessages', 0] },
+  //             then: null,
+  //             else: '$messages',
+  //           },
+  //         },
+  //       },
+  //       data: { $first: '$$ROOT' },
+  //     },
+  //   },
+  //   { $replaceRoot: { newRoot: '$data' } },
+
+  //   // Get partners' image, username
+  //   {
+  //     $lookup: {
+  //       from: 'users',
+  //       let: { userId: '$chatUsers.user', currentUserId: ObjectId(_id) },
+  //       pipeline: [
+  //         {
+  //           $match: {
+  //             $expr: {
+  //               $and: [
+  //                 { $in: ['$_id', '$$userId'] },
+  //                 { $ne: ['$_id', '$$currentUserId'] },
+  //               ],
+  //             },
+  //           },
+  //         },
+  //       ],
+  //       as: 'partnerDetails',
+  //     },
+  //   },
+  //   {
+  //     $unwind: '$partnerDetails',
+  //   },
+  //   {
+  //     $project: {
+  //       _id: true,
+  //       lastMessage: '$messages',
+  //       // lastMessage: { $ifNull: ['$messages', null] },
+  //       // lastMessage: {
+  //       //   $cond: {
+  //       //     // if: { $eq: ['$lastMessage', null] },
+  //       //     if: { $ifNull: ['$messages', {}] },
+  //       //     then: 'lastMessage',
+  //       //     else: '$messages',
+  //       //   },
+  //       // },
+  //       'partnerDetails.username': true,
+  //       'partnerDetails.profileImage': true,
+  //       'partnerDetails._id': true,
+  //     },
+  //   },
+  //   // group after unwinding by group id and push partners into an array '$lastMessage'
+  //   {
+  //     $group: {
+  //       _id: '$_id',
+  //       lastMessage: { $first: '$lastMessage' },
+  //       partners: {
+  //         $push: {
+  //           _id: '$partnerDetails._id',
+  //           profileImage: '$partnerDetails.profileImage',
+  //           username: '$partnerDetails.username',
+  //         },
+  //       },
+  //     },
+  //   },
+  // ]);
+  // console.log(userChatLists2);
+
   const userChatLists = await Chat.aggregate([
     // find all user's chats
     {
@@ -115,7 +211,19 @@ const getChatList = asyncHandler(async (req, res) => {
       },
     },
     { $sort: { updatedAt: -1 } },
-    // Get partner's image, username
+    // get last message
+    { $unwind: '$messages' },
+    { $sort: { 'messages.createdAt': -1 } },
+    {
+      $group: {
+        _id: '$_id',
+        lastMessage: { $first: '$messages' },
+        data: { $first: '$$ROOT' },
+      },
+    },
+    { $replaceRoot: { newRoot: '$data' } },
+
+    // Get partners' image, username
     {
       $lookup: {
         from: 'users',
@@ -141,6 +249,7 @@ const getChatList = asyncHandler(async (req, res) => {
     {
       $project: {
         _id: true,
+        lastMessage: '$messages',
         'partnerDetails.username': true,
         'partnerDetails.profileImage': true,
         'partnerDetails._id': true,
@@ -150,6 +259,7 @@ const getChatList = asyncHandler(async (req, res) => {
     {
       $group: {
         _id: '$_id',
+        lastMessage: { $first: '$lastMessage' },
         partners: {
           $push: {
             _id: '$partnerDetails._id',
@@ -159,6 +269,7 @@ const getChatList = asyncHandler(async (req, res) => {
         },
       },
     },
+    { $sort: { 'lastMessage.createdAt': -1 } },
   ]);
 
   if (userChatLists) {

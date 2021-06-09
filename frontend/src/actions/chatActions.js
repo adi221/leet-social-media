@@ -9,6 +9,7 @@ import {
   GET_CHAT_LIST_SUCCESS,
   GET_CHAT_LIST_FAIL,
   ADD_CHAT,
+  UPDATE_LAST_MESSAGE,
   GET_CHAT_FEED_REQUEST,
   GET_CHAT_FEED_FAIL,
   GET_CHAT_FEED_SUCCESS,
@@ -119,6 +120,11 @@ export const getChatFeed = chatId => async (dispatch, getState) => {
 export const addChat = chat => dispatch => {
   dispatch({ type: ADD_CHAT, payload: chat });
 };
+
+export const updateLastMessage = message => ({
+  type: UPDATE_LAST_MESSAGE,
+  payload: message,
+});
 
 export const receivedMessage = message => dispatch => {
   dispatch({ type: RECEIVED_MESSAGE, payload: message });
