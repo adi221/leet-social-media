@@ -104,7 +104,10 @@ export const chatFeedReducer = (state = chatFeedInitialState, action) => {
       if (chatId === state.currentChatId) {
         return {
           ...state,
-          messages: [...state.messages, { fromUser, message }],
+          messages: [
+            ...state.messages,
+            { _id: new Date().toString(), fromUser, message },
+          ],
         };
       }
       return state;

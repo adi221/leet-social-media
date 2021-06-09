@@ -72,7 +72,7 @@
       margin-bottom: 10px;
       position: relative !important;
 
-      p {
+      &-content {
         word-wrap: break-word;
         word-break: break-word;
         padding: 1rem;
@@ -102,6 +102,15 @@
         object-fit: cover;
         border-radius: 50%;
         cursor: pointer;
+      }
+
+      &-username {
+        position: absolute;
+        top: -0.9rem;
+        left: 0.7rem;
+        color: #7e7e7e;
+        font-size: 0.8rem;
+        white-space: nowrap;
       }
     }
   }

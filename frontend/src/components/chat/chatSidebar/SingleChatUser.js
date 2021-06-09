@@ -25,7 +25,6 @@ const SingleChatUser = ({ partners, _id: chatId, lastMessage }) => {
       partner => partner.chatId === chatId && partner.typing
     );
     if (isTyping) {
-      console.log('HE IS TYPING');
       setUserTypingId(isTyping.fromUser);
     } else {
       setUserTypingId(null);

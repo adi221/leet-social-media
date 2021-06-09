@@ -53,14 +53,45 @@ const SingleChatMessage = ({
     );
   };
 
+  const addUsernameOrNot = () => {
+    if (userInfo._id === fromUser || chatType === 'dual') return false;
+    if (index === 0) return true;
+    const prevMessage = messages[index - 1];
+
+    if (prevMessage.fromUser !== fromUser) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const determineUsernameDetails = () => {
+    let ownerUsername;
+    if (chatType === 'dual') {
+      ownerUsername = partners[0].username;
+    } else {
+      let user = partners.find(partner => partner._id === fromUser);
+      ownerUsername = user.username;
+    }
+
+    return (
+      <p className='chat-feed__messages--message-username'>{ownerUsername}</p>
+    );
+  };
+
   const imageHandler = username => {
     history.push(`/profile/${username}`);
   };
 
   return (
-    <div className={`chat-feed__messages--message ${determineMessageOwner()}`}>
+    <div
+      className={`chat-feed__messages--message ${determineMessageOwner()} ${
+        addUsernameOrNot() && 'mt-sm'
+      }`}
+    >
       {addThumbnailOrNot() && determineThumbnailDetails()}
-      <p>{message}</p>
+      {addUsernameOrNot() && determineUsernameDetails()}
+      <p className='chat-feed__messages--message-content'>{message}</p>
     </div>
   );
 };

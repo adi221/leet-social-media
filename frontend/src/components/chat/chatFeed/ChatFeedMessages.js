@@ -1,20 +1,26 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import SingleChatMessage from './SingleChatMessage';
 
 const ChatFeedMessages = ({
   messages,
-
   partnerTypingId,
   partners,
   chatType,
 }) => {
   const history = useHistory();
+  const msgBoxRef = useRef();
+
+  // Scroll bottom on mounting, when new message is added, or partner is typing
+  useEffect(() => {
+    msgBoxRef.current.scrollTop = msgBoxRef.current.scrollHeight;
+  }, [messages, partnerTypingId]);
+
   const imageHandler = username => {
     history.push(`/profile/${username}`);
   };
 
-  const determinePartnerTyping = () => {
+  const renderPartnerTyping = () => {
     let typingImg, typingUsername;
     if (chatType === 'dual') {
       typingImg = partners[0].profileImage;
@@ -33,13 +39,18 @@ const ChatFeedMessages = ({
           alt={typingUsername}
           onClick={() => imageHandler(typingUsername)}
         />
-        <p style={{ color: '#666' }}>Typing...</p>
+        <p
+          className='chat-feed__messages--message-content'
+          style={{ color: '#666' }}
+        >
+          Typing...
+        </p>
       </div>
     );
   };
 
   return (
-    <div className='chat-feed__messages'>
+    <div className='chat-feed__messages' ref={msgBoxRef}>
       {messages.map((message, index) => {
         return (
           <SingleChatMessage
@@ -52,7 +63,7 @@ const ChatFeedMessages = ({
           />
         );
       })}
-      {partnerTypingId && determinePartnerTyping()}
+      {partnerTypingId && renderPartnerTyping()}
     </div>
   );
 };
