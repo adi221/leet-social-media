@@ -30,7 +30,7 @@ router.route('/profile/password').put(protect, updateUserPassword);
 router.route('/post/:id').get(getPostUserDetails);
 router.route('/:username').get(getUserProfileDetails);
 router.route('/:id').delete(deleteUser);
-router.route('/relatedposts/:id').get(getUserSavedLikedPosts);
+router.route('/relatedposts/:username').get(getUserSavedLikedPosts);
 router.route('/follow/:id').put(protect, followUser);
 router.route('/unfollow/:id').put(protect, unfollowUser);
 router.route('/save/:id').post(protect, addPostToSaved);

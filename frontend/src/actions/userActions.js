@@ -10,6 +10,9 @@ import {
   USER_DETAILS_PROFILE_GET_REQUEST,
   USER_DETAILS_PROFILE_GET_SUCCESS,
   USER_DETAILS_PROFILE_GET_FAIL,
+  USER_DETAILS_PROFILE_RELATED_REQUEST,
+  USER_DETAILS_PROFILE_RELATED_SUCCESS,
+  USER_DETAILS_PROFILE_RELATED_FAIL,
   USER_DETAILS_GET_REQUEST,
   USER_DETAILS_GET_SUCCESS,
   USER_DETAILS_GET_FAIL,
@@ -101,6 +104,22 @@ export const getUserProfileDetails = username => async dispatch => {
   } catch (error) {
     dispatch({
       type: USER_DETAILS_PROFILE_GET_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const getUserProfileRelatedPosts = username => async dispatch => {
+  try {
+    dispatch({ type: USER_DETAILS_PROFILE_RELATED_REQUEST });
+    const { data } = await axios.get(`/api/users/relatedposts/${username}`);
+    dispatch({ type: USER_DETAILS_PROFILE_RELATED_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: USER_DETAILS_PROFILE_RELATED_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

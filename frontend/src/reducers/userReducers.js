@@ -9,6 +9,9 @@ import {
   USER_DETAILS_PROFILE_GET_REQUEST,
   USER_DETAILS_PROFILE_GET_SUCCESS,
   USER_DETAILS_PROFILE_GET_FAIL,
+  USER_DETAILS_PROFILE_RELATED_REQUEST,
+  USER_DETAILS_PROFILE_RELATED_SUCCESS,
+  USER_DETAILS_PROFILE_RELATED_FAIL,
   USER_DETAILS_GET_REQUEST,
   USER_DETAILS_GET_SUCCESS,
   USER_DETAILS_GET_FAIL,
@@ -64,14 +67,45 @@ export const userRegisterReducer = (state = {}, action) => {
   }
 };
 
-export const userDetailsProfileReducer = (state = { user: {} }, action) => {
+const userProfileInitialState = {
+  loading: true,
+  error: false,
+  user: {
+    _id: '',
+    profileImage: '',
+    username: '',
+    name: '',
+    description: '',
+    following: [],
+    followers: [],
+    userPosts: [],
+    userSavedPosts: [],
+    userLikedPosts: [],
+  },
+};
+
+export const userDetailsProfileReducer = (
+  state = userProfileInitialState,
+  action
+) => {
   switch (action.type) {
     case USER_DETAILS_PROFILE_GET_REQUEST:
-      return { loading: true, user: {} };
+      return { ...state, loading: true };
     case USER_DETAILS_PROFILE_GET_SUCCESS:
-      return { loading: false, user: action.payload };
+      return { loading: false, user: { ...state.user, ...action.payload } };
     case USER_DETAILS_PROFILE_GET_FAIL:
       return { loading: false, error: action.payload, user: {} };
+    case USER_DETAILS_PROFILE_RELATED_REQUEST:
+      return { ...state, loading: true };
+    case USER_DETAILS_PROFILE_RELATED_SUCCESS:
+      const { userLikedPosts, userSavedPosts } = action.payload;
+      return {
+        ...state,
+        loading: false,
+        user: { ...state.user, userLikedPosts, userSavedPosts },
+      };
+    case USER_DETAILS_PROFILE_RELATED_FAIL:
+      return { ...state };
     default:
       return state;
   }

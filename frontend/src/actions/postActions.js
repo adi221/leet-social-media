@@ -9,6 +9,9 @@ import {
   POST_DELETE_REQUEST,
   POST_DELETE_SUCCESS,
   POST_DELETE_FAIL,
+  POSTS_EXPLORE_REQUEST,
+  POSTS_EXPLORE_SUCCESS,
+  POSTS_EXPLORE_FAIL,
 } from '../constants/postConstants';
 
 export const getPosts = () => async dispatch => {
@@ -70,6 +73,22 @@ export const deletePost = (postId, userId) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: POST_DELETE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const getExplorePostPreviews = offset => async dispatch => {
+  try {
+    dispatch({ type: POSTS_EXPLORE_REQUEST });
+    const { data } = await axios.get(`/api/posts/explore/${offset}`);
+    dispatch({ type: POSTS_EXPLORE_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: POSTS_EXPLORE_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

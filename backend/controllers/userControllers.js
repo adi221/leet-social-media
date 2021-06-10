@@ -121,13 +121,13 @@ const getUserProfileDetails = asyncHandler(async (req, res) => {
 });
 
 // @desc Get details of user profile
-// @route POST /api/users/post/:username
+// @route POST /api/users/relatedposts/:username
 // @access User
 const getUserSavedLikedPosts = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  const user = await User.findById(id, 'likedPosts savedPosts');
+  const { username } = req.params;
+  const user = await User.find({ username }, 'likedPosts savedPosts');
 
-  const { likedPosts, savedPosts } = user;
+  const { likedPosts, savedPosts } = user[0];
 
   const likedPostsIds = likedPosts.map(post => ObjectId(post.post));
   const savedPostsIds = savedPosts.map(post => ObjectId(post.post));
@@ -137,7 +137,7 @@ const getUserSavedLikedPosts = asyncHandler(async (req, res) => {
 
   const getPostData = async id => {
     return await Post.aggregate([
-      { $match: { _id: id } },
+      { $match: { _id: ObjectId(id) } },
       {
         $project: {
           image: true,
@@ -152,18 +152,17 @@ const getUserSavedLikedPosts = asyncHandler(async (req, res) => {
   for (const id of likedPostsIds) {
     const post = await getPostData(id);
     if (post) {
-      userLikedPosts.push(post);
+      userLikedPosts.push(post[0]);
     }
   }
 
   for (const id of savedPostsIds) {
     const post = await getPostData(id);
     if (post) {
-      userSavedPosts.push(post);
+      userSavedPosts.push(post[0]);
     }
   }
-
-  res.json(userSavedPosts, userLikedPosts);
+  res.json({ userSavedPosts, userLikedPosts });
 });
 
 // @desc Follow user & increase your own following

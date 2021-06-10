@@ -10,19 +10,18 @@ const ProfileContent = ({ list, username }) => {
 
   return (
     <>
-      {list &&
-        list.map(post => {
-          const { _id, image, comments, likes } = post;
-          return (
-            <PreviewImage
-              key={_id}
-              image={image}
-              comments={comments}
-              likes={likes}
-              onClick={() => imgHandler(username, _id)}
-            />
-          );
-        })}
+      {list.map(post => {
+        const { _id, image, comments, likes } = post;
+        return (
+          <PreviewImage
+            key={_id}
+            image={image}
+            comments={comments}
+            likes={likes}
+            onClick={() => imgHandler(username, _id)}
+          />
+        );
+      })}
     </>
   );
 };

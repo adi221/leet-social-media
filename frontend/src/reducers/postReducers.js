@@ -11,6 +11,9 @@ import {
   POST_DELETE_SUCCESS,
   POST_DELETE_FAIL,
   POST_DELETE_RESET,
+  POSTS_EXPLORE_REQUEST,
+  POSTS_EXPLORE_SUCCESS,
+  POSTS_EXPLORE_FAIL,
 } from '../constants/postConstants';
 
 export const postsGetReducer = (
@@ -68,6 +71,19 @@ export const postDeleteReducer = (state = {}, action) => {
       return { loading: false, error: action.payload };
     case POST_DELETE_RESET:
       return {};
+    default:
+      return state;
+  }
+};
+
+export const postsExploreReducer = (state = { postPreviews: [] }, action) => {
+  switch (action.type) {
+    case POSTS_EXPLORE_REQUEST:
+      return { ...state, loading: true };
+    case POSTS_EXPLORE_SUCCESS:
+      return { ...state, loading: false, postPreviews: action.payload };
+    case POSTS_EXPLORE_FAIL:
+      return { ...state, loading: false, error: true };
     default:
       return state;
   }

@@ -7,6 +7,7 @@ import {
   getPostDetails,
   deletePost,
   getPostLikes,
+  getExplorePostPreviews,
 } from '../controllers/postControllers.js';
 import { protect } from '../middleware/authMiddleware.js';
 
@@ -18,5 +19,6 @@ router.route('/comment/:id').post(protect, commentPost);
 router.route('/like/:id').post(protect, likePost);
 router.route('/delete/:postId/:userId').delete(deletePost);
 router.route('/:postId/:offset/likes').get(getPostLikes);
+router.route('/explore/:offset').get(getExplorePostPreviews);
 
 export default router;

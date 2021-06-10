@@ -233,7 +233,7 @@ const getPostLikes = asyncHandler(async (req, res) => {
 });
 
 // @desc Delete single post
-// @route GET /api/posts/delete/:id
+// @route DELETE /api/posts/delete/:id
 // @access User
 const deletePost = asyncHandler(async (req, res) => {
   const { postId, userId } = req.params;
@@ -252,6 +252,61 @@ const deletePost = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc Get explore posts
+// @route GET /api/posts/explore
+// @access User
+const getExplorePostPreviews = asyncHandler(async (req, res) => {
+  const { offset = 0 } = req.params;
+
+  const postPreviews = await Post.aggregate([
+    {
+      $sort: { createdAt: -1 },
+    },
+    {
+      $skip: Number(offset),
+    },
+    {
+      $limit: 20,
+    },
+    {
+      $sample: { size: 20 },
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'user',
+        foreignField: '_id',
+        as: 'postOwner',
+      },
+    },
+    {
+      $unwind: '$postOwner',
+    },
+    {
+      $addFields: {
+        postOwnerUsername: '$postOwner.username',
+      },
+    },
+    {
+      $project: {
+        image: true,
+        comments: { $size: '$comments' },
+        likes: { $size: '$likes' },
+        description: true,
+        postOwnerUsername: true,
+      },
+    },
+  ]);
+
+  if (postPreviews) {
+    res.send(postPreviews);
+  } else {
+    res
+      .status(401)
+      .json({ success: false, message: 'Posts are not available' });
+  }
+});
+
 export {
   getPosts,
   createPost,
@@ -260,4 +315,5 @@ export {
   getPostDetails,
   deletePost,
   getPostLikes,
+  getExplorePostPreviews,
 };

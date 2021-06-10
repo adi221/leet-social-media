@@ -5,22 +5,27 @@ import { BsGrid3X3, BsBookmark, BsHeart } from 'react-icons/bs';
 import { ErrorPage } from '../pages';
 import { Loader, ProfileHeader, PrivateRoute } from '../components';
 import ProfileContent from '../components/profile/ProfileContent';
-import { getUserProfileDetails } from '../actions/userActions';
+import {
+  getUserProfileDetails,
+  getUserProfileRelatedPosts,
+} from '../actions/userActions';
 
 const ProfilePage = () => {
   const { username } = useParams();
   const dispatch = useDispatch();
+  const { userInfo } = useSelector(state => state.userLogin);
 
   useEffect(() => {
     dispatch(getUserProfileDetails(username));
-  }, [dispatch, username]);
+    if (userInfo.username === username) {
+      dispatch(getUserProfileRelatedPosts(username));
+    }
+  }, [dispatch, username, userInfo]);
 
   const { user, loading, error } = useSelector(
     state => state.userDetailsProfile
   );
   const { userPosts, userSavedPosts, userLikedPosts, _id } = user;
-
-  const { userInfo } = useSelector(state => state.userLogin);
 
   if (loading) return <Loader />;
   if (error) return <ErrorPage />;
@@ -59,15 +64,15 @@ const ProfilePage = () => {
         </div>
         <main className='profile-page__content'>
           <Switch>
-            <PrivateRoute exact path='/profile/:id'>
+            <PrivateRoute exact path='/profile/:username'>
               <ProfileContent list={userPosts} username={username} />
             </PrivateRoute>
             {userInfo._id === _id && (
               <>
-                <PrivateRoute path='/profile/:id/liked'>
+                <PrivateRoute path='/profile/:username/liked'>
                   <ProfileContent list={userLikedPosts} username={username} />
                 </PrivateRoute>
-                <PrivateRoute path='/profile/:id/saved'>
+                <PrivateRoute path='/profile/:username/saved'>
                   <ProfileContent list={userSavedPosts} username={username} />
                 </PrivateRoute>
               </>

@@ -8,7 +8,7 @@ const ChatButton = () => {
   const { unreadCount } = useSelector(state => state.chatNotifications);
 
   return (
-    <div className='nav__center--chat is-flexed'>
+    <div className='nav__center--chat nav__center--link is-flexed'>
       <Link to='/direct/inbox' className='nav__center--button is-flexed'>
         {pathname.startsWith('/direct/') ? (
           <RiMessengerFill style={{ fill: '#262626' }} />

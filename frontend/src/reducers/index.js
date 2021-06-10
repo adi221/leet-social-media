@@ -15,6 +15,7 @@ import {
   postCreateReducer,
   postsGetReducer,
   postDeleteReducer,
+  postsExploreReducer,
 } from '../reducers/postReducers';
 import { modalReducer } from '../reducers/utilReducers';
 import { socketReducer } from '../reducers/socketReducers';
@@ -32,7 +33,6 @@ const rootReducer = combineReducers({
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
   userDetailsProfile: userDetailsProfileReducer,
-
   userUpdateProfile: userUpdateProfileReducer,
   userUpdatePassword: userUpdatePasswordReducer,
   userDetails: userDetailsReducer,
@@ -43,6 +43,7 @@ const rootReducer = combineReducers({
   postCreate: postCreateReducer,
   postsGet: postsGetReducer,
   postDelete: postDeleteReducer,
+  postsExplore: postsExploreReducer,
   modal: modalReducer,
   socket: socketReducer,
   notifications: notificationsReducer,

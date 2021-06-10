@@ -5,6 +5,7 @@ import { IoIosSettings, IoIosPerson } from 'react-icons/io';
 import { FaSignOutAlt } from 'react-icons/fa';
 import { SearchBar, NotificationButton } from '../../components';
 import ChatButton from './ChatButton';
+import ExploreButton from './ExploreButton';
 import logo from '../../assets/leet-logo.png';
 import { logout } from '../../actions/userActions';
 
@@ -43,8 +44,9 @@ const Navbar = () => {
                 Upload
               </Link>
               <ChatButton />
+              <ExploreButton />
               <NotificationButton />
-              <div className=' nav__center--dropdown'>
+              <div className='nav__center--dropdown'>
                 <button
                   className='is-flexed'
                   onClick={() => setShowSettings(!showSettings)}
