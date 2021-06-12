@@ -15,6 +15,9 @@ import {
   GET_CHAT_FEED_SUCCESS,
   RECEIVED_MESSAGE,
   PARTNER_TYPING,
+  GET_ADDITIONAL_MESSAGES_REQUEST,
+  GET_ADDITIONAL_MESSAGES_SUCCESS,
+  GET_ADDITIONAL_MESSAGES_FAIL,
 } from '../constants/chatConstants';
 
 export const changePartnerUsersId = (id, type) => (dispatch, getState) => {
@@ -109,6 +112,22 @@ export const getChatFeed = chatId => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: GET_CHAT_FEED_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const getAdditionalMessages = (chatId, offset) => async dispatch => {
+  try {
+    dispatch({ type: GET_ADDITIONAL_MESSAGES_REQUEST });
+    const { data } = await axios.get(`/api/chats/${chatId}/${offset}`);
+    dispatch({ type: GET_ADDITIONAL_MESSAGES_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: GET_ADDITIONAL_MESSAGES_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

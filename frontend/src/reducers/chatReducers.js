@@ -15,6 +15,9 @@ import {
   GET_CHAT_FEED_SUCCESS,
   RECEIVED_MESSAGE,
   PARTNER_TYPING,
+  GET_ADDITIONAL_MESSAGES_REQUEST,
+  GET_ADDITIONAL_MESSAGES_SUCCESS,
+  GET_ADDITIONAL_MESSAGES_FAIL,
 } from '../constants/chatConstants';
 
 export const createChatReducer = (
@@ -69,6 +72,7 @@ export const chatListReducer = (state = { chatList: [] }, action) => {
 
 const chatFeedInitialState = {
   loading: true,
+  fetchingAdditional: false,
   error: false,
   currentChatId: '',
   partners: [
@@ -81,6 +85,7 @@ const chatFeedInitialState = {
   chatType: '',
   messages: [],
   chatPartnersTyping: [],
+  hasMoreMessages: true,
 };
 export const chatFeedReducer = (state = chatFeedInitialState, action) => {
   switch (action.type) {
@@ -97,6 +102,7 @@ export const chatFeedReducer = (state = chatFeedInitialState, action) => {
         chatType,
         partners,
         currentChatId: _id,
+        hasMoreMessages: messages.length === 20,
       };
     case RECEIVED_MESSAGE:
       const { fromUser, message, chatId } = action.payload;
@@ -128,6 +134,16 @@ export const chatFeedReducer = (state = chatFeedInitialState, action) => {
         ...state,
         chatPartnersTyping: modifiedTypingPartners,
       };
+    case GET_ADDITIONAL_MESSAGES_REQUEST:
+      return { ...state, fetchingAdditional: true };
+    case GET_ADDITIONAL_MESSAGES_SUCCESS:
+      return {
+        ...state,
+        messages: [...state.messages, ...action.payload],
+        hasMoreMessages: action.payload.length === 20,
+      };
+    case GET_ADDITIONAL_MESSAGES_FAIL:
+      return state;
     default:
       return state;
   }

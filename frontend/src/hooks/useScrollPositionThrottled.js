@@ -41,6 +41,7 @@ const useScrollPositionThrottled = (callback, element, deps = []) => {
             currentElement.scrollTop -
             currentElement.clientHeight <
           1000,
+        atTop: currentElement.scrollTop < 200,
       });
     };
     // Throttle the function to improve performance

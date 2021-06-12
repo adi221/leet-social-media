@@ -14,8 +14,9 @@ const ChatFeed = () => {
   const [partnerTypingId, setPartnerTypingId] = useState(null);
 
   const dispatch = useDispatch();
-  const { partners, chatType, messages, loading, error, chatPartnersTyping } =
-    useSelector(state => state.chatFeed);
+  const { partners, loading, error, chatPartnersTyping } = useSelector(
+    state => state.chatFeed
+  );
   const { userInfo } = useSelector(state => state.userLogin);
   const { notifications } = useSelector(state => state.chatNotifications);
   const { socket } = useSelector(state => state.socket);
@@ -60,18 +61,8 @@ const ChatFeed = () => {
   return (
     <div className='chat-feed'>
       <ChatFeedHeader partners={partners} />
-      <ChatFeedMessages
-        messages={messages}
-        partnerTypingId={partnerTypingId}
-        chatType={chatType}
-        partners={partners}
-      />
-      <ChatFeedForm
-        chatId={chatId}
-        chatPartners={partners[0]}
-        partners={partners}
-        chatType={chatType}
-      />
+      <ChatFeedMessages chatId={chatId} partnerTypingId={partnerTypingId} />
+      <ChatFeedForm chatId={chatId} partners={partners} />
     </div>
   );
 };

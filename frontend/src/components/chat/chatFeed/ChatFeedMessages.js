@@ -1,20 +1,46 @@
 import React, { useEffect, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import useScrollPositionThrottled from '../../../hooks/useScrollPositionThrottled';
 import SingleChatMessage from './SingleChatMessage';
+import { getAdditionalMessages } from '../../../actions/chatActions';
 
-const ChatFeedMessages = ({
-  messages,
-  partnerTypingId,
-  partners,
-  chatType,
-}) => {
+const ChatFeedMessages = ({ partnerTypingId, chatId }) => {
   const history = useHistory();
+  const dispatch = useDispatch();
   const msgBoxRef = useRef();
+
+  const {
+    loading,
+    fetchingAdditional,
+    hasMoreMessages,
+    messages,
+    partners,
+    chatType,
+  } = useSelector(state => state.chatFeed);
 
   // Scroll bottom on mounting, when new message is added, or partner is typing
   useEffect(() => {
     msgBoxRef.current.scrollTop = msgBoxRef.current.scrollHeight;
-  }, [messages, partnerTypingId]);
+  }, [loading, partnerTypingId]);
+
+  useEffect(() => {
+    msgBoxRef.current.addEventListener('scroll', () => {
+      console.log(msgBoxRef.current.scrollHeight, msgBoxRef.current.scrollTop);
+    });
+  }, [msgBoxRef]);
+
+  // For fetching additional messages
+  useScrollPositionThrottled(
+    ({ atTop }) => {
+      if (atTop && hasMoreMessages && !fetchingAdditional && !loading) {
+        console.log('Its okay');
+        dispatch(getAdditionalMessages(chatId, messages.length));
+      }
+    },
+    msgBoxRef.current,
+    [hasMoreMessages, fetchingAdditional, loading]
+  );
 
   const imageHandler = username => {
     history.push(`/profile/${username}`);

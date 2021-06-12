@@ -280,7 +280,7 @@ const getChatList = asyncHandler(async (req, res) => {
 });
 
 // @desc Get data for single chat feed
-// @route GET /api/chats/:chatId
+// @route GET /api/chats/:chatId/:offset
 // @access User
 const getSingleChatData = asyncHandler(async (req, res) => {
   const { chatId } = req.params;
@@ -296,7 +296,7 @@ const getSingleChatData = asyncHandler(async (req, res) => {
     {
       $addFields: {
         chatType: '$chatType',
-        messages: '$messages',
+        messages: { $slice: ['$messages', -20] },
       },
     },
     // Get partner's image, username
@@ -332,7 +332,6 @@ const getSingleChatData = asyncHandler(async (req, res) => {
         'partnerDetails._id': true,
       },
     },
-
     // group after unwinding by group id and push partners into an array
     {
       $group: {
@@ -360,4 +359,45 @@ const getSingleChatData = asyncHandler(async (req, res) => {
   }
 });
 
-export { getChatList, createChat, getSingleChatData };
+// @desc Get additional messages for feed
+// @route GET /api/chats/:chatId/:offset
+// @access User
+const getAdditionalMessagesChat = asyncHandler(async (req, res) => {
+  const { chatId, offset } = req.params;
+  const additionalMessages = await Chat.aggregate([
+    // find chat by id
+    {
+      $match: {
+        _id: ObjectId(chatId),
+      },
+    },
+    // Sort nested array by created date
+    {
+      $unwind: '$messages',
+    },
+    { $sort: { 'messages.createdAt': -1 } },
+    { $group: { _id: '$_id', messages: { $push: '$messages' } } },
+    // limit and skip with slice - get 20 messages
+    {
+      $project: {
+        messages: {
+          $slice: ['$messages', Number(offset), 20],
+        },
+      },
+    },
+  ]);
+
+  if (additionalMessages) {
+    // returns an array
+    res.json(additionalMessages[0].messages);
+  } else {
+    res.status(201).json({ success: false, message: 'No more messages' });
+  }
+});
+
+export {
+  getChatList,
+  createChat,
+  getSingleChatData,
+  getAdditionalMessagesChat,
+};

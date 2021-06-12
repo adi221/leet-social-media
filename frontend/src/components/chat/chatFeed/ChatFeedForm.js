@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-const ChatFeedForm = ({ chatId, chatPartners, partners, chatType }) => {
+const ChatFeedForm = ({ chatId, partners }) => {
   const [addedMessage, setAddedMessage] = useState('');
   const { socket } = useSelector(state => state.socket);
 

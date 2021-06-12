@@ -3,12 +3,13 @@ import SkeletonLoader from './SkeletonLoader';
 
 const ChatFeedLoader = () => {
   const renderMessages = () => {
-    return Array.from({ length: 15 }, (_, index) => {
+    return Array.from({ length: 10 }, (_, index) => {
       let chatSkeletonStyle = {
         display: 'flex',
-        width: '8rem',
+        width: '10rem',
+        height: '3rem',
         marginBottom: '10px',
-        padding: '1rem',
+        padding: '0.8rem',
         alignSelf: 'flex-start',
         justifyContent: 'center',
       };
@@ -23,24 +24,22 @@ const ChatFeedLoader = () => {
           style={{ chatSkeletonStyle }}
           key={index}
         >
-          <div className='chat-feed__header--user is-flexed'>
-            <SkeletonLoader
-              style={{
-                width: '25px',
-                height: '25px',
-                borderRadius: '50%',
-              }}
-            />
-            <SkeletonLoader
-              style={{
-                width: '8.5rem',
-                height: '1rem',
-                marginLeft: '1rem',
-                marginBottom: '5px',
-                borderRadius: '8px',
-              }}
-            />
-          </div>
+          <SkeletonLoader
+            style={{
+              width: '25px',
+              height: '25px',
+              borderRadius: '50%',
+            }}
+          />
+          <SkeletonLoader
+            style={{
+              width: '8.5rem',
+              height: '2.5rem',
+              marginLeft: '1rem',
+              marginBottom: '5px',
+              borderRadius: '8px',
+            }}
+          />
         </div>
       );
     });
