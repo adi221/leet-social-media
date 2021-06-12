@@ -8,7 +8,6 @@
 - Uploading photos with description
 - Commenting
 - Liking photos
-- Photo Tags
 - Following users
 - Sharing link
 - Searching users
@@ -32,3 +31,4 @@
 - Ability to create chat groups and private dual chat
 - Notifications for chat
 - See when user is typing
+- Explore page

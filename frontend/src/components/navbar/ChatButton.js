@@ -9,7 +9,11 @@ const ChatButton = () => {
 
   return (
     <div className='nav__center--chat nav__center--link is-flexed'>
-      <Link to='/direct/inbox' className='nav__center--button is-flexed'>
+      <Link
+        to='/direct/inbox'
+        className='nav__center--button is-flexed'
+        style={{ fontSize: '1.95rem' }}
+      >
         {pathname.startsWith('/direct/') ? (
           <RiMessengerFill style={{ fill: '#262626' }} />
         ) : (

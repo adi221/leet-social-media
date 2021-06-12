@@ -5,8 +5,8 @@ import ChatFeedInbox from './ChatFeedInbox';
 import ChatFeedHeader from './ChatFeedHeader';
 import ChatFeedForm from './ChatFeedForm';
 import ChatFeedMessages from './ChatFeedMessages';
+import ChatFeedLoader from '../../loaders/ChatFeedLoader';
 import { getChatFeed } from '../../../actions/chatActions';
-import Loader from '../../loaders/Loader';
 
 const ChatFeed = () => {
   const { pathname } = useLocation();
@@ -29,6 +29,7 @@ const ChatFeed = () => {
 
   // remove chat notification
   useEffect(() => {
+    if (!chatId) return;
     if (notifications.includes(chatId)) {
       socket.emit('readChat', { chatId, userId: userInfo._id });
     }
@@ -47,14 +48,7 @@ const ChatFeed = () => {
   }, [chatPartnersTyping, chatId]);
 
   if (pathname === '/direct/inbox') return <ChatFeedInbox />;
-  if (loading) {
-    return (
-      <div className='chat-feed'>
-        <Loader />
-      </div>
-    );
-  }
-
+  if (loading) return <ChatFeedLoader />;
   if (error) {
     return (
       <div className='chat-feed'>

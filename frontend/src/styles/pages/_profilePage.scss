@@ -117,22 +117,12 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-auto-rows: 1fr;
-    gap: calc(100% / 45);
+    gap: 2.5rem;
     justify-content: center;
     justify-items: center;
 
     @include respond(tab-port) {
       gap: 2px;
     }
-  }
-}
-
-@media (max-width: 768px) {
-  .profile-page-header {
-    grid-template-columns: none;
-  }
-
-  .profile-page-header img {
-    display: none;
   }
 }

@@ -36,7 +36,7 @@ const NotificationButton = () => {
   return (
     <div className='nav__center--dropdown'>
       <button
-        className='is-flexed nav__center--link'
+        className='is-flexed '
         onClick={() => setShowNotifications(!showNotifications)}
       >
         {showNotificationPopup && (

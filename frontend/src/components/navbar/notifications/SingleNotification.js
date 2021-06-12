@@ -31,7 +31,7 @@ const SingleNotification = ({ notification }) => {
               alt={username}
             />
             <p>
-              <Link to={`/profile/${senderId}`} className='bold'>
+              <Link to={`/profile/${username}`} className='bold'>
                 {username}
               </Link>{' '}
               liked your post.
@@ -56,7 +56,7 @@ const SingleNotification = ({ notification }) => {
               alt={username}
             />
             <p>
-              <Link to={`/profile/${senderId}`} className='bold'>
+              <Link to={`/profile/${username}`} className='bold'>
                 {username}
               </Link>{' '}
               started following you.
@@ -80,7 +80,7 @@ const SingleNotification = ({ notification }) => {
               alt={username}
             />
             <p>
-              <Link to={`/profile/${senderId}`} className='bold'>
+              <Link to={`/profile/${username}`} className='bold'>
                 {username}
               </Link>{' '}
               commented:{' '}
