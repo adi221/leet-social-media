@@ -18,7 +18,7 @@ const ProfileHeader = ({ user }) => {
   const dispatch = useDispatch();
   const { userInfo } = useSelector(state => state.userLogin);
 
-  const openFollowingModal = (listType, countUsers) => {
+  const openFollowingModal = listType => {
     dispatch({
       type: SHOW_MODAL,
       payload: {
@@ -26,7 +26,6 @@ const ProfileHeader = ({ user }) => {
         modalProps: {
           userOrPostId: userId,
           listType,
-          countUsers,
           users: true,
         },
       },
@@ -44,13 +43,13 @@ const ProfileHeader = ({ user }) => {
           style={{
             cursor: `${followers && followers.length > 0 ? 'pointer' : 'auto'}`,
           }}
-          onClick={() => openFollowingModal('followers', followers.length)}
+          onClick={() => openFollowingModal('followers')}
         >
           <span className='bold'>{followers && followers.length} </span>{' '}
           followers
         </p>
         <p
-          onClick={() => openFollowingModal('following', following.length)}
+          onClick={() => openFollowingModal('following')}
           style={{
             cursor: `${following && following.length > 0 ? 'pointer' : 'auto'}`,
           }}

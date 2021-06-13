@@ -5,6 +5,10 @@
   grid-template-rows: 4rem 1fr 5.5rem;
   overflow-y: hidden;
 
+  &__info {
+    grid-template-rows: 4rem min-content min-content;
+  }
+
   &__header {
     width: 100%;
     display: flex;
@@ -51,9 +55,18 @@
     }
 
     &--info {
+      transition: $transition;
       svg {
+        border-radius: 50%;
         font-size: 1.8rem;
         color: $clr-black;
+      }
+
+      &-show {
+        svg {
+          color: $clr-white;
+          background-color: $clr-black;
+        }
       }
     }
   }

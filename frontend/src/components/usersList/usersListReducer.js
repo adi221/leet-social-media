@@ -3,6 +3,7 @@ export const INITIAL_STATE = {
   fetchingAdditional: false,
   error: false,
   data: [],
+  hasMoreUsers: true,
 };
 
 export const usersListReducer = (state, action) => {
@@ -33,6 +34,7 @@ export const usersListReducer = (state, action) => {
         fetchingAdditional: false,
         error: false,
         data: action.payload,
+        hasMoreUsers: action.payload.length === 10,
       };
     }
     case 'ADD_USERS': {
@@ -40,6 +42,7 @@ export const usersListReducer = (state, action) => {
         ...state,
         fetchingAdditional: false,
         data: [...state.data, ...action.payload],
+        hasMoreUsers: action.payload.length === 10,
       };
     }
     default:

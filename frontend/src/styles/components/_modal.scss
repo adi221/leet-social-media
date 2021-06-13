@@ -64,9 +64,9 @@
       padding: 0.7rem;
       text-align: center;
 
-      &:not(:last-child) {
-        border-bottom: 1px solid $clr-border-light;
-      }
+      // &:not(:last-child) {
+      //   border-bottom: 1px solid $clr-border-light;
+      // }
     }
     label {
       cursor: pointer;
@@ -92,7 +92,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 0.7rem;
+      padding: 0.7rem;
+      width: 100%;
       transition: $transition;
       cursor: pointer;
 
@@ -141,6 +142,24 @@
           opacity: 0.5rem;
           cursor: default;
         }
+      }
+    }
+    &--to {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      padding: 0.3rem 0.8rem;
+      border-bottom: 1px solid $clr-border-light;
+
+      p {
+        width: min-content;
+        margin-right: 1rem;
+      }
+
+      input {
+        padding: 1rem;
+        border: none;
+        font-size: 1rem;
       }
     }
   }

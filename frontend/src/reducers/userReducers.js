@@ -170,7 +170,7 @@ export const userSuggestionsReducer = (state = { suggestions: [] }, action) => {
 export const userSearchReducer = (state = { users: [] }, action) => {
   switch (action.type) {
     case USER_SEARCH_REQUEST:
-      return { loading: false, users: [] };
+      return { loading: true, users: [] };
     case USER_SEARCH_SUCCESS:
       return { loading: false, users: action.payload };
     case USER_SEARCH_FAIL:

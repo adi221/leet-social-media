@@ -1,0 +1,45 @@
+.chat-info {
+  overflow-y: auto;
+  &__members {
+    padding: 1rem 0;
+    border-bottom: 1px solid $clr-border-light;
+    &--header {
+      padding: 0 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+
+      &-add {
+        color: #0095f6;
+      }
+    }
+    &--partner {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0.6rem 1.4rem;
+      transition: $transition;
+
+      img {
+        border-radius: 50%;
+        height: 3.3rem;
+        width: 3.3rem;
+        margin-right: 1.5rem;
+      }
+
+      &:hover {
+        background-color: #fcfcfc;
+      }
+    }
+  }
+
+  &__options {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid $clr-border-light;
+    button {
+      text-align: left;
+      padding: 0.8rem 1rem;
+    }
+  }
+}

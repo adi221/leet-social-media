@@ -24,17 +24,10 @@ const ChatFeedMessages = ({ partnerTypingId, chatId }) => {
     msgBoxRef.current.scrollTop = msgBoxRef.current.scrollHeight;
   }, [loading, partnerTypingId]);
 
-  useEffect(() => {
-    msgBoxRef.current.addEventListener('scroll', () => {
-      console.log(msgBoxRef.current.scrollHeight, msgBoxRef.current.scrollTop);
-    });
-  }, [msgBoxRef]);
-
   // For fetching additional messages
   useScrollPositionThrottled(
     ({ atTop }) => {
       if (atTop && hasMoreMessages && !fetchingAdditional && !loading) {
-        console.log('Its okay');
         dispatch(getAdditionalMessages(chatId, messages.length));
       }
     },

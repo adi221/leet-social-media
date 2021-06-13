@@ -63,7 +63,6 @@ const SinglePost = ({ uniqueId, simple = false }) => {
         modalProps: {
           userOrPostId: postId,
           listType: 'likes',
-          countUsers: likes.length,
           users: false,
         },
       },

@@ -1,17 +1,12 @@
 import React, { useEffect, useReducer, useRef } from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import { UsersListSkeleton } from '../../components';
 import SingleUserList from './SingleUserList';
 import { INITIAL_STATE, usersListReducer } from './usersListReducer';
 import useScrollPositionThrottled from '../../hooks/useScrollPositionThrottled';
 
-const UsersList = ({
-  userOrPostId,
-  listType,
-  countUsers,
-  users,
-  checkButton,
-}) => {
+const UsersList = ({ userOrPostId, listType, users, checkButton }) => {
   const [state, dispatch] = useReducer(usersListReducer, INITIAL_STATE);
   const usersOrPosts = users ? 'users' : 'posts';
   const componentRef = useRef();
@@ -19,7 +14,7 @@ const UsersList = ({
   useScrollPositionThrottled(async ({ atBottom }) => {
     if (
       atBottom &&
-      state.data.length < countUsers &&
+      state.hasMoreUsers &&
       !state.fetching &&
       !state.fetchingAdditional
     ) {
@@ -73,6 +68,13 @@ const UsersList = ({
       )}
     </ul>
   );
+};
+
+UsersList.propTypes = {
+  userOrPostId: PropTypes.string.isRequired,
+  listType: PropTypes.string.isRequired,
+  users: PropTypes.bool.isRequired,
+  checkButton: PropTypes.bool.isRequired,
 };
 
 export default UsersList;

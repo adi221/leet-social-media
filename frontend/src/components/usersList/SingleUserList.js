@@ -16,7 +16,7 @@ const SingleUserList = ({ name, username, profileImage, _id, checkButton }) => {
   };
 
   return (
-    <li className='modal__users--item' key={_id}>
+    <li className='modal__users--item ' key={_id}>
       <div className='is-flexed' onClick={() => userHandler(_id)}>
         <img src={profileImage} alt={name} className='mr-sm' />
         <div>
