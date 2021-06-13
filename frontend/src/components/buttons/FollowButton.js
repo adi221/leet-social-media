@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-// import { followUser } from '../../actions/userActions';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import { SHOW_MODAL } from '../../constants/utilConstants';
 import { USER_STATS_FOLLOWING } from '../../constants/userConstants';
@@ -80,6 +80,14 @@ const FollowButton = ({
       {loading && <LoaderSvg />}
     </button>
   );
+};
+
+FollowButton.propTypes = {
+  style: PropTypes.object,
+  userId: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
+  profileImage: PropTypes.string.isRequired,
+  colored: PropTypes.bool,
 };
 
 export default FollowButton;

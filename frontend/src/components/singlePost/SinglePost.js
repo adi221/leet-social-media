@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useReducer } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import { BsThreeDots } from 'react-icons/bs';
 import {
@@ -148,6 +149,11 @@ const SinglePost = ({ uniqueId, simple = false }) => {
       </div>
     </article>
   );
+};
+
+SinglePost.propTypes = {
+  uniqueId: PropTypes.string.isRequired,
+  simple: PropTypes.bool,
 };
 
 export default SinglePost;

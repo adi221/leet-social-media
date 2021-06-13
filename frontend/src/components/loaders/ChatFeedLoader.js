@@ -12,6 +12,7 @@ const ChatFeedLoader = () => {
         padding: '0.8rem',
         alignSelf: 'flex-start',
         justifyContent: 'center',
+        flexDirection: 'row',
       };
 
       if (index % 2 === 1) {
@@ -76,7 +77,10 @@ const ChatFeedLoader = () => {
           </div>
         </div>
       </div>
-      <div className='chat-feed_messages ' style={{ padding: '1rem' }}>
+      <div
+        className='chat-feed_messages '
+        style={{ padding: '1rem', width: '100%' }}
+      >
         {renderMessages()}
       </div>
       <SkeletonLoader
@@ -84,8 +88,9 @@ const ChatFeedLoader = () => {
         style={{
           width: '90%',
           margin: '0 auto',
-          height: '4rem',
-          borderRadius: '10px',
+          padding: '2rem',
+          height: '2rem',
+          borderRadius: '30px',
         }}
       />
     </div>

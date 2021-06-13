@@ -20,7 +20,7 @@ const SingleUserList = ({ name, username, profileImage, _id, checkButton }) => {
       <div className='is-flexed' onClick={() => userHandler(_id)}>
         <img src={profileImage} alt={name} className='mr-sm' />
         <div>
-          <p className='bold underline'>{username}</p>
+          <p className='bold'>{username}</p>
           <p>{name}</p>
         </div>
       </div>

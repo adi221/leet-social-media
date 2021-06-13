@@ -97,14 +97,14 @@
       cursor: pointer;
 
       img {
-        width: 34px;
-        height: 34px;
+        width: 38px;
+        height: 38px;
         border-radius: 50%;
         object-fit: cover;
       }
 
       p {
-        font-size: 12px;
+        font-size: 0.9rem;
         text-align: left;
       }
 
@@ -124,7 +124,7 @@
       display: flex;
       justify-content: space-between;
       width: 100%;
-      border-bottom: 1px solid #a8a8a8;
+      border-bottom: 1px solid #cecdcd;
       padding: 1rem 1.5rem;
       text-transform: capitalize;
 

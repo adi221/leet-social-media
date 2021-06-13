@@ -118,7 +118,7 @@ export const chatFeedReducer = (state = chatFeedInitialState, action) => {
       }
       return state;
     case PARTNER_TYPING:
-      // filter any typing status from partnersArr and then add if typing true
+      // filter any typing status from partnersArr fot current chat and then add if typing true
       // currentPartnerTyping = {chatId, fromUser, typing}
       const currentPartnerTyping = action.payload;
 

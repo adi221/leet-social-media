@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { FaHeart, FaComment } from 'react-icons/fa';
 
 const PreviewImage = ({ onClick, image, likes, comments }) => {
@@ -21,6 +22,13 @@ const PreviewImage = ({ onClick, image, likes, comments }) => {
       </div>
     </figure>
   );
+};
+
+PreviewImage.propTypes = {
+  onClick: PropTypes.func,
+  image: PropTypes.string.isRequired,
+  likes: PropTypes.number,
+  comments: PropTypes.number,
 };
 
 export default PreviewImage;

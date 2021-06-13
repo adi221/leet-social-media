@@ -89,6 +89,7 @@ const ChatFeedMessages = ({ partnerTypingId, chatId }) => {
           />
         );
       })}
+
       {partnerTypingId && renderPartnerTyping()}
     </div>
   );

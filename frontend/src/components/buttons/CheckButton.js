@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
 import { FaCheck } from 'react-icons/fa';
 import { changePartnerUsersId } from '../../actions/chatActions';
 
@@ -26,6 +27,10 @@ const CheckButton = ({ userId }) => {
       {isChecked && <FaCheck />}
     </button>
   );
+};
+
+CheckButton.propTypes = {
+  userId: PropTypes.string.isRequired,
 };
 
 export default CheckButton;

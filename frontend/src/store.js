@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import rootReducer from './reducers';
 
-const middleware = [thunk];
+export const middleware = [thunk];
 
 const userInfoFromStorage = localStorage.getItem('userInfoLeet')
   ? JSON.parse(localStorage.getItem('userInfoLeet'))
