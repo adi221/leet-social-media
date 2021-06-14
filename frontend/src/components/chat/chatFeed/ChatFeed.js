@@ -17,8 +17,14 @@ const ChatFeed = () => {
   const [showChatInfo, setShowChatInfo] = useState(false);
 
   const dispatch = useDispatch();
-  const { partners, loading, error, chatPartnersTyping, currentChatId } =
-    useSelector(state => state.chatFeed);
+  const {
+    partners,
+    loading,
+    error,
+    chatPartnersTyping,
+    currentChatId,
+    chatType,
+  } = useSelector(state => state.chatFeed);
   const { userInfo } = useSelector(state => state.userLogin);
   const { notifications } = useSelector(state => state.chatNotifications);
   const { socket } = useSelector(state => state.socket);
@@ -75,8 +81,8 @@ const ChatFeed = () => {
       />
       {showChatInfo ? (
         <>
-          <ChatInfoMembers partners={partners} />
-          <ChatInfoOptions />
+          <ChatInfoMembers partners={partners} chatId={chatId} />
+          <ChatInfoOptions chatId={chatId} chatType={chatType} />
         </>
       ) : (
         <>

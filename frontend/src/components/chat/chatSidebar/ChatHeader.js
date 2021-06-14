@@ -15,7 +15,6 @@ const ChatHeader = () => {
         modalProps: {
           userOrPostId: userInfo._id,
           listType: 'following',
-          countUsers: 3,
           users: true,
           checkButton: true,
         },

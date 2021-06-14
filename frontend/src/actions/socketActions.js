@@ -10,6 +10,8 @@ import {
   addChat,
   partnerTyping,
   updateLastMessage,
+  addNewGroupMembers,
+  removeChatFromList,
 } from '../actions/chatActions';
 
 // connect to socket
@@ -48,6 +50,14 @@ export const connectSocket = () => (dispatch, getState) => {
 
   socket.on('readChat', chatId => {
     dispatch(readChatNotification(chatId));
+  });
+
+  socket.on('newGroupMember', newMembers => {
+    dispatch(addNewGroupMembers(newMembers));
+  });
+
+  socket.on('removeGroupMember', chatId => {
+    dispatch(removeChatFromList(chatId));
   });
 };
 

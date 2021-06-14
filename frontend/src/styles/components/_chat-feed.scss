@@ -7,6 +7,7 @@
 
   &__info {
     grid-template-rows: 4rem min-content min-content;
+    overflow-y: auto;
   }
 
   &__header {

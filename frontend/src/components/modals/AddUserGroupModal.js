@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { GrClose } from 'react-icons/gr';
 import { UsersList } from '../../components';
@@ -7,16 +6,15 @@ import SingleUserList from '../usersList/SingleUserList';
 import LoaderSvg from '../loaders/LoaderSvg';
 import UsersListSkeleton from '../loaders/UsersListSkeleton';
 import { CLOSE_MODAL } from '../../constants/utilConstants';
-import { RESET_CHAT_REDIRECT } from '../../constants/chatConstants';
-import { createChat } from '../../actions/chatActions';
+import { addUsersToGroup } from '../../actions/chatActions';
 import { getUserSearch } from '../../actions/userActions';
 
-const NewMessageModal = props => {
+const AddUserGroupModal = props => {
+  const { chatId } = props;
   const [query, setQuery] = useState('');
 
   const dispatch = useDispatch();
-  const history = useHistory();
-  const { partnerUsersId, redirectChatId, loading } = useSelector(
+  const { partnerUsersId, addUserSuccess, loading } = useSelector(
     state => state.createChat
   );
   const { users, loading: searchLoading } = useSelector(
@@ -31,15 +29,13 @@ const NewMessageModal = props => {
 
   // redirecting after creating new chat
   useEffect(() => {
-    if (redirectChatId) {
-      history.push(`/direct/${redirectChatId}`);
+    if (addUserSuccess) {
       dispatch({ type: CLOSE_MODAL });
-      dispatch({ type: RESET_CHAT_REDIRECT });
     }
-  }, [redirectChatId, dispatch, history]);
+  }, [dispatch, addUserSuccess]);
 
   const createNewChatHandler = () => {
-    dispatch(createChat());
+    dispatch(addUsersToGroup(chatId));
   };
 
   return (
@@ -48,7 +44,7 @@ const NewMessageModal = props => {
         <button onClick={() => dispatch({ type: CLOSE_MODAL })}>
           <GrClose />
         </button>
-        <h3>New Message</h3>
+        <h3>Add User</h3>
         <button
           onClick={createNewChatHandler}
           className='modal__new-message--title-next'
@@ -95,4 +91,4 @@ const NewMessageModal = props => {
   );
 };
 
-export default NewMessageModal;
+export default AddUserGroupModal;

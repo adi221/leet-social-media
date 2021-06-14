@@ -5,6 +5,7 @@ import SinglePostModal from './SinglePostModal';
 import UserListModal from './UserListModal';
 import UnfollowUserModal from './UnfollowUserModal';
 import NewMessageModal from './NewMessageModal';
+import AddUserGroupModal from './AddUserGroupModal';
 import { CLOSE_MODAL } from '../../constants/utilConstants';
 import { RESET_CHAT_PARTNERS } from '../../constants/chatConstants';
 
@@ -14,6 +15,7 @@ const MODAL_COMPONENTS = {
   USER_LIST: UserListModal,
   UNFOLLOW_USER: UnfollowUserModal,
   NEW_MESSAGE: NewMessageModal,
+  ADD_USER_GROUP: AddUserGroupModal,
 };
 
 const RootModal = () => {

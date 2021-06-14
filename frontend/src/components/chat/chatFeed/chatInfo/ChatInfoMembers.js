@@ -1,13 +1,37 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { SHOW_MODAL } from '../../../../constants/utilConstants';
 
-const ChatInfoMembers = ({ partners }) => {
+const ChatInfoMembers = ({ partners, chatId }) => {
+  const { userInfo } = useSelector(state => state.userLogin);
+  const dispatch = useDispatch();
+
+  const openAddUserGroupModal = () => {
+    dispatch({
+      type: SHOW_MODAL,
+      payload: {
+        modalType: 'ADD_USER_GROUP',
+        modalProps: {
+          chatId,
+          userOrPostId: userInfo._id,
+          listType: 'following',
+          users: true,
+          checkButton: true,
+        },
+      },
+    });
+  };
+
   return (
     <div className='chat-info__members'>
       <div className='chat-info__members--header'>
         <h4>Members</h4>
         {partners.length > 1 && (
-          <button className='chat-info__members--header-add bold '>
+          <button
+            className='chat-info__members--header-add bold'
+            onClick={openAddUserGroupModal}
+          >
             Add People
           </button>
         )}

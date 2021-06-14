@@ -1,5 +1,6 @@
 .chat-sidebar {
   border-right: 1px solid $clr-border-light;
+  overflow-y: hidden;
 
   &__header {
     width: 100%;
@@ -21,6 +22,9 @@
 
   &__list {
     width: 100%;
+    overflow-y: auto;
+    height: calc(86vh - 4rem);
+
     &--item {
       width: 100%;
       display: flex;

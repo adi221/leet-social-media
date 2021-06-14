@@ -3,7 +3,11 @@ import Chat from '../models/chatModel.js';
 import User from '../models/userModel.js';
 import mongoose from 'mongoose';
 const ObjectId = mongoose.Types.ObjectId;
-import { sendNewChat } from '../handlers/socketHandlers.js';
+import {
+  sendNewChat,
+  addNewGroupMembers,
+  removeGroupMember,
+} from '../handlers/socketHandlers.js';
 
 // @desc Create chat
 // @route POST /api/chats
@@ -373,7 +377,7 @@ const getAdditionalMessagesChat = asyncHandler(async (req, res) => {
         _id: ObjectId(chatId),
       },
     },
-    // Sort nested array by created date
+    // Sort nested array by createdAt
     {
       $unwind: '$messages',
     },
@@ -397,9 +401,63 @@ const getAdditionalMessagesChat = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc Add new users to group
+// @route PUT /api/chats/:chatId
+// @access User
+const addUsersToGroup = asyncHandler(async (req, res) => {
+  const { chatId } = req.params;
+  const { partnerUsersId } = req.body;
+  const { _id } = req.user;
+
+  if (!partnerUsersId.length) {
+    return res.status(401).json({ success: false, message: 'No users to add' });
+  }
+
+  const chat = await Chat.findById(chatId, 'chatUsers');
+  if (!chat) {
+    return res
+      .status(401)
+      .json({ success: false, message: 'chatId is incorrect' });
+  }
+
+  partnerUsersId.forEach(userId => {
+    chat.chatUsers.push({ user: userId });
+  });
+  await chat.save();
+
+  // emit event for new members with socket
+  const newMembers = await User.find(
+    { _id: { $in: partnerUsersId } },
+    '_id username name profileImage'
+  );
+  addNewGroupMembers(req, newMembers, _id);
+
+  res.json({ success: true, message: 'Successfully added' });
+});
+
+// @desc User leaves group
+// @route PUT /api/chats/leave/:chatId
+// @access User
+const leaveGroup = asyncHandler(async (req, res) => {
+  const { _id } = req.user;
+  const { chatId } = req.params;
+
+  await Chat.updateOne(
+    { _id: chatId },
+    { $pull: { chatUsers: { user: _id } } }
+  );
+
+  // emit event to remove user from group in chatList
+  removeGroupMember(req, chatId, _id);
+
+  res.json({ success: true, message: 'Removed from group successfully' });
+});
+
 export {
   getChatList,
   createChat,
   getSingleChatData,
   getAdditionalMessagesChat,
+  addUsersToGroup,
+  leaveGroup,
 };

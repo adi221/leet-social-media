@@ -18,6 +18,11 @@ import {
   GET_ADDITIONAL_MESSAGES_REQUEST,
   GET_ADDITIONAL_MESSAGES_SUCCESS,
   GET_ADDITIONAL_MESSAGES_FAIL,
+  ADD_USER_GROUP_REQUEST,
+  ADD_USER_GROUP_SUCCESS,
+  ADD_USER_GROUP_FAIL,
+  ADD_NEW_GROUP_MEMBER,
+  REMOVE_CHAT_FROM_LIST,
 } from '../constants/chatConstants';
 
 export const changePartnerUsersId = (id, type) => (dispatch, getState) => {
@@ -58,6 +63,36 @@ export const createChat = () => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: CREATE_CHAT_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const addUsersToGroup = chatId => async (dispatch, getState) => {
+  try {
+    dispatch({ type: ADD_USER_GROUP_REQUEST });
+
+    const {
+      createChat: { partnerUsersId },
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    await axios.put(`/api/chats/${chatId}`, { partnerUsersId }, config);
+    dispatch({ type: ADD_USER_GROUP_SUCCESS });
+    dispatch({ type: RESET_CHAT_PARTNERS });
+  } catch (error) {
+    dispatch({
+      type: ADD_USER_GROUP_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
@@ -152,3 +187,13 @@ export const receivedMessage = message => dispatch => {
 export const partnerTyping = chatPartnerTyping => dispatch => {
   dispatch({ type: PARTNER_TYPING, payload: chatPartnerTyping });
 };
+
+export const addNewGroupMembers = newMembers => ({
+  type: ADD_NEW_GROUP_MEMBER,
+  payload: newMembers,
+});
+
+export const removeChatFromList = chatId => ({
+  type: REMOVE_CHAT_FROM_LIST,
+  payload: chatId,
+});

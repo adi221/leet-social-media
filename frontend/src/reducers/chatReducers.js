@@ -18,6 +18,11 @@ import {
   GET_ADDITIONAL_MESSAGES_REQUEST,
   GET_ADDITIONAL_MESSAGES_SUCCESS,
   GET_ADDITIONAL_MESSAGES_FAIL,
+  ADD_USER_GROUP_REQUEST,
+  ADD_USER_GROUP_SUCCESS,
+  ADD_USER_GROUP_FAIL,
+  ADD_NEW_GROUP_MEMBER,
+  REMOVE_CHAT_FROM_LIST,
 } from '../constants/chatConstants';
 
 export const createChatReducer = (
@@ -37,6 +42,12 @@ export const createChatReducer = (
       return { ...state, partnerUsersId: [] };
     case RESET_CHAT_REDIRECT:
       return { ...state, redirectChatId: null };
+    case ADD_USER_GROUP_REQUEST:
+      return { ...state, loading: true };
+    case ADD_USER_GROUP_SUCCESS:
+      return { ...state, loading: false, addUserSuccess: true };
+    case ADD_USER_GROUP_FAIL:
+      return { ...state, loading: false, error: action.payload };
     default:
       return state;
   }
@@ -65,6 +76,11 @@ export const chatListReducer = (state = { chatList: [] }, action) => {
       return { ...state, chatList: updatedChatList };
     case ADD_CHAT:
       return { ...state, chatList: [action.payload, ...state.chatList] };
+    case REMOVE_CHAT_FROM_LIST:
+      const updatedList = state.chatList.filter(
+        chat => chat._id !== action.payload
+      );
+      return { ...state, chatList: updatedList };
     default:
       return state;
   }
@@ -90,7 +106,7 @@ const chatFeedInitialState = {
 export const chatFeedReducer = (state = chatFeedInitialState, action) => {
   switch (action.type) {
     case GET_CHAT_FEED_REQUEST:
-      return { ...state, loading: true };
+      return { ...state, loading: true, error: false };
     case GET_CHAT_FEED_FAIL:
       return { ...state, loading: false, error: true };
     case GET_CHAT_FEED_SUCCESS:
@@ -134,6 +150,8 @@ export const chatFeedReducer = (state = chatFeedInitialState, action) => {
         ...state,
         chatPartnersTyping: modifiedTypingPartners,
       };
+    case ADD_NEW_GROUP_MEMBER:
+      return { ...state, partners: [...state.partners, ...action.payload] };
     case GET_ADDITIONAL_MESSAGES_REQUEST:
       return { ...state, fetchingAdditional: true };
     case GET_ADDITIONAL_MESSAGES_SUCCESS:
