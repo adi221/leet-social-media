@@ -25,6 +25,10 @@ const chatSchema = mongoose.Schema(
           required: true,
           ref: 'User',
         },
+        showChat: {
+          type: Boolean,
+          default: true,
+        },
       },
     ],
     messages: [messageSchema],

@@ -2,9 +2,15 @@ import jwt from 'jsonwebtoken';
 import colors from 'colors';
 import Chat from '../models/chatModel.js';
 import ChatNotification from '../models/chatNotificationModel.js';
+import { getSingleChatForList } from '../controllers/chatControllers.js';
 
 // to check online / offline users
 const onlineUsersId = {};
+
+// getSingleChatForList({
+//   chatId: '60c776c5604a574b14005aa9',
+//   currentUserId: '60b38846501fe4296829b896',
+// });
 
 const socketServer = socketio => {
   // Authenticate before establishing a socket connection
@@ -47,22 +53,18 @@ const socketServer = socketio => {
           chat.messages.push(newMessage);
           await chat.save();
 
-          socketio.sockets
-            .in(fromUser.toString())
-            .emit('receivedMessage', {
+          socketio.sockets.in(fromUser.toString()).emit('receivedMessage', {
+            ...newMessage,
+            chatId,
+            createdAt: new Date(),
+          });
+
+          toUserId.forEach(userId => {
+            socketio.sockets.in(userId.toString()).emit('receivedMessage', {
               ...newMessage,
               chatId,
               createdAt: new Date(),
             });
-
-          toUserId.forEach(userId => {
-            socketio.sockets
-              .in(userId.toString())
-              .emit('receivedMessage', {
-                ...newMessage,
-                chatId,
-                createdAt: new Date(),
-              });
           });
 
           // send chatNotification
@@ -114,6 +116,13 @@ const socketServer = socketio => {
             .in(userId.toString())
             .emit('partnerTyping', { chatId, fromUser, typing });
         });
+      });
+
+      socket.on('getChat', async chatAndUserId => {
+        const { currentUserId } = chatAndUserId;
+        const chat = await getSingleChatForList(chatAndUserId);
+        console.log(chat);
+        socketio.sockets.in(currentUserId.toString()).emit('newChat', chat);
       });
 
       socket.on('disconnect', () => {

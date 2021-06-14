@@ -6,6 +6,7 @@ import {
   getAdditionalMessagesChat,
   addUsersToGroup,
   leaveGroup,
+  hideChatForUser,
 } from '../controllers/chatControllers.js';
 import { protect } from '../middleware/authMiddleware.js';
 
@@ -19,5 +20,6 @@ router
   .put(protect, addUsersToGroup);
 router.route('/:chatId/:offset').get(getAdditionalMessagesChat);
 router.route('/leave/:chatId').put(protect, leaveGroup);
+router.route('/hide/:chatId').put(protect, hideChatForUser);
 
 export default router;

@@ -39,6 +39,24 @@ export const connectSocket = () => (dispatch, getState) => {
   });
 
   socket.on('receivedMessage', message => {
+    const {
+      chatList: { chatList },
+    } = getState();
+
+    // if chat is not shown yet - maybe it`s hidden by user or message for first time or chat not loaded yet
+    if (!chatList.some(chat => chat._id === message.chatId)) {
+      const {
+        socket: { socket },
+        userLogin: { userInfo },
+      } = getState();
+      socket.emit('getChat', {
+        chatId: message.chatId,
+        currentUserId: userInfo._id,
+      });
+      dispatch(addChatNotification(message.chatId, message.fromUser));
+      return;
+    }
+
     dispatch(receivedMessage(message));
     dispatch(addChatNotification(message.chatId, message.fromUser));
     dispatch(updateLastMessage(message));
@@ -57,6 +75,10 @@ export const connectSocket = () => (dispatch, getState) => {
   });
 
   socket.on('removeGroupMember', chatId => {
+    dispatch(removeChatFromList(chatId));
+  });
+
+  socket.on('hideChatFromList', chatId => {
     dispatch(removeChatFromList(chatId));
   });
 };

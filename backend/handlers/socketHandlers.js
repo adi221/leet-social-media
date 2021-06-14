@@ -19,3 +19,8 @@ export const removeGroupMember = (req, chatId, receiver) => {
   const socketio = req.app.get('socketio');
   socketio.sockets.in(receiver.toString()).emit('removeGroupMember', chatId);
 };
+
+export const hideChatFromList = (req, chatId, receiver) => {
+  const socketio = req.app.get('socketio');
+  socketio.sockets.in(receiver.toString()).emit('hideChatFromList', chatId);
+};

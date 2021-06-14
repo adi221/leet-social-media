@@ -7,6 +7,7 @@ import {
   sendNewChat,
   addNewGroupMembers,
   removeGroupMember,
+  hideChatFromList,
 } from '../handlers/socketHandlers.js';
 
 // @desc Create chat
@@ -46,7 +47,14 @@ const createChat = asyncHandler(async (req, res) => {
       ]);
 
       if (userChats.length > 0) {
-        return userChats[0]._id.toString();
+        const chatId = userChats[0]._id.toString();
+        // show chat if is hidden
+        await Chat.updateOne(
+          { _id: chatId, 'chatUsers.user': _id },
+          { $set: { 'chatUsers.$.showChat': true } }
+        );
+
+        return chatId;
       } else {
         return false;
       }
@@ -96,10 +104,99 @@ const createChat = asyncHandler(async (req, res) => {
   }
 
   sendNewChat(req, newChatSocket, _id);
+  // sendNewChat(req, newChatSocket, [_id, ...partnerUsersId]);
 
   // send chatId so i can redirect when I get success message
   res.status(201).send(chat._id);
 });
+
+export const getSingleChatForList = async chatAndUserId => {
+  const { chatId, currentUserId } = chatAndUserId;
+
+  let chat = await Chat.aggregate([
+    // find chat by id
+    {
+      $match: {
+        _id: ObjectId(chatId),
+      },
+    },
+    // get last message
+    { $unwind: { path: '$messages', preserveNullAndEmptyArrays: true } },
+    { $sort: { 'messages.createdAt': -1 } },
+    {
+      $group: {
+        _id: '$_id',
+        lastMessage: { $first: '$messages' },
+        data: { $first: '$$ROOT' },
+      },
+    },
+    { $replaceRoot: { newRoot: '$data' } },
+    // Get partners' image, username
+    {
+      $lookup: {
+        from: 'users',
+        let: {
+          userId: '$chatUsers.user',
+          currentUserId: ObjectId(currentUserId),
+        },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  { $in: ['$_id', '$$userId'] },
+                  { $ne: ['$_id', '$$currentUserId'] },
+                ],
+              },
+            },
+          },
+        ],
+        as: 'partnerDetails',
+      },
+    },
+    {
+      $unwind: '$partnerDetails',
+    },
+    {
+      $project: {
+        _id: true,
+        lastMessage: '$messages',
+        'partnerDetails.username': true,
+        'partnerDetails.profileImage': true,
+        'partnerDetails._id': true,
+      },
+    },
+    // group after unwinding by group id and push partners into an array
+    {
+      $group: {
+        _id: '$_id',
+        lastMessage: { $first: '$lastMessage' },
+        partners: {
+          $push: {
+            _id: '$partnerDetails._id',
+            profileImage: '$partnerDetails.profileImage',
+            username: '$partnerDetails.username',
+          },
+        },
+      },
+    },
+    { $sort: { 'lastMessage.createdAt': -1 } },
+  ]);
+  // aggregate returns an array
+  chat = chat[0];
+
+  // set showChat to all partners
+  const chatPartnersId = chat.partners.map(partner => ObjectId(partner._id));
+
+  for (const partnerId of chatPartnersId) {
+    await Chat.updateOne(
+      { _id: chatId, 'chatUsers.user': partnerId },
+      { $set: { 'chatUsers.$.showChat': true } }
+    );
+  }
+
+  return chat;
+};
 
 // @desc Get chat lists of a user
 // @route GET /api/chats/list
@@ -107,116 +204,21 @@ const createChat = asyncHandler(async (req, res) => {
 const getChatList = asyncHandler(async (req, res) => {
   const { _id } = req.user;
 
-  // Needs to add condition if no messages
-  // const userChatLists2 = await Chat.aggregate([
-  //   // find all user's chats
-  //   {
-  //     $match: {
-  //       chatUsers: {
-  //         $elemMatch: {
-  //           user: ObjectId(_id),
-  //         },
-  //       },
-  //     },
-  //   },
-  //   { $sort: { updatedAt: -1 } },
-  //   // get last message
-  //   { $unwind: '$messages' },
-  //   { $sort: { 'messages.createdAt': -1 } },
-  //   {
-  //     $set: {
-  //       totalMessages: { $sum: '$messages' },
-  //     },
-  //   },
-  //   {
-  //     $group: {
-  //       _id: '$_id',
-  //       lastMessage: {
-  //         $first: {
-  //           $cond: {
-  //             if: { $eq: ['$totalMessages', 0] },
-  //             then: null,
-  //             else: '$messages',
-  //           },
-  //         },
-  //       },
-  //       data: { $first: '$$ROOT' },
-  //     },
-  //   },
-  //   { $replaceRoot: { newRoot: '$data' } },
-
-  //   // Get partners' image, username
-  //   {
-  //     $lookup: {
-  //       from: 'users',
-  //       let: { userId: '$chatUsers.user', currentUserId: ObjectId(_id) },
-  //       pipeline: [
-  //         {
-  //           $match: {
-  //             $expr: {
-  //               $and: [
-  //                 { $in: ['$_id', '$$userId'] },
-  //                 { $ne: ['$_id', '$$currentUserId'] },
-  //               ],
-  //             },
-  //           },
-  //         },
-  //       ],
-  //       as: 'partnerDetails',
-  //     },
-  //   },
-  //   {
-  //     $unwind: '$partnerDetails',
-  //   },
-  //   {
-  //     $project: {
-  //       _id: true,
-  //       lastMessage: '$messages',
-  //       // lastMessage: { $ifNull: ['$messages', null] },
-  //       // lastMessage: {
-  //       //   $cond: {
-  //       //     // if: { $eq: ['$lastMessage', null] },
-  //       //     if: { $ifNull: ['$messages', {}] },
-  //       //     then: 'lastMessage',
-  //       //     else: '$messages',
-  //       //   },
-  //       // },
-  //       'partnerDetails.username': true,
-  //       'partnerDetails.profileImage': true,
-  //       'partnerDetails._id': true,
-  //     },
-  //   },
-  //   // group after unwinding by group id and push partners into an array '$lastMessage'
-  //   {
-  //     $group: {
-  //       _id: '$_id',
-  //       lastMessage: { $first: '$lastMessage' },
-  //       partners: {
-  //         $push: {
-  //           _id: '$partnerDetails._id',
-  //           profileImage: '$partnerDetails.profileImage',
-  //           username: '$partnerDetails.username',
-  //         },
-  //       },
-  //     },
-  //   },
-  // ]);
-  // console.log(userChatLists2);
-
   const userChatLists = await Chat.aggregate([
-    // find all user's chats
+    // find all user's chats, both userId and showChat match
     {
       $match: {
         chatUsers: {
           $elemMatch: {
             user: ObjectId(_id),
+            showChat: true,
           },
         },
       },
     },
     { $sort: { updatedAt: -1 } },
     // get last message
-    { $unwind: '$messages' },
+    { $unwind: { path: '$messages', preserveNullAndEmptyArrays: true } },
     { $sort: { 'messages.createdAt': -1 } },
     {
       $group: {
@@ -453,6 +455,21 @@ const leaveGroup = asyncHandler(async (req, res) => {
   res.json({ success: true, message: 'Removed from group successfully' });
 });
 
+const hideChatForUser = asyncHandler(async (req, res) => {
+  const { _id } = req.user;
+  const { chatId } = req.params;
+
+  await Chat.updateOne(
+    { _id: chatId, 'chatUsers.user': _id },
+    { $set: { 'chatUsers.$.showChat': false } }
+  );
+
+  // emit event to remove chat from list
+  hideChatFromList(req, chatId, _id);
+
+  res.status(200).json({ success: true, message: 'Chat removed successfully' });
+});
+
 export {
   getChatList,
   createChat,
@@ -460,4 +477,5 @@ export {
   getAdditionalMessagesChat,
   addUsersToGroup,
   leaveGroup,
+  hideChatForUser,
 };

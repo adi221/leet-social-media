@@ -21,6 +21,20 @@ const ChatInfoOptions = ({ chatId, chatType }) => {
     }
   };
 
+  const hideChatForUser = async () => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+      await axios.put(`/api/chats/hide/${chatId}`, {}, config);
+      history.push('/direct/inbox');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const leaveConfirmHandler = () => {
     const confirmed = window.confirm('Are you sure you want to leave ?');
     if (confirmed) {
@@ -28,9 +42,18 @@ const ChatInfoOptions = ({ chatId, chatType }) => {
     }
   };
 
+  const deleteConfirmHandler = () => {
+    const confirmed = window.confirm('Are you sure you want to delete chat ?');
+    if (confirmed) {
+      hideChatForUser();
+    }
+  };
+
   return (
     <div className='chat-info__options'>
-      <button className='red width100'>Delete Chat</button>
+      <button className='red width100' onClick={deleteConfirmHandler}>
+        Delete Chat
+      </button>
       {chatType === 'group' && (
         <button className='red width100' onClick={leaveConfirmHandler}>
           Leave Group
