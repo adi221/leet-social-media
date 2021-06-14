@@ -185,15 +185,17 @@ export const getSingleChatForList = async chatAndUserId => {
   // aggregate returns an array
   chat = chat[0];
 
-  // set showChat to all partners
+  // set showChat to all partners including the current user
   const chatPartnersId = chat.partners.map(partner => ObjectId(partner._id));
+  chatPartnersId.push(currentUserId);
 
-  for (const partnerId of chatPartnersId) {
-    await Chat.updateOne(
-      { _id: chatId, 'chatUsers.user': partnerId },
-      { $set: { 'chatUsers.$.showChat': true } }
-    );
-  }
+  await Chat.updateMany(
+    {
+      _id: chatId,
+      chatUsers: { $elemMatch: { user: { $in: chatPartnersId } } },
+    },
+    { $set: { 'chatUsers.$.showChat': true } }
+  );
 
   return chat;
 };

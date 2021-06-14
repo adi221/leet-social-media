@@ -121,7 +121,6 @@ const socketServer = socketio => {
       socket.on('getChat', async chatAndUserId => {
         const { currentUserId } = chatAndUserId;
         const chat = await getSingleChatForList(chatAndUserId);
-        console.log(chat);
         socketio.sockets.in(currentUserId.toString()).emit('newChat', chat);
       });
 
