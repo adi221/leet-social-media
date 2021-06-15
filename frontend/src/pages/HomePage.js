@@ -33,7 +33,7 @@ const HomePage = () => {
   if (error) return <ErrorPage />;
 
   return (
-    <div className='page home-page'>
+    <div className='page home-page' data-test='homePage'>
       <div className='page-center home-page__container'>
         <Feed />
         <aside className='sidebar'>

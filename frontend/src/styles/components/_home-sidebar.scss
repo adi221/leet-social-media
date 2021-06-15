@@ -58,14 +58,33 @@
     }
   }
 
-  footer {
-    color: $clr-border;
-    text-transform: uppercase;
+  &__links {
+    width: 100%;
+
+    display: flex;
+    flex-wrap: wrap;
     margin-top: 1.2rem;
+
+    p {
+      font-size: 12px;
+      margin: 0.1rem 0;
+      color: $clr-grey-1;
+      cursor: pointer;
+    }
+
+    span {
+      margin: 0 0.2rem;
+    }
+  }
+
+  &__footer {
+    text-transform: uppercase;
+    margin-top: 0.5rem;
     font-size: 12px;
+    color: $clr-grey-2;
 
     a {
-      color: $clr-border;
+      color: $clr-grey-2;
       transition: $transition;
 
       &:hover {

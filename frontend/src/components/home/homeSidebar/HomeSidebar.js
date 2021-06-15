@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import UserSuggestions from './UserSuggestions';
+import HomeSidebarLinks from './HomeSidebarLinks';
 
 const HomeSidebar = () => {
   const { userInfo } = useSelector(state => state.userLogin);
@@ -19,7 +20,8 @@ const HomeSidebar = () => {
         </div>
       </header>
       <UserSuggestions />
-      <footer className='home-sidebar-footer'>
+      <HomeSidebarLinks />
+      <footer className='home-sidebar__footer'>
         @{new Date().getFullYear()} Leet social media <br /> By{' '}
         <a
           href='https://github.com/adi221'

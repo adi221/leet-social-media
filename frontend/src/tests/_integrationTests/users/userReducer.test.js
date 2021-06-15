@@ -1,4 +1,4 @@
-import { userLoginReducer } from '../../reducers/userReducers';
+import { userLoginReducer } from '../../../reducers/userReducers';
 
 test('returns initial state when no action is passed', () => {
   const newState = userLoginReducer(undefined, {});

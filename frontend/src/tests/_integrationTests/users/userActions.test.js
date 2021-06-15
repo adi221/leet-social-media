@@ -1,6 +1,6 @@
 import moxios from 'moxios';
-import { storeFactory } from '../../utils/testUtils';
-import { login } from '../../actions/userActions';
+import { storeFactory } from '../../../utils/testUtils';
+import { login } from '../../../actions/userActions';
 
 describe('login action', () => {
   beforeEach(() => {
