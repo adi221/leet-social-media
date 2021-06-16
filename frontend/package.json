@@ -8,7 +8,6 @@
     "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.21.1",
-    "check-prop-types": "^1.1.2",
     "date-fns": "^2.22.1",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
@@ -57,8 +56,9 @@
     ]
   },
   "devDependencies": {
+    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.2",
+    "check-prop-types": "^1.1.2",
     "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.6",
     "jest-enzyme": "^7.1.2"
   }
 }

@@ -10,7 +10,7 @@ import { middleware } from '../store';
  * @param {string} attr Attribute to find
  * @returns {JSX.Element}
  */
-export const findByTestAtrr = (component, attr) => {
+export const findByTestAttr = (component, attr) => {
   const wrapper = component.find(`[data-test='${attr}']`);
   return wrapper;
 };

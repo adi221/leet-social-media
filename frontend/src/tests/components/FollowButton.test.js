@@ -1,7 +1,6 @@
 import React from 'react';
-import { shallow, configure } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-import { findByTestAtrr, checkProps } from '../../utils/testUtils';
+import { shallow } from 'enzyme';
+import { findByTestAttr, checkProps } from '../../utils/testUtils';
 import FollowButton from '../../components/buttons/FollowButton';
 
 const expectedProps = {
@@ -17,12 +16,11 @@ const setup = (initialProps = {}) => {
   const wrapper = shallow(<FollowButton {...setupProps} />);
   return wrapper;
 };
-configure({ adapter: new Adapter() });
 
 // describe('render', () => {
 //   it('renders without error', () => {
 //     const wrapper = setup();
-//     const component = findByTestAtrr(wrapper, 'followButtonComponent');
+//     const component = findByTestAtrr(wrapper, 'component-follow-button');
 //     expect(component.exists()).toBeTruthy();
 //   });
 // });

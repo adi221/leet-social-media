@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { IoIosSettings, IoIosPerson } from 'react-icons/io';
@@ -7,10 +7,15 @@ import { SearchBar, NotificationButton } from '../../components';
 import ChatButton from './ChatButton';
 import ExploreButton from './ExploreButton';
 import logo from '../../assets/leet-logo.png';
+import useComponentVisible from '../../hooks/useComponentVisible';
 import { logout } from '../../actions/userActions';
 
 const Navbar = () => {
-  const [showSettings, setShowSettings] = useState(false);
+  const {
+    ref,
+    isComponentVisible: showSettings,
+    setIsComponentVisible: setShowSettings,
+  } = useComponentVisible(false);
 
   const { userInfo } = useSelector(state => state.userLogin);
   const dispatch = useDispatch();
@@ -20,13 +25,6 @@ const Navbar = () => {
     dispatch(logout());
     history.push('/login');
   };
-
-  useEffect(() => {
-    document.addEventListener('click', e => {
-      if (e.target.closest('nav')) return;
-      setShowSettings(false);
-    });
-  });
 
   return (
     <nav className='nav'>
@@ -60,7 +58,7 @@ const Navbar = () => {
                   />
                 </button>
                 {showSettings && (
-                  <ul className=' nav__center--dropdown-content'>
+                  <ul className='nav__center--dropdown-content' ref={ref}>
                     <li>
                       <Link to={`/profile/${userInfo.username}`}>
                         <IoIosPerson /> Profile

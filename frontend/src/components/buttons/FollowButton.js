@@ -72,7 +72,7 @@ const FollowButton = ({
 
   return (
     <button
-      data-test='followButtonComponent'
+      data-test='component-follow-button'
       className='drop button is-primary'
       onClick={followHandler}
       style={{ ...style, ...colorStyle, position: 'relative' }}

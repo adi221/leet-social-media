@@ -8,7 +8,7 @@ import {
   readNotifications,
 } from '../../../actions/notificationActions';
 
-const Notifications = () => {
+const Notifications = ({ notificationsRef, show }) => {
   const dispatch = useDispatch();
   const { notifications, loading } = useSelector(state => state.notifications);
 
@@ -28,8 +28,10 @@ const Notifications = () => {
       </ul>
     );
 
+  if (!show) return null;
+
   return (
-    <ul className=' nav-notifications'>
+    <ul className=' nav-notifications' ref={notificationsRef}>
       {notifications.length > 0 ? (
         notifications.map(notification => {
           return (

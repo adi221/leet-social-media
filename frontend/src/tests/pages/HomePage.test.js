@@ -1,8 +1,7 @@
 import React from 'react';
-import { shallow, configure } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import { shallow } from 'enzyme';
 import { Provider } from 'react-redux';
-import { findByTestAtrr, storeFactory } from '../../utils/testUtils';
+import { findByTestAttr, storeFactory } from '../../utils/testUtils';
 import HomePage from '../../pages/HomePage';
 
 const setup = (initialState = {}) => {
@@ -15,7 +14,6 @@ const setup = (initialState = {}) => {
   return wrapper;
 };
 
-configure({ adapter: new Adapter() });
 describe('render HomePage', () => {
   test('should render without error', () => {
     const initialState = {
@@ -24,10 +22,10 @@ describe('render HomePage', () => {
       loadedPosts: [],
     };
     const wrapper = setup(initialState);
-    console.log(wrapper);
+
     expect(wrapper.length).toBe(1);
     // console.log(wrapper, 'WE');
-    // const component = findByTestAtrr(wrapper, 'homePage');
+    // const component = findByTestAtrr(wrapper, 'page-home');
     // // expect(component.length).toBe(1);
     // expect(component.exists()).toBeTruthy();
   });

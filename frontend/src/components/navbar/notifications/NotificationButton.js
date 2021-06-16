@@ -4,9 +4,14 @@ import Notifications from './Notifications';
 import NotificationPopup from './NotificationPopup';
 import { FaRegHeart, FaHeart } from 'react-icons/fa';
 import { hidePopup } from '../../../actions/notificationActions';
+import useComponentVisible from '../../../hooks/useComponentVisible';
 
 const NotificationButton = () => {
-  const [showNotifications, setShowNotifications] = useState(false);
+  const {
+    ref,
+    isComponentVisible: showNotifications,
+    setIsComponentVisible: setShowNotifications,
+  } = useComponentVisible(false);
   const [showNotificationPopup, setShowNotificationPopup] = useState(false);
   const [popupTimer, setPopupTimer] = useState(null);
   const dispatch = useDispatch();
@@ -57,7 +62,9 @@ const NotificationButton = () => {
           <FaRegHeart className='nav__center--dropdown-notification' />
         )}
       </button>
-      {showNotifications && <Notifications />}
+      {showNotifications && (
+        <Notifications notificationsRef={ref} show={showNotifications} />
+      )}
     </div>
   );
 };
