@@ -11,7 +11,11 @@ const messageSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    // messageType : image, text, user leaved/entered group..
+    messageType: {
+      type: String,
+      default: 'message',
+      enum: ['message', 'post'],
+    },
   },
   { timestamps: true }
 );

@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { findByTestAttr, checkProps } from '../../utils/testUtils';
-import FollowButton from '../../components/buttons/FollowButton';
+import { findByTestAttr, checkProps } from '../../../utils/testUtils';
+import FollowButton from '../../../components/buttons/FollowButton';
 
 const expectedProps = {
   style: {},

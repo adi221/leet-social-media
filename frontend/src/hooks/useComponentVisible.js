@@ -25,7 +25,6 @@ export default function useComponentVisible(initialIsVisible) {
     }
   };
 
-  // Remove visibility on click inside link in dropdown
   useEffect(() => {
     setIsComponentVisible(false);
   }, [pathname]);

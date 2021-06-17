@@ -7,9 +7,11 @@ import {
   FaRegComment,
   FaRegBookmark,
   FaBookmark,
+  FaRegPaperPlane,
 } from 'react-icons/fa';
 import { USER_STATS_BOOKMARKS } from '../../constants/userConstants';
 import { SINGLE_POST_LIKE_SUCCESS } from '../../constants/singlePostConstants';
+import { SHOW_MODAL } from '../../constants/utilConstants';
 
 const SinglePostBtns = ({ uniqueId, likes, commentRef, dispatch }) => {
   const [isLiked, setIsLiked] = useState(false);
@@ -70,6 +72,22 @@ const SinglePostBtns = ({ uniqueId, likes, commentRef, dispatch }) => {
     }
   };
 
+  const sharePostHandler = () => {
+    dispatchRedux({
+      type: SHOW_MODAL,
+      payload: {
+        modalType: 'SHARE_POST',
+        modalProps: {
+          postId: uniqueId,
+          userOrPostId: userInfo._id,
+          listType: 'following',
+          users: true,
+          checkButton: true,
+        },
+      },
+    });
+  };
+
   return (
     <div className='single-post__content--btns is-flexed '>
       <div className='is-flexed'>
@@ -84,8 +102,9 @@ const SinglePostBtns = ({ uniqueId, likes, commentRef, dispatch }) => {
         )}
         <FaRegComment
           onClick={() => commentRef.current.focus()}
-          className='single-icon'
+          className='single-icon mr-sm'
         />
+        <FaRegPaperPlane className='single-icon' onClick={sharePostHandler} />
       </div>
       {isBookmarked ? (
         <FaBookmark className='single-icon' onClick={bookmarkHandler} />

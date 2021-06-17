@@ -4,8 +4,8 @@ import {
   storeFactory,
   checkProps,
   findByTestAttr,
-} from '../../utils/testUtils';
-import SinglePost from '../../components/singlePost/SinglePost';
+} from '../../../utils/testUtils';
+import SinglePost from '../../../components/singlePost/SinglePost';
 
 const defaultProps = {
   uniqueId: '12314',

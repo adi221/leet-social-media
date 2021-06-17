@@ -23,6 +23,7 @@
     "react-redux": "^7.2.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "react-spring": "^9.2.3",
     "react-tag-input": "^6.5.2",
     "react-tag-input-dnd-fix": "0.0.2",
     "redux": "^4.1.0",

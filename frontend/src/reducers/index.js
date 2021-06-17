@@ -16,6 +16,7 @@ import {
   postsGetReducer,
   postDeleteReducer,
   postsExploreReducer,
+  sharePostReducer,
 } from '../reducers/postReducers';
 import { modalReducer } from '../reducers/utilReducers';
 import { socketReducer } from '../reducers/socketReducers';
@@ -44,6 +45,7 @@ const rootReducer = combineReducers({
   postsGet: postsGetReducer,
   postDelete: postDeleteReducer,
   postsExplore: postsExploreReducer,
+  sharePost: sharePostReducer,
   modal: modalReducer,
   socket: socketReducer,
   notifications: notificationsReducer,

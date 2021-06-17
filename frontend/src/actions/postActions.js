@@ -12,6 +12,7 @@ import {
   POSTS_EXPLORE_REQUEST,
   POSTS_EXPLORE_SUCCESS,
   POSTS_EXPLORE_FAIL,
+  CHANGE_POST_RECEIVERS,
 } from '../constants/postConstants';
 
 export const getPosts = () => async dispatch => {
@@ -95,4 +96,20 @@ export const getExplorePostPreviews = offset => async dispatch => {
           : error.message,
     });
   }
+};
+
+export const changeSharePostReceivers = (id, type) => (dispatch, getState) => {
+  const {
+    sharePost: { postReceiversId },
+  } = getState();
+
+  let newPostReceiversId = [];
+
+  if (type === 'del') {
+    newPostReceiversId = postReceiversId.filter(userId => userId !== id);
+  } else {
+    newPostReceiversId = [...postReceiversId, id];
+  }
+
+  dispatch({ type: CHANGE_POST_RECEIVERS, payload: newPostReceiversId });
 };

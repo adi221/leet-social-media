@@ -14,6 +14,8 @@ import {
   POSTS_EXPLORE_REQUEST,
   POSTS_EXPLORE_SUCCESS,
   POSTS_EXPLORE_FAIL,
+  CHANGE_POST_RECEIVERS,
+  RESET_POST_RECEIVERS,
 } from '../constants/postConstants';
 
 export const postsGetReducer = (
@@ -84,6 +86,17 @@ export const postsExploreReducer = (state = { postPreviews: [] }, action) => {
       return { ...state, loading: false, postPreviews: action.payload };
     case POSTS_EXPLORE_FAIL:
       return { ...state, loading: false, error: true };
+    default:
+      return state;
+  }
+};
+
+export const sharePostReducer = (state = { postReceiversId: [] }, action) => {
+  switch (action.type) {
+    case CHANGE_POST_RECEIVERS:
+      return { ...state, postReceiversId: action.payload };
+    case RESET_POST_RECEIVERS:
+      return { ...state, postReceiversId: [] };
     default:
       return state;
   }
