@@ -14,6 +14,7 @@ import {
   ExplorePage,
 } from './pages';
 import { Navbar, PrivateRoute, RootModal } from './components';
+import Alert from './components/alert/Alert';
 import { connectSocket } from './actions/socketActions';
 import {
   getNotifications,
@@ -64,6 +65,7 @@ const App = () => {
         </Switch>
       </div>
       <RootModal />
+      <Alert />
     </Router>
   );
 };

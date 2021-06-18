@@ -182,9 +182,11 @@ const socketServer = socketio => {
             await newChatNotif.save();
           }
         }
-
+        console.log('HEY');
         // Send alert for the fromUser by sending success
-        socketio.sockets.in(fromUser.toString()).emit('successPostMessage', {});
+        socketio.sockets
+          .in(fromUser.toString())
+          .emit('successPostMessage', { success: true });
       });
 
       socket.on('disconnect', () => {

@@ -4,7 +4,7 @@ import { GrClose } from 'react-icons/gr';
 import { UsersList } from '../../components';
 import SingleUserList from '../usersList/SingleUserList';
 import UsersListSkeleton from '../loaders/UsersListSkeleton';
-import { closeModal } from '../../actions/utilActions';
+import { closeModal, showAlert } from '../../actions/utilActions';
 import {
   RESET_POST_RECEIVERS,
   SHARE_POST_RESET,
@@ -27,6 +27,7 @@ const SharePostModal = props => {
     if (success) {
       dispatch(closeModal());
       dispatch({ type: SHARE_POST_RESET });
+      dispatch(showAlert('Sent'));
     }
   }, [success, dispatch]);
 

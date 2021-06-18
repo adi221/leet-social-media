@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Message } from '../../components';
 import { USER_UPDATE_PASSWORD_RESET } from '../../constants/userConstants';
 import { updateUserPassword } from '../../actions/userActions';
+import { showAlert } from '../../actions/utilActions';
 import SettingsHeader from './SettingsHeader';
 
 const ChangePassword = ({ currSettings }) => {

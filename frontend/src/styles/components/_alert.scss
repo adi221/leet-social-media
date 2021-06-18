@@ -1,0 +1,17 @@
+.alert {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #474747;
+  color: $clr-white;
+  padding: 1rem 2rem;
+  text-align: left;
+  z-index: 100;
+  transition: $transition;
+  transform: translateY(100%);
+
+  &__show {
+    transform: translateY(0%);
+  }
+}
