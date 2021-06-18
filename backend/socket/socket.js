@@ -124,6 +124,21 @@ const socketServer = socketio => {
         socketio.sockets.in(currentUserId.toString()).emit('newChat', chat);
       });
 
+      socket.on('sharePostMessage', async msg => {
+        const { postId, postReceiversId, fromUser } = msg;
+
+        const newMessage = { fromUser, post: postId, messageType: 'post' };
+
+        postReceiversId.forEach(receiver => {
+          // Check if there is an existing chat
+          // yes ? so add new message to current chat
+          // no ? open new chat and add the message
+        });
+
+        // Send alert for the fromUser by sending success
+        // Send chatNotification and add the message in socket for online users
+      });
+
       socket.on('disconnect', () => {
         console.log(`User disconnected ${socket.user.id}`.brightRed.bold);
         if (onlineUsersId[socket.user.id]) {

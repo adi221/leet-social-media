@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import { CLOSE_MODAL } from '../../constants/utilConstants';
+import { closeModal } from '../../actions/utilActions';
 import { USER_STATS_FOLLOWING } from '../../constants/userConstants';
 
 const UnfollowUserModal = props => {
@@ -23,14 +23,10 @@ const UnfollowUserModal = props => {
         config
       );
       dispatch({ type: USER_STATS_FOLLOWING, payload: data });
-      dispatch({ type: CLOSE_MODAL });
+      dispatch(closeModal());
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const closeModal = () => {
-    dispatch({ type: CLOSE_MODAL });
   };
 
   return (
@@ -50,7 +46,7 @@ const UnfollowUserModal = props => {
           </button>
         </li>
         <li>
-          <button onClick={closeModal}> Cancel</button>
+          <button onClick={() => dispatch(closeModal())}> Cancel</button>
         </li>
       </ul>
     </>

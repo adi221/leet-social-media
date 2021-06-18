@@ -7,7 +7,7 @@ import UnfollowUserModal from './UnfollowUserModal';
 import NewMessageModal from './NewMessageModal';
 import AddUserGroupModal from './AddUserGroupModal';
 import SharePostModal from './SharePostModal';
-import { CLOSE_MODAL } from '../../constants/utilConstants';
+import { closeModal } from '../../actions/utilActions';
 import { RESET_CHAT_PARTNERS } from '../../constants/chatConstants';
 import { RESET_POST_RECEIVERS } from '../../constants/postConstants';
 
@@ -27,9 +27,9 @@ const RootModal = () => {
 
   if (!isShow) return null;
 
-  const closeModal = e => {
+  const closeModalHandler = e => {
     if (e.target.classList.contains('overlay')) {
-      dispatch({ type: CLOSE_MODAL });
+      dispatch(closeModal());
       // For NewMessageModal
       dispatch({ type: RESET_CHAT_PARTNERS });
       // For SharePostModal
@@ -40,7 +40,7 @@ const RootModal = () => {
   const SpecificModal = MODAL_COMPONENTS[modalType];
 
   return (
-    <div className='overlay' onClick={closeModal}>
+    <div className='overlay' onClick={closeModalHandler}>
       <div className='modal is-flexed'>
         <SpecificModal {...modalProps} />
       </div>

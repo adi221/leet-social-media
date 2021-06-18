@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { CLOSE_MODAL } from '../../constants/utilConstants';
+import { closeModal } from '../../actions/utilActions';
 import { FollowButton } from '../../components';
 import { POST_DELETE_RESET } from '../../constants/postConstants';
 import { deletePost, getPosts } from '../../actions/postActions';
@@ -13,10 +13,6 @@ const SinglePostModal = props => {
   const { userInfo } = useSelector(state => state.userLogin);
   const { success: successDelete } = useSelector(state => state.postDelete);
 
-  const closeModal = () => {
-    dispatch({ type: CLOSE_MODAL });
-  };
-
   const deleteHandler = () => {
     dispatch(deletePost(postId, userId));
   };
@@ -24,7 +20,7 @@ const SinglePostModal = props => {
   useEffect(() => {
     if (successDelete) {
       dispatch(getPosts());
-      dispatch({ type: CLOSE_MODAL });
+      dispatch(closeModal());
       dispatch({ type: POST_DELETE_RESET });
     }
   }, [successDelete, dispatch]);
@@ -57,7 +53,7 @@ const SinglePostModal = props => {
         </Link>
       </li>
       <li>
-        <button onClick={closeModal}> Cancel</button>
+        <button onClick={() => dispatch(closeModal())}> Cancel</button>
       </li>
     </ul>
   );

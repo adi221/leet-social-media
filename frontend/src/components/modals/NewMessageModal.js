@@ -6,7 +6,7 @@ import { UsersList } from '../../components';
 import SingleUserList from '../usersList/SingleUserList';
 import LoaderSvg from '../loaders/LoaderSvg';
 import UsersListSkeleton from '../loaders/UsersListSkeleton';
-import { CLOSE_MODAL } from '../../constants/utilConstants';
+import { closeModal } from '../../actions/utilActions';
 import { RESET_CHAT_REDIRECT } from '../../constants/chatConstants';
 import { createChat } from '../../actions/chatActions';
 import { getUserSearch } from '../../actions/userActions';
@@ -33,7 +33,7 @@ const NewMessageModal = props => {
   useEffect(() => {
     if (redirectChatId) {
       history.push(`/direct/${redirectChatId}`);
-      dispatch({ type: CLOSE_MODAL });
+      dispatch(closeModal());
       dispatch({ type: RESET_CHAT_REDIRECT });
     }
   }, [redirectChatId, dispatch, history]);
@@ -45,7 +45,7 @@ const NewMessageModal = props => {
   return (
     <>
       <div className='modal__new-message--title'>
-        <button onClick={() => dispatch({ type: CLOSE_MODAL })}>
+        <button onClick={() => dispatch(closeModal())}>
           <GrClose />
         </button>
         <h3>New Message</h3>

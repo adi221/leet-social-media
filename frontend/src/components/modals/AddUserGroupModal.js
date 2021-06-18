@@ -5,9 +5,10 @@ import { UsersList } from '../../components';
 import SingleUserList from '../usersList/SingleUserList';
 import LoaderSvg from '../loaders/LoaderSvg';
 import UsersListSkeleton from '../loaders/UsersListSkeleton';
-import { CLOSE_MODAL } from '../../constants/utilConstants';
+import { closeModal } from '../../actions/utilActions';
 import { addUsersToGroup } from '../../actions/chatActions';
 import { getUserSearch } from '../../actions/userActions';
+import { ADD_USER_GROUP_RESET } from '../../constants/chatConstants';
 
 const AddUserGroupModal = props => {
   const { chatId } = props;
@@ -27,34 +28,35 @@ const AddUserGroupModal = props => {
     dispatch(getUserSearch(query));
   }, [query, dispatch]);
 
-  // redirecting after creating new chat
+  // close modal after user added and show alert 'Successfully added'
   useEffect(() => {
     if (addUserSuccess) {
-      dispatch({ type: CLOSE_MODAL });
+      dispatch(closeModal());
+      dispatch({ type: ADD_USER_GROUP_RESET });
     }
   }, [dispatch, addUserSuccess]);
 
-  const createNewChatHandler = () => {
+  const addNewUsersHandler = () => {
     dispatch(addUsersToGroup(chatId));
   };
 
   return (
     <>
-      <div className='modal__new-message--title'>
-        <button onClick={() => dispatch({ type: CLOSE_MODAL })}>
+      <div className='modal__add-user-group--title'>
+        <button onClick={() => dispatch(closeModal())}>
           <GrClose />
         </button>
         <h3>Add User</h3>
         <button
-          onClick={createNewChatHandler}
-          className='modal__new-message--title-next'
+          onClick={addNewUsersHandler}
+          className='modal__add-user-group--title-next'
           disabled={partnerUsersId && partnerUsersId.length === 0}
         >
           Next
           {loading && <LoaderSvg />}
         </button>
       </div>
-      <div className='modal__new-message--to'>
+      <div className='modal__add-user-group--to'>
         <p className='bold'>To:</p>
         <input
           type='text'

@@ -11,7 +11,7 @@ import {
 } from 'react-icons/fa';
 import { USER_STATS_BOOKMARKS } from '../../constants/userConstants';
 import { SINGLE_POST_LIKE_SUCCESS } from '../../constants/singlePostConstants';
-import { SHOW_MODAL } from '../../constants/utilConstants';
+import { openModal } from '../../actions/utilActions';
 
 const SinglePostBtns = ({ uniqueId, likes, commentRef, dispatch }) => {
   const [isLiked, setIsLiked] = useState(false);
@@ -73,19 +73,15 @@ const SinglePostBtns = ({ uniqueId, likes, commentRef, dispatch }) => {
   };
 
   const sharePostHandler = () => {
-    dispatchRedux({
-      type: SHOW_MODAL,
-      payload: {
-        modalType: 'SHARE_POST',
-        modalProps: {
-          postId: uniqueId,
-          userOrPostId: userInfo._id,
-          listType: 'following',
-          users: true,
-          checkButton: true,
-        },
-      },
-    });
+    dispatchRedux(
+      openModal('SHARE_POST', {
+        postId: uniqueId,
+        userOrPostId: userInfo._id,
+        listType: 'following',
+        users: true,
+        checkButton: true,
+      })
+    );
   };
 
   return (

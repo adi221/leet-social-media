@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { SHOW_MODAL } from '../../constants/utilConstants';
+import { openModal } from '../../actions/utilActions';
 import { USER_STATS_FOLLOWING } from '../../constants/userConstants';
 import LoaderSvg from '../loaders/LoaderSvg';
 
@@ -25,20 +25,10 @@ const FollowButton = ({
   }, [following, userId]);
 
   const unfollowModalHandler = () => {
-    dispatch({
-      type: SHOW_MODAL,
-      payload: {
-        modalType: 'UNFOLLOW_USER',
-        modalProps: {
-          userId,
-          username,
-          profileImage,
-        },
-      },
-    });
+    dispatch(openModal('UNFOLLOW_USER', { userId, username, profileImage }));
   };
 
-  const followUser = () => async (dispatch, getState) => {
+  const followUser = async () => {
     try {
       setLoading(true);
       const config = {
@@ -63,7 +53,7 @@ const FollowButton = ({
   };
 
   const followHandler = () => {
-    isFollowing ? unfollowModalHandler() : dispatch(followUser(userId));
+    isFollowing ? unfollowModalHandler() : followUser(userId);
   };
 
   const colorStyle = colored

@@ -21,6 +21,7 @@ import {
   ADD_USER_GROUP_REQUEST,
   ADD_USER_GROUP_SUCCESS,
   ADD_USER_GROUP_FAIL,
+  ADD_USER_GROUP_RESET,
   ADD_NEW_GROUP_MEMBER,
   REMOVE_CHAT_FROM_LIST,
 } from '../constants/chatConstants';
@@ -48,6 +49,8 @@ export const createChatReducer = (
       return { ...state, loading: false, addUserSuccess: true };
     case ADD_USER_GROUP_FAIL:
       return { ...state, loading: false, error: action.payload };
+    case ADD_USER_GROUP_RESET:
+      return { ...state, addUserSuccess: false };
     default:
       return state;
   }

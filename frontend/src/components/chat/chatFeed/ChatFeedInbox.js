@@ -1,26 +1,21 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { IoPaperPlaneOutline } from 'react-icons/io5';
-import { SHOW_MODAL } from '../../../constants/utilConstants';
+import { openModal } from '../../../actions/utilActions';
 
 const ChatFeedInbox = () => {
   const { userInfo } = useSelector(state => state.userLogin);
   const dispatch = useDispatch();
 
   const openMessageModalHandler = () => {
-    dispatch({
-      type: SHOW_MODAL,
-      payload: {
-        modalType: 'NEW_MESSAGE',
-        modalProps: {
-          userOrPostId: userInfo._id,
-          listType: 'following',
-          countUsers: 3,
-          users: true,
-          checkButton: true,
-        },
-      },
-    });
+    dispatch(
+      openModal('NEW_MESSAGE', {
+        userOrPostId: userInfo._id,
+        listType: 'following',
+        users: true,
+        checkButton: true,
+      })
+    );
   };
 
   return (

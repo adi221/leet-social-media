@@ -1,15 +1,12 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { SHOW_MODAL } from '../../constants/utilConstants';
+import { openModal } from '../../actions/utilActions';
 
 const EditImageProfile = ({ image, username }) => {
   const dispatch = useDispatch();
 
   const openModalHandler = () => {
-    dispatch({
-      type: SHOW_MODAL,
-      payload: { modalType: 'EDIT_PROFILE_IMAGE', modalProps: {} },
-    });
+    dispatch(openModal('EDIT_PROFILE_IMAGE'));
   };
 
   return (

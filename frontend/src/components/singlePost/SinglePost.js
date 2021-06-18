@@ -12,7 +12,7 @@ import {
   SinglePostBtns,
   SinglePostSkeleton,
 } from '..';
-import { SHOW_MODAL } from '../../constants/utilConstants';
+import { openModal } from '../../actions/utilActions';
 import {
   SINGLE_POST_LOADING,
   SINGLE_POST_ERROR,
@@ -56,27 +56,19 @@ const SinglePost = ({ uniqueId, simple = false }) => {
   const { profileImage, username } = state.author;
 
   const openLikesModal = () => {
-    dispatchRedux({
-      type: SHOW_MODAL,
-      payload: {
-        modalType: 'USER_LIST',
-        modalProps: {
-          userOrPostId: postId,
-          listType: 'likes',
-          users: false,
-        },
-      },
-    });
+    dispatchRedux(
+      openModal('USER_LIST', {
+        userOrPostId: postId,
+        listType: 'likes',
+        users: false,
+      })
+    );
   };
 
   const openModalHandler = () => {
-    dispatchRedux({
-      type: SHOW_MODAL,
-      payload: {
-        modalType: 'SINGLE_POST',
-        modalProps: { username, postId, userId, profileImage },
-      },
-    });
+    dispatchRedux(
+      openModal('SINGLE_POST', { username, postId, userId, profileImage })
+    );
   };
 
   if (state.loading) return <SinglePostSkeleton simple={simple} />;

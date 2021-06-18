@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FollowButton } from '../../components';
 import { useSelector, useDispatch } from 'react-redux';
-import { SHOW_MODAL } from '../../constants/utilConstants';
+import { openModal } from '../../actions/utilActions';
 
 const ProfileHeader = ({ user }) => {
   const {
@@ -19,17 +19,9 @@ const ProfileHeader = ({ user }) => {
   const { userInfo } = useSelector(state => state.userLogin);
 
   const openFollowingModal = listType => {
-    dispatch({
-      type: SHOW_MODAL,
-      payload: {
-        modalType: 'USER_LIST',
-        modalProps: {
-          userOrPostId: userId,
-          listType,
-          users: true,
-        },
-      },
-    });
+    dispatch(
+      openModal('USER_LIST', { userOrPostId: userId, listType, users: true })
+    );
   };
 
   const renderFollowDiv = () => {

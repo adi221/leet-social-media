@@ -1,18 +1,15 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { GrClose } from 'react-icons/gr';
-import { CLOSE_MODAL } from '../../constants/utilConstants';
+import { closeModal } from '../../actions/utilActions';
 import { updateUserProfile } from '../../actions/userActions';
 
+// If user deletes current photo
 const defaultImage =
   'https://www.irishrsa.ie/wp-content/uploads/2017/03/default-avatar.png';
 
 const EditImageModal = () => {
   const dispatch = useDispatch();
-
-  const closeModal = () => {
-    dispatch({ type: CLOSE_MODAL });
-  };
 
   const removeHandler = () => {
     dispatch(updateUserProfile({ image: defaultImage }));
@@ -36,7 +33,7 @@ const EditImageModal = () => {
 
     getBase64(e.target.files[0])
       .then(result => dispatch(updateUserProfile({ image: result })))
-      .then(() => closeModal())
+      .then(() => dispatch(closeModal()))
       .catch(err => console.log(err));
   };
 
@@ -44,7 +41,7 @@ const EditImageModal = () => {
     <>
       <div className='modal__title'>
         <h2>Change Profile Photo</h2>
-        <button onClick={() => dispatch({ type: CLOSE_MODAL })}>
+        <button onClick={() => dispatch(closeModal())}>
           <GrClose />
         </button>
       </div>
@@ -66,7 +63,7 @@ const EditImageModal = () => {
           </button>
         </li>
         <li>
-          <button onClick={closeModal}> Cancel</button>
+          <button onClick={() => dispatch(closeModal())}> Cancel</button>
         </li>
       </ul>
     </>
