@@ -16,6 +16,8 @@ import {
   POSTS_EXPLORE_FAIL,
   CHANGE_POST_RECEIVERS,
   RESET_POST_RECEIVERS,
+  SHARE_POST_SUCCESS,
+  SHARE_POST_RESET,
 } from '../constants/postConstants';
 
 export const postsGetReducer = (
@@ -97,6 +99,10 @@ export const sharePostReducer = (state = { postReceiversId: [] }, action) => {
       return { ...state, postReceiversId: action.payload };
     case RESET_POST_RECEIVERS:
       return { ...state, postReceiversId: [] };
+    case SHARE_POST_SUCCESS:
+      return { ...state, postReceiversId: [], success: true };
+    case SHARE_POST_RESET:
+      return { ...state, success: false };
     default:
       return state;
   }

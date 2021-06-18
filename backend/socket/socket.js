@@ -2,15 +2,13 @@ import jwt from 'jsonwebtoken';
 import colors from 'colors';
 import Chat from '../models/chatModel.js';
 import ChatNotification from '../models/chatNotificationModel.js';
-import { getSingleChatForList } from '../controllers/chatControllers.js';
+import {
+  getSingleChatForList,
+  doesChatAlreadyExist,
+} from '../controllers/chatControllers.js';
 
 // to check online / offline users
 const onlineUsersId = {};
-
-// getSingleChatForList({
-//   chatId: '60c776c5604a574b14005aa9',
-//   currentUserId: '60b38846501fe4296829b896',
-// });
 
 const socketServer = socketio => {
   // Authenticate before establishing a socket connection
@@ -48,7 +46,7 @@ const socketServer = socketio => {
 
           if (!chat) throw new Error('Could not find chat');
 
-          const newMessage = { fromUser, message };
+          const newMessage = { fromUser, message, messageType: 'text' };
 
           chat.messages.push(newMessage);
           await chat.save();
@@ -127,16 +125,66 @@ const socketServer = socketio => {
       socket.on('sharePostMessage', async msg => {
         const { postId, postReceiversId, fromUser } = msg;
 
-        const newMessage = { fromUser, post: postId, messageType: 'post' };
+        const newMessage = {
+          fromUser,
+          post: postId,
+          messageType: 'post',
+          message: '',
+        };
 
-        postReceiversId.forEach(receiver => {
+        for (const receiver of postReceiversId) {
+          let chatId;
           // Check if there is an existing chat
+          const chatExists = await doesChatAlreadyExist(fromUser, receiver);
           // yes ? so add new message to current chat
-          // no ? open new chat and add the message
-        });
+          if (chatExists) {
+            chatId = chatExists;
+            const chat = await Chat.findById(chatId);
+            chat.messages.push(newMessage);
+            await chat.save();
+          } else {
+            // no ? open new chat and add the message
+            const chatUsers = [{ user: fromUser }, { user: receiver }];
+            const chat = new Chat({
+              chatUsers,
+              messages: [newMessage],
+              chatType: 'dual',
+            });
+            await chat.save();
+            chatId = chat._id.toString();
+          }
+
+          // Add the message in socket for online users
+          socketio.sockets.in(receiver.toString()).emit('receivedMessage', {
+            ...newMessage,
+            chatId,
+            createdAt: new Date(),
+          });
+
+          // Send chatNotification
+          const userChatNotif = await ChatNotification.findOne({
+            user: receiver,
+          });
+
+          if (userChatNotif) {
+            const doesNotificationExist = userChatNotif.unreadChats.some(
+              chat => chat.chat.toString() === chatId
+            );
+            if (doesNotificationExist) return;
+
+            userChatNotif.unreadChats.push({ chat: chatId });
+            await userChatNotif.save();
+          } else {
+            const newChatNotif = new ChatNotification({
+              user: receiver,
+              unreadChats: [{ chat: chatId }],
+            });
+            await newChatNotif.save();
+          }
+        }
 
         // Send alert for the fromUser by sending success
-        // Send chatNotification and add the message in socket for online users
+        socketio.sockets.in(fromUser.toString()).emit('successPostMessage', {});
       });
 
       socket.on('disconnect', () => {

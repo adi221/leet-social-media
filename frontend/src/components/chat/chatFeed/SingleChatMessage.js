@@ -1,10 +1,13 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import PostMessageCard from './PostMessageCard';
 
 const SingleChatMessage = ({
   fromUser,
   message,
+  messageType,
+  post: postId,
   index,
   messages,
   partners,
@@ -91,7 +94,11 @@ const SingleChatMessage = ({
     >
       {addThumbnailOrNot() && determineThumbnailDetails()}
       {addUsernameOrNot() && determineUsernameDetails()}
-      <p className='chat-feed__messages--message-content'>{message}</p>
+      {messageType === 'post' ? (
+        <PostMessageCard postId={postId} />
+      ) : (
+        <p className='chat-feed__messages--message-content'>{message}</p>
+      )}
     </div>
   );
 };

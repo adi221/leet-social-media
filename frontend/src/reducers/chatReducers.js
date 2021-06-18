@@ -66,11 +66,12 @@ export const chatListReducer = (state = { chatList: [] }, action) => {
       return { loading: false, error: action.payload };
     case UPDATE_LAST_MESSAGE:
       const updatedLastMessage = action.payload;
-      const { fromUser, message, createdAt, chatId } = updatedLastMessage;
+      const { fromUser, message, createdAt, chatId, messageType, post } =
+        updatedLastMessage;
       let updatedChat = state.chatList.find(chat => chat._id === chatId);
       updatedChat = {
         ...updatedChat,
-        lastMessage: { fromUser, message, createdAt },
+        lastMessage: { fromUser, message, createdAt, messageType, post },
       };
 
       let updatedChatList = state.chatList.filter(chat => chat._id !== chatId);
@@ -124,14 +125,20 @@ export const chatFeedReducer = (state = chatFeedInitialState, action) => {
         hasMoreMessages: messages.length === 20,
       };
     case RECEIVED_MESSAGE:
-      const { fromUser, message, chatId } = action.payload;
+      const { fromUser, message, chatId, messageType, post } = action.payload;
       // if chatId doesnt equal current chatId shown to user don't add new message
       if (chatId === state.currentChatId) {
         return {
           ...state,
           messages: [
             ...state.messages,
-            { _id: new Date().toString(), fromUser, message },
+            {
+              _id: new Date().toString(),
+              fromUser,
+              message,
+              messageType,
+              post,
+            },
           ],
         };
       }
@@ -160,7 +167,7 @@ export const chatFeedReducer = (state = chatFeedInitialState, action) => {
     case GET_ADDITIONAL_MESSAGES_SUCCESS:
       return {
         ...state,
-        messages: [...state.messages, ...action.payload],
+        messages: [...action.payload, ...state.messages],
         hasMoreMessages: action.payload.length === 20,
       };
     case GET_ADDITIONAL_MESSAGES_FAIL:

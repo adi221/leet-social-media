@@ -32,3 +32,4 @@
 - Notifications for chat
 - See when user is typing
 - Explore page
+- Sharing posts with other users

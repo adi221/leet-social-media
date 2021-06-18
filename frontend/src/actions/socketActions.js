@@ -13,6 +13,7 @@ import {
   addNewGroupMembers,
   removeChatFromList,
 } from '../actions/chatActions';
+import { sharePostSuccess } from '../actions/postActions';
 
 // connect to socket
 const connect = token => {
@@ -80,6 +81,11 @@ export const connectSocket = () => (dispatch, getState) => {
 
   socket.on('hideChatFromList', chatId => {
     dispatch(removeChatFromList(chatId));
+  });
+
+  socket.on('successPostMessage', () => {
+    dispatch(sharePostSuccess());
+    // Add alert
   });
 };
 

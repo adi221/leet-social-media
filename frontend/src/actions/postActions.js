@@ -13,6 +13,7 @@ import {
   POSTS_EXPLORE_SUCCESS,
   POSTS_EXPLORE_FAIL,
   CHANGE_POST_RECEIVERS,
+  SHARE_POST_SUCCESS,
 } from '../constants/postConstants';
 
 export const getPosts = () => async dispatch => {
@@ -113,3 +114,5 @@ export const changeSharePostReceivers = (id, type) => (dispatch, getState) => {
 
   dispatch({ type: CHANGE_POST_RECEIVERS, payload: newPostReceiversId });
 };
+
+export const sharePostSuccess = () => ({ type: SHARE_POST_SUCCESS });

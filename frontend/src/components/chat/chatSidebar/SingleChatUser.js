@@ -37,9 +37,38 @@ const SingleChatUser = ({ partners, _id: chatId, lastMessage }) => {
     return lastMessageOwner ? lastMessageOwner.username : null;
   };
 
+  const renderPostMessage = () => {
+    if (partners.length === 1) {
+      if (lastMessage.fromUser === userInfo._id) {
+        return (
+          <p className='chat-sidebar__list--item-last'>
+            You sent a post · {formatDateDistance(lastMessage.createdAt)}
+          </p>
+        );
+      } else {
+        return (
+          <p className='chat-sidebar__list--item-last'>
+            Sent a post · {formatDateDistance(lastMessage.createdAt)}
+          </p>
+        );
+      }
+    } else {
+      return (
+        <p className='chat-sidebar__list--item-last'>
+          {determineLastMessageOwner(lastMessage.fromUser)} sent a post ·{' '}
+          {formatDateDistance(lastMessage.createdAt)}
+        </p>
+      );
+    }
+  };
+
   const renderLastMessage = () => {
     if (!lastMessage)
       return <p className='chat-sidebar__list--item-last'>No messages yet</p>;
+
+    if (lastMessage.messageType && lastMessage.messageType === 'post') {
+      return renderPostMessage();
+    }
 
     if (partners.length === 1) {
       return (

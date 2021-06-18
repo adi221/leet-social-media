@@ -10,6 +10,45 @@ import {
   hideChatFromList,
 } from '../handlers/socketHandlers.js';
 
+export const doesChatAlreadyExist = async (fromUserId, toUserId) => {
+  const commonChat = await Chat.aggregate([
+    {
+      $match: {
+        $and: [
+          { chatType: 'dual' },
+          {
+            chatUsers: {
+              $elemMatch: {
+                user: ObjectId(fromUserId),
+              },
+            },
+          },
+          {
+            chatUsers: {
+              $elemMatch: {
+                user: ObjectId(toUserId),
+              },
+            },
+          },
+        ],
+      },
+    },
+  ]);
+
+  if (commonChat.length > 0) {
+    const chatId = commonChat[0]._id.toString();
+    // show chat for sender if is hidden
+    await Chat.updateOne(
+      { _id: chatId, 'chatUsers.user': fromUserId },
+      { $set: { 'chatUsers.$.showChat': true } }
+    );
+
+    return chatId;
+  } else {
+    return false;
+  }
+};
+
 // @desc Create chat
 // @route POST /api/chats
 // @access User

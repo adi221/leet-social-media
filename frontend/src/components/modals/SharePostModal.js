@@ -3,30 +3,50 @@ import { useDispatch, useSelector } from 'react-redux';
 import { GrClose } from 'react-icons/gr';
 import { UsersList } from '../../components';
 import SingleUserList from '../usersList/SingleUserList';
-import LoaderSvg from '../loaders/LoaderSvg';
 import UsersListSkeleton from '../loaders/UsersListSkeleton';
 import { closeModal } from '../../actions/utilActions';
-import { RESET_POST_RECEIVERS } from '../../constants/postConstants';
+import {
+  RESET_POST_RECEIVERS,
+  SHARE_POST_RESET,
+} from '../../constants/postConstants';
 import { getUserSearch } from '../../actions/userActions';
 
 const SharePostModal = props => {
   const [query, setQuery] = useState('');
 
   const dispatch = useDispatch();
-  const { postReceiversId, loading, success } = useSelector(
-    state => state.sharePost
-  );
+  const { socket } = useSelector(state => state.socket);
+  const { userInfo } = useSelector(state => state.userLogin);
+  const { postReceiversId, success } = useSelector(state => state.sharePost);
   const { users, loading: searchLoading } = useSelector(
     state => state.userSearch
   );
 
   // sharePost success - show alert and close modal and reset success
+  useEffect(() => {
+    if (success) {
+      dispatch(closeModal());
+      dispatch({ type: SHARE_POST_RESET });
+    }
+  }, [success, dispatch]);
 
   // get users from search
   useEffect(() => {
     if (!query) return;
     dispatch(getUserSearch(query));
   }, [query, dispatch]);
+
+  const sharePostHandler = () => {
+    if (postReceiversId.length === 0) return;
+
+    const msg = {
+      fromUser: userInfo._id,
+      postId: props.postId,
+      postReceiversId,
+    };
+
+    socket.emit('sharePostMessage', msg);
+  };
 
   return (
     <div className='modal__share-post'>
@@ -77,6 +97,7 @@ const SharePostModal = props => {
       <button
         className='modal__share-post-btn  btn is-primary'
         disabled={postReceiversId.length === 0}
+        onClick={sharePostHandler}
       >
         Send
       </button>

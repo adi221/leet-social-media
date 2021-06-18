@@ -13,13 +13,12 @@ const messageSchema = mongoose.Schema(
     },
     post: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
       ref: 'Post',
     },
     messageType: {
       type: String,
-      default: 'message',
-      enum: ['message', 'post'],
+      default: 'text',
+      enum: ['text', 'post'],
     },
   },
   { timestamps: true }
