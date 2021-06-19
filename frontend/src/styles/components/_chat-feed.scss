@@ -99,11 +99,13 @@
       &-post {
         width: 16rem;
         height: max-content;
-        background-color: #e0f1ff;
+        background-color: #f0f8ff;
         border-radius: 20px;
-        margin-bottom: 10px;
+
         &-header {
-          padding: 0.5rem 0.8rem;
+          border-top-left-radius: 20px;
+          border-top-right-radius: 20px;
+          padding: 1.5rem 1rem;
           justify-content: stretch;
           width: 100%;
           height: 2.4rem;
@@ -122,8 +124,10 @@
           cursor: pointer;
         }
         &-body {
-          padding: 0.5rem 0.8rem;
+          padding: 0.5rem 0.8rem 0.2rem;
+          margin-bottom: 1rem;
           min-height: 2.4rem;
+          background: #f0f8ff;
 
           p {
             word-wrap: break-word;
@@ -136,7 +140,7 @@
       &-owner {
         align-self: flex-end;
         border-radius: 20px;
-        background-color: #e9e9e9;
+        background-color: #e4e7eb;
       }
 
       &-other-person {

@@ -6,6 +6,7 @@ import { ErrorPage } from '../pages';
 import { Loader } from '../components';
 import { POST_CREATE_RESET } from '../constants/postConstants';
 import { createPost } from '../actions/postActions';
+import axios from 'axios';
 
 const UploadPage = () => {
   const [description, setDescription] = useState('');
@@ -13,6 +14,7 @@ const UploadPage = () => {
   const [file, setFile] = useState('');
   const [filename, setFilename] = useState('Choose file..');
   const [base64, setBase64] = useState('');
+  const [image, setImage] = useState('');
 
   const history = useHistory();
 
@@ -53,6 +55,30 @@ const UploadPage = () => {
         setBase64(result);
       })
       .catch(err => console.log(err));
+  };
+
+  const uploadFileHandler = async e => {
+    console.log(e.target.files[0]);
+    setFile(e.target.files[0]);
+    setFilename(e.target.files[0].name);
+
+    const file = e.target.files[0];
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      };
+
+      const { data } = await axios.post('/api/uploads', formData, config);
+      setImage(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleDelete = i => {

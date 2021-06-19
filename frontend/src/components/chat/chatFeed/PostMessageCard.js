@@ -20,8 +20,9 @@ const PostMessageCard = ({ postId }) => {
   };
 
   useEffect(() => {
+    if (Object.keys(post).length > 0) return;
     getPostDetails(postId);
-  }, [postId]);
+  }, [postId, post]);
 
   const { author, image, description } = post;
 

@@ -170,7 +170,7 @@ const socketServer = socketio => {
             const doesNotificationExist = userChatNotif.unreadChats.some(
               chat => chat.chat.toString() === chatId
             );
-            if (doesNotificationExist) return;
+            if (doesNotificationExist) continue;
 
             userChatNotif.unreadChats.push({ chat: chatId });
             await userChatNotif.save();
@@ -182,7 +182,7 @@ const socketServer = socketio => {
             await newChatNotif.save();
           }
         }
-        console.log('HEY');
+
         // Send alert for the fromUser by sending success
         socketio.sockets
           .in(fromUser.toString())
