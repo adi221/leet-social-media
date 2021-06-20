@@ -12,7 +12,6 @@ const UploadPostModal = ({ file }) => {
   const [activeMode, setActiveMode] = useState('preview');
   const [image, setImage] = useState('');
   const [description, setDescription] = useState('');
-  const [tags, setTags] = useState([]);
 
   const dispatch = useDispatch();
   const { success, loading, error } = useSelector(state => state.postCreate);
@@ -51,11 +50,8 @@ const UploadPostModal = ({ file }) => {
 
   const uploadPostHandler = () => {
     if (!image || !description) return;
-    const updatedTags = tags.map(tag => {
-      const { text } = tag;
-      return text;
-    });
-    dispatch(createPost(image, updatedTags, description));
+
+    dispatch(createPost(image, description));
   };
 
   return (

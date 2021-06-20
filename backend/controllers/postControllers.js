@@ -4,6 +4,7 @@ import User from '../models/userModel.js';
 import Notification from '../models/notificationModel.js';
 import { sendNotification, sendNewPost } from '../handlers/socketHandlers.js';
 import { resizeImage } from '../handlers/imageResizeHandlers.js';
+import { findHashtags } from '../utils/hashtags.js';
 import mongoose from 'mongoose';
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -19,16 +20,18 @@ const getPosts = asyncHandler(async (req, res) => {
 // @route POST /api/posts
 // @access User
 const createPost = asyncHandler(async (req, res) => {
-  const { file, tags, description } = req.body;
+  const { file, description } = req.body;
   const { _id, username } = req.user;
 
   const user = await User.findById(_id);
+
+  const hashtags = findHashtags(description);
 
   const post = new Post({
     user: _id,
     username,
     description,
-    tags,
+    tags: hashtags,
     image: file,
     likes: [],
     comments: [],
