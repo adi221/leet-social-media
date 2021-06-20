@@ -3,6 +3,7 @@ import {
   POSTS_GET_SUCCESS,
   POSTS_GET_FAIL,
   POSTS_ADD_LOADED,
+  ADD_NEW_POST,
   POST_CREATE_REQUEST,
   POST_CREATE_SUCCESS,
   POST_CREATE_FAIL,
@@ -44,6 +45,11 @@ export const postsGetReducer = (
       return {
         ...state,
         loadedPosts: [...state.loadedPosts, ...newLoadedPosts],
+      };
+    case ADD_NEW_POST:
+      return {
+        ...state,
+        loadedPosts: [{ _id: action.payload }, ...state.loadedPosts],
       };
     default:
       return state;

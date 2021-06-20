@@ -6,6 +6,7 @@ import { FaSignOutAlt } from 'react-icons/fa';
 import { SearchBar, NotificationButton } from '../../components';
 import ChatButton from './ChatButton';
 import ExploreButton from './ExploreButton';
+import UploadButton from './UploadButton';
 import logo from '../../assets/leet-logo.png';
 import useComponentVisible from '../../hooks/useComponentVisible';
 import { logout } from '../../actions/userActions';
@@ -38,9 +39,7 @@ const Navbar = () => {
         <div>
           {userInfo ? (
             <div className='is-flexed'>
-              <Link className='button is-primary' to='/upload'>
-                Upload
-              </Link>
+              <UploadButton />
               <ChatButton />
               <ExploreButton />
               <NotificationButton />

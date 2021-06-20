@@ -13,7 +13,7 @@ import {
   addNewGroupMembers,
   removeChatFromList,
 } from '../actions/chatActions';
-import { sharePostSuccess } from '../actions/postActions';
+import { sharePostSuccess, addNewPost } from '../actions/postActions';
 
 // connect to socket
 const connect = token => {
@@ -33,6 +33,10 @@ export const connectSocket = () => (dispatch, getState) => {
 
   socket.on('newNotification', data => {
     dispatch(addNotification(data));
+  });
+
+  socket.on('newPost', newPostId => {
+    dispatch(addNewPost(newPostId));
   });
 
   socket.on('newChat', chat => {

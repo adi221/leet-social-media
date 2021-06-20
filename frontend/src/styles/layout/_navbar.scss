@@ -87,5 +87,13 @@
         font-size: 0.8rem;
       }
     }
+
+    &--upload {
+      font-size: 1rem;
+      cursor: pointer;
+      height: 2rem;
+      width: 1.8rem;
+      color: #000;
+    }
   }
 }

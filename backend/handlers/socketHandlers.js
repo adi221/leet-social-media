@@ -24,3 +24,8 @@ export const hideChatFromList = (req, chatId, receiver) => {
   const socketio = req.app.get('socketio');
   socketio.sockets.in(receiver.toString()).emit('hideChatFromList', chatId);
 };
+
+export const sendNewPost = (req, postId, receiver) => {
+  const socketio = req.app.get('socketio');
+  socketio.sockets.in(receiver.toString()).emit('newPost', postId);
+};

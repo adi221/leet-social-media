@@ -2,7 +2,7 @@ import asyncHandler from 'express-async-handler';
 import Post from '../models/postModel.js';
 import User from '../models/userModel.js';
 import Notification from '../models/notificationModel.js';
-import { sendNotification } from '../handlers/socketHandlers.js';
+import { sendNotification, sendNewPost } from '../handlers/socketHandlers.js';
 import { resizeImage } from '../handlers/imageResizeHandlers.js';
 import mongoose from 'mongoose';
 const ObjectId = mongoose.Types.ObjectId;
@@ -36,8 +36,9 @@ const createPost = asyncHandler(async (req, res) => {
   const createdPost = await post.save();
 
   user.posts.push({ post: post._id });
-
   await user.save();
+
+  sendNewPost(req, post._id, _id);
 
   res.status(201).json(createdPost);
 });

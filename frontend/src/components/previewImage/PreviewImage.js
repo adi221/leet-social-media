@@ -8,12 +8,11 @@ const PreviewImage = ({ onClick, image, likes, comments }) => {
       <img src={image} alt='User post' />
       <div className='preview-image__overlay'>
         <span className='preview-image__content'>
-          {likes > 0 && (
-            <div className='preview-image__icon'>
-              <FaHeart />
-              <span>{likes}</span>
-            </div>
-          )}
+          <div className='preview-image__icon'>
+            <FaHeart />
+            <span>{likes}</span>
+          </div>
+
           <div className='preview-image__icon'>
             <FaComment />
             <span>{comments}</span>
