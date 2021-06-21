@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import { findByTestAttr, storeFactory } from '../../utils/testUtils';
+import { findByTestAttr } from '../../utils/testUtils';
 import HomePage from '../../pages/HomePage';
 
 // https://stackoverflow.com/questions/59346079/using-jest-and-enzyme-to-test-functional-react-components-that-are-using-redux
