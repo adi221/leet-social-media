@@ -40,7 +40,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ## Prerequisites
 
-- MongoDB server and ENV variables
+- MongoDB database and ENV variables
 
 Create an .env file on the root of the project and put
 
