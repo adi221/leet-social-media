@@ -1,0 +1,59 @@
+.single-message {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  min-height: 4rem;
+  padding: 0.5rem 0;
+  position: relative;
+
+  img {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 0.7rem;
+  }
+
+  &__details {
+    display: flex;
+    justify-content: stretch;
+    flex-direction: column;
+
+    &--user {
+      display: block;
+      justify-content: stretch;
+
+      a {
+        margin-right: 0.5rem;
+      }
+
+      p {
+        word-wrap: break-word;
+        word-break: break-word;
+        text-align: left;
+      }
+    }
+
+    &--info {
+      display: flex;
+      margin-top: 0.5rem;
+
+      p {
+        font-size: 0.8rem;
+        font-weight: bold;
+        color: $clr-grey-3;
+        margin-right: 0.6rem;
+      }
+    }
+  }
+
+  &__like {
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+}

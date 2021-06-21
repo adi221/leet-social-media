@@ -30,6 +30,7 @@ const SinglePost = ({ uniqueId, simple = false }) => {
     try {
       dispatch({ type: SINGLE_POST_LOADING });
       const { data } = await axios.get(`/api/posts/${id}`);
+      console.log(data);
       dispatch({ type: SINGLE_POST_GET_SUCCESS, payload: data });
     } catch (error) {
       dispatch({
@@ -50,10 +51,13 @@ const SinglePost = ({ uniqueId, simple = false }) => {
     likes,
     comments,
     createdAt,
+    commentCount,
     user: userId,
     _id: postId,
   } = state.post;
   const { profileImage, username } = state.author;
+
+  console.log(state);
 
   const openLikesModal = () => {
     dispatchRedux(
@@ -128,6 +132,7 @@ const SinglePost = ({ uniqueId, simple = false }) => {
           simple={simple}
           username={username}
           postId={postId}
+          commentCount={commentCount}
         />
         <div className='single-post__content--created-at'>
           {moment(createdAt).fromNow()}

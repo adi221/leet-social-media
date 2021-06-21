@@ -1,14 +1,29 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import { Provider } from 'react-redux';
+import { MemoryRouter } from 'react-router-dom';
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
 import { findByTestAttr, storeFactory } from '../../utils/testUtils';
 import HomePage from '../../pages/HomePage';
 
-const setup = (initialState = {}) => {
-  const store = storeFactory({ postsGet: { ...initialState } });
-  const wrapper = shallow(
+// https://stackoverflow.com/questions/59346079/using-jest-and-enzyme-to-test-functional-react-components-that-are-using-redux
+// https://stackoverflow.com/questions/67633359/how-to-mock-an-async-action-creator-with-jest
+
+const mockStore = configureMockStore([thunk]);
+
+const setup = () => {
+  const store = mockStore({
+    postsGet: { loading: false, posts: [{ _id: '1' }], loadedPosts: [] },
+    userLogin: { userInfo: { _id: '1', username: '11', profileImage: '' } },
+    userSuggestions: { loading: false, error: false, suggestions: [] },
+  });
+
+  const wrapper = mount(
     <Provider store={store}>
-      <HomePage />
+      <MemoryRouter>
+        <HomePage />
+      </MemoryRouter>
     </Provider>
   );
   return wrapper;
@@ -16,17 +31,8 @@ const setup = (initialState = {}) => {
 
 describe('render HomePage', () => {
   test('should render without error', () => {
-    const initialState = {
-      loading: false,
-      posts: [{ _id: '1' }, { _id: '2' }],
-      loadedPosts: [],
-    };
-    const wrapper = setup(initialState);
-
-    expect(wrapper.length).toBe(1);
-    // console.log(wrapper, 'WE');
-    // const component = findByTestAtrr(wrapper, 'page-home');
-    // // expect(component.length).toBe(1);
-    // expect(component.exists()).toBeTruthy();
+    const wrapper = setup();
+    const homePage = findByTestAttr(wrapper, 'page-home');
+    expect(homePage.length).toBe(1);
   });
 });

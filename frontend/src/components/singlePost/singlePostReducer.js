@@ -25,7 +25,9 @@ export const INITIAL_STATE = {
     comments: [],
     createdAt: '',
     user: '',
+    commentCount: 0,
   },
+  replying: false,
 };
 
 export const singlePostReducer = (state, action) => {

@@ -5,12 +5,8 @@ import cors from 'cors';
 import * as io from 'socket.io';
 import colors from 'colors';
 import connectDB from './config/db.js';
-import userRoutes from './routes/userRoutes.js';
-import postRoutes from './routes/postRoutes.js';
-import notificationRoutes from './routes/notificationRoutes.js';
-import chatRoutes from './routes/chatRoutes.js';
-import uploadRoutes from './routes/uploadRoutes.js';
 import socketServer from './socket/socket.js';
+import apiRouter from './routes/index.js';
 
 dotenv.config();
 connectDB();
@@ -23,12 +19,7 @@ if (process.env.NODE_ENV === 'development') {
 // allows us to accept json data in the body
 app.use(express.json({ limit: '200mb' }));
 app.use(cors());
-
-app.use('/api/users', userRoutes);
-app.use('/api/posts', postRoutes);
-app.use('/api/notifications', notificationRoutes);
-app.use('/api/chats', chatRoutes);
-app.use('/api/uploads', uploadRoutes);
+app.use('/api', apiRouter);
 
 app.get('/', (req, res) => {
   res.send('API is running');

@@ -9,7 +9,6 @@ const messageSchema = mongoose.Schema(
     },
     message: {
       type: String,
-      // required: true,
     },
     post: {
       type: mongoose.Schema.Types.ObjectId,

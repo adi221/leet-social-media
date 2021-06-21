@@ -5,6 +5,7 @@ import Notification from '../models/notificationModel.js';
 import { sendNotification, sendNewPost } from '../handlers/socketHandlers.js';
 import { resizeImage } from '../handlers/imageResizeHandlers.js';
 import { findHashtags } from '../utils/hashtags.js';
+import { getCommentsOfPost } from '../utils/controllerUtils.js';
 import mongoose from 'mongoose';
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -157,8 +158,7 @@ const likePost = asyncHandler(async (req, res) => {
 
     res.status(201).json(post.likes);
   } else {
-    res.status(401);
-    throw new Error('Post not found');
+    res.status(404).json({ success: false, message: 'Post not found' });
   }
 });
 
@@ -167,7 +167,6 @@ const likePost = asyncHandler(async (req, res) => {
 // @access User
 const getPostDetails = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  // const post = await Post.findById(id);
 
   const post = await Post.aggregate([
     { $match: { _id: ObjectId(id) } },
@@ -196,9 +195,11 @@ const getPostDetails = asyncHandler(async (req, res) => {
     },
   ]);
 
+  const postComments = await getCommentsOfPost(id);
+
   if (post) {
     // Aggregate returns an array so destructure
-    res.json(...post);
+    res.send({ ...post[0], ...postComments });
   } else {
     res.status(404).json({ success: false, message: 'Post was not found' });
   }

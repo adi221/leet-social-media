@@ -32,17 +32,17 @@
   }
 
   &__header {
-    padding: 1.6rem 1.2rem;
+    padding: 2rem 1rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid $clr-border-light;
 
     img {
-      width: 40px;
-      height: 40px;
+      width: 2.5rem;
+      height: 2.5rem;
       object-fit: cover;
-      margin-right: 1rem;
+      margin-right: 0.7rem;
       border-radius: 50%;
     }
 
@@ -58,7 +58,7 @@
     padding-top: 0.5rem;
 
     & > * {
-      padding: 0.3rem 2rem;
+      padding: 0.3rem 1rem;
     }
 
     &--comments {
@@ -66,7 +66,7 @@
       overflow-y: auto;
 
       &-link {
-        color: $clr-grey-1;
+        color: $clr-grey-3;
       }
     }
 

@@ -17,11 +17,10 @@ const SinglePostForm = ({ dispatch, uniqueId, commentRef }) => {
         },
       };
       const { data } = await axios.post(
-        `/api/posts/comment/${uniqueId}`,
+        `/api/comments/${uniqueId}`,
         { comment: addedComment },
         config
       );
-
       dispatch({ type: SINGLE_POST_COMMENT_SUCCESS, payload: data });
     } catch (error) {}
     setAddedComment('');

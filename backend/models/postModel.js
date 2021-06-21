@@ -12,13 +12,6 @@ const likeSchema = mongoose.Schema({
   },
 });
 
-const tagSchema = mongoose.Schema({
-  tag: {
-    type: String,
-    required: true,
-  },
-});
-
 const commentSchema = mongoose.Schema(
   {
     user: {
