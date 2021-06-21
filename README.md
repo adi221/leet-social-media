@@ -33,3 +33,40 @@
 - See when user is typing
 - Explore page
 - Sharing posts with other users
+
+# Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+
+## Prerequisites
+
+- MongoDB server and ENV variables
+
+Create an .env file on the root of the project and put
+
+`NODE_ENV=development`
+`PORT=YOUR_PORT`
+`MONGO_URI=YOUR_MONGO_URI`
+`JWT_SECRET=secret123`
+
+## Installing
+
+1. Clone the repo
+
+```
+git clone https://github.com/adi221/leet-social-media.git
+```
+
+2. Run npm install in both root directory and frontend directory
+
+```
+npm install
+```
+
+3. Start the server
+
+```
+npm start
+```
+
+4. Enjoy :)

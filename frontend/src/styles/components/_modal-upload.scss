@@ -46,7 +46,7 @@
     &-desc {
       height: 8rem;
       display: grid;
-      grid-template-columns: 4rem 1fr 8rem;
+      grid-template-columns: 4rem 1fr 9rem;
       align-items: start;
       padding-bottom: 1rem;
       border-bottom: 1px solid $clr-border-light;
@@ -79,7 +79,8 @@
       &-image {
         align-self: center;
         justify-self: center;
-        width: 8rem;
+        width: 9rem;
+        max-height: 9rem;
         object-fit: cover;
         padding: 0.2rem 0.4rem;
       }

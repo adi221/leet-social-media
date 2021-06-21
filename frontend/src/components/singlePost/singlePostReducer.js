@@ -4,6 +4,7 @@ import {
   SINGLE_POST_GET_SUCCESS,
   SINGLE_POST_LIKE_SUCCESS,
   SINGLE_POST_COMMENT_SUCCESS,
+  SINGLE_POST_COMMENT_LIKE_SUCCESS,
 } from '../../constants/singlePostConstants';
 
 const defaultProfileImage =
@@ -52,6 +53,22 @@ export const singlePostReducer = (state, action) => {
         post: {
           ...state.post,
           comments: [...state.post.comments, action.payload],
+          commentCount: state.post.commentCount + 1,
+        },
+      };
+    case SINGLE_POST_COMMENT_LIKE_SUCCESS:
+      const { commentId, type } = action.payload;
+      const newComments = state.post.comments.map(comment => {
+        if (comment._id === commentId) {
+          type === 'del' ? comment.commnetLikes-- : comment.commnetLikes++;
+        }
+        return comment;
+      });
+      return {
+        ...state,
+        post: {
+          ...state.post,
+          comments: newComments,
         },
       };
     default:

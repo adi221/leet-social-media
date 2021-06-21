@@ -13,11 +13,10 @@ export const getCommentsOfPost = async (postId, offset = 0) => {
             { $match: { post: ObjectId(postId) } },
             // sort the newest comments to the top
             { $sort: { createdAt: -1 } },
-            // resort comments to ascending order
-            // exclude ?
-            // { $sort: { createdAt: 1 } },
+            // get 10 last comments and then resort comments to ascending order
             { $skip: Number(offset) },
             { $limit: 10 },
+            { $sort: { createdAt: 1 } },
             // {
             //   $lookup: {
             //     from: 'commentreplies',

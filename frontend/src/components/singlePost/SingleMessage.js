@@ -4,10 +4,18 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import LikeIcon from '../icons/LikeIcon';
 import { formatDateDistance } from '../../helpers/timeHelpers';
+import { SINGLE_POST_COMMENT_LIKE_SUCCESS } from '../../constants/singlePostConstants';
 
 // Check if user likes
 
-const SingleMessage = ({ _id, author, comment, commentLikes, createdAt }) => {
+const SingleMessage = ({
+  _id,
+  author,
+  comment,
+  commentLikes,
+  createdAt,
+  dispatch,
+}) => {
   const [isLiked, setIsLiked] = useState(false);
   const { userInfo } = useSelector(state => state.userLogin);
 
@@ -27,6 +35,17 @@ const SingleMessage = ({ _id, author, comment, commentLikes, createdAt }) => {
       };
       const { data } = await axios.put(`/api/comments/like/${_id}`, {}, config);
       // dispatch new action to singlePostReducer
+      // if (isLiked) {
+      //   dispatch({
+      //     type: SINGLE_POST_COMMENT_LIKE_SUCCESS,
+      //     payload: { commentId: _id, type: 'del' },
+      //   });
+      // } else {
+      //   dispatch({
+      //     type: SINGLE_POST_COMMENT_LIKE_SUCCESS,
+      //     payload: { commentId: _id, type: 'inc' },
+      //   });
+      // }
       setIsLiked(!isLiked);
     } catch (error) {
       console.log(error);

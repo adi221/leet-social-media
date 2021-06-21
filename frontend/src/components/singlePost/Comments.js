@@ -2,7 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import SingleMessage from './SingleMessage';
 
-const Comments = ({ comments, simple, postId, username, commentCount }) => {
+const Comments = ({
+  comments,
+  simple,
+  postId,
+  username,
+  commentCount,
+  dispatch,
+}) => {
   if (simple) {
     if (commentCount === 0) return null;
 

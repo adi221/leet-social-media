@@ -34,7 +34,7 @@ const Navbar = () => {
           <Link to='/'>
             <img src={logo} alt='logo' className='logo' />
           </Link>
-          <SearchBar />
+          {userInfo && <SearchBar />}
         </div>
         <div>
           {userInfo ? (

@@ -133,6 +133,7 @@ const SinglePost = ({ uniqueId, simple = false }) => {
           username={username}
           postId={postId}
           commentCount={commentCount}
+          dispatch={dispatch}
         />
         <div className='single-post__content--created-at'>
           {moment(createdAt).fromNow()}
