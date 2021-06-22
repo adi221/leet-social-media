@@ -6,8 +6,6 @@ import LikeIcon from '../icons/LikeIcon';
 import { formatDateDistance } from '../../helpers/timeHelpers';
 import { SINGLE_POST_COMMENT_LIKE_SUCCESS } from '../../constants/singlePostConstants';
 
-// Check if user likes
-
 const SingleMessage = ({
   _id,
   author,
@@ -15,12 +13,13 @@ const SingleMessage = ({
   commentLikes,
   createdAt,
   dispatch,
+  isDesc = false,
 }) => {
   const [isLiked, setIsLiked] = useState(false);
   const { userInfo } = useSelector(state => state.userLogin);
 
   useEffect(() => {
-    if (commentLikes.some(like => like.user === userInfo._id)) {
+    if (commentLikes && commentLikes.some(like => like.user === userInfo._id)) {
       setIsLiked(true);
     }
   }, [commentLikes, userInfo]);
@@ -33,19 +32,17 @@ const SingleMessage = ({
           Authorization: `Bearer ${userInfo.token}`,
         },
       };
-      const { data } = await axios.put(`/api/comments/like/${_id}`, {}, config);
+      await axios.put(`/api/comments/like/${_id}`, {}, config);
       // dispatch new action to singlePostReducer
-      // if (isLiked) {
-      //   dispatch({
-      //     type: SINGLE_POST_COMMENT_LIKE_SUCCESS,
-      //     payload: { commentId: _id, type: 'del' },
-      //   });
-      // } else {
-      //   dispatch({
-      //     type: SINGLE_POST_COMMENT_LIKE_SUCCESS,
-      //     payload: { commentId: _id, type: 'inc' },
-      //   });
-      // }
+      const delOrIncLikeCount = isLiked ? 'del' : 'add';
+      dispatch({
+        type: SINGLE_POST_COMMENT_LIKE_SUCCESS,
+        payload: {
+          commentId: _id,
+          type: delOrIncLikeCount,
+          userId: userInfo._id,
+        },
+      });
       setIsLiked(!isLiked);
     } catch (error) {
       console.log(error);
@@ -53,7 +50,7 @@ const SingleMessage = ({
   };
 
   return (
-    <div key={_id} className='single-message'>
+    <div className='single-message'>
       <img src={author.profileImage} alt={author.username} />
       <div className='single-message__details'>
         <div className='single-message__details--user'>
@@ -64,15 +61,19 @@ const SingleMessage = ({
         </div>
         <div className='single-message__details--info'>
           <p> {formatDateDistance(createdAt)}</p>
-          {commentLikes.length > 0 && <p>{commentLikes.length} likes</p>}
-          <p>reply</p>
+          {!isDesc && commentLikes.length > 0 && (
+            <p>{commentLikes.length} likes</p>
+          )}
+          {!isDesc && <p>reply</p>}
         </div>
       </div>
-      <LikeIcon
-        isLiked={isLiked}
-        styleClass='single-message__like'
-        onClick={likeCommentHandler}
-      />
+      {!isDesc && (
+        <LikeIcon
+          isLiked={isLiked}
+          styleClass='single-message__like'
+          onClick={likeCommentHandler}
+        />
+      )}
     </div>
   );
 };

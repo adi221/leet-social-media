@@ -9,6 +9,7 @@ import {
   FaBookmark,
   FaRegPaperPlane,
 } from 'react-icons/fa';
+import LikeIcon from '../icons/LikeIcon';
 import { USER_STATS_BOOKMARKS } from '../../constants/userConstants';
 import { SINGLE_POST_LIKE_SUCCESS } from '../../constants/singlePostConstants';
 import { openModal } from '../../actions/utilActions';
@@ -87,15 +88,11 @@ const SinglePostBtns = ({ uniqueId, likes, commentRef, dispatch }) => {
   return (
     <div className='single-post__content--btns is-flexed '>
       <div className='is-flexed'>
-        {isLiked ? (
-          <FaHeart
-            onClick={likeHandler}
-            className='single-icon mr-sm'
-            style={{ fill: '#dd2f3e' }}
-          />
-        ) : (
-          <FaRegHeart onClick={likeHandler} className='single-icon mr-sm' />
-        )}
+        <LikeIcon
+          isLiked={isLiked}
+          onClick={likeHandler}
+          styleClass='single-icon mr-sm'
+        />
         <FaRegComment
           onClick={() => commentRef.current.focus()}
           className='single-icon mr-sm'

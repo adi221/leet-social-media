@@ -30,7 +30,7 @@ const SinglePost = ({ uniqueId, simple = false }) => {
     try {
       dispatch({ type: SINGLE_POST_LOADING });
       const { data } = await axios.get(`/api/posts/${id}`);
-      console.log(data);
+
       dispatch({ type: SINGLE_POST_GET_SUCCESS, payload: data });
     } catch (error) {
       dispatch({
@@ -56,8 +56,6 @@ const SinglePost = ({ uniqueId, simple = false }) => {
     _id: postId,
   } = state.post;
   const { profileImage, username } = state.author;
-
-  console.log(state);
 
   const openLikesModal = () => {
     dispatchRedux(
@@ -118,15 +116,20 @@ const SinglePost = ({ uniqueId, simple = false }) => {
         >
           {likes.length} likes
         </div>
-        <div className='single-post__-description'>
-          <p>
-            <Link to={`/profile/${username}`} className='bold mr-sm underline'>
-              {username}
-            </Link>
-            {description}
-          </p>
-        </div>
-        {tags && tags.length > 0 && <Tags tags={tags} />}
+        {simple && (
+          <div>
+            <p>
+              <Link
+                to={`/profile/${username}`}
+                className='bold mr-sm underline'
+              >
+                {username}
+              </Link>
+              {description}
+            </p>
+          </div>
+        )}
+        {simple && tags.length > 0 && <Tags tags={tags} />}
         <Comments
           comments={comments}
           simple={simple}
@@ -134,6 +137,13 @@ const SinglePost = ({ uniqueId, simple = false }) => {
           postId={postId}
           commentCount={commentCount}
           dispatch={dispatch}
+          loadingAdditional={state.loadingAdditionalComments}
+          description={{
+            _id: userId,
+            author: state.author,
+            comment: description,
+            createdAt,
+          }}
         />
         <div className='single-post__content--created-at'>
           {moment(createdAt).fromNow()}

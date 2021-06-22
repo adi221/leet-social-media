@@ -6,6 +6,7 @@ import Notification from '../models/notificationModel.js';
 import User from '../models/userModel.js';
 import { sendNotification } from '../handlers/socketHandlers.js';
 import { resizeImage } from '../handlers/imageResizeHandlers.js';
+import { getCommentsOfPost } from '../utils/controllerUtils.js';
 import mongoose from 'mongoose';
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -102,4 +103,18 @@ const likeComment = asyncHandler(async (req, res) => {
   }
 });
 
-export { createComment, likeComment };
+// @desc Create new comment for post
+// @route POST /api/comments/:postId/:offset/:exclude
+// @access User
+const getComments = asyncHandler(async (req, res) => {
+  //  exclude
+  const { postId, offset } = req.params;
+  const comments = await getCommentsOfPost(postId, offset);
+  if (comments) {
+    res.send(comments);
+  } else {
+    res.send([]);
+  }
+});
+
+export { createComment, likeComment, getComments };

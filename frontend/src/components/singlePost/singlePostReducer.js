@@ -5,6 +5,8 @@ import {
   SINGLE_POST_LIKE_SUCCESS,
   SINGLE_POST_COMMENT_SUCCESS,
   SINGLE_POST_COMMENT_LIKE_SUCCESS,
+  SINGLE_POST_LOADING_ADDITIONAL,
+  SINGLE_POST_GET_ADDITIONAL_COMMENTS_SUCCESS,
 } from '../../constants/singlePostConstants';
 
 const defaultProfileImage =
@@ -13,6 +15,7 @@ const defaultProfileImage =
 export const INITIAL_STATE = {
   loading: true,
   error: false,
+  loadingAdditionalComments: false,
   author: {
     profileImage: defaultProfileImage,
     username: '',
@@ -57,10 +60,16 @@ export const singlePostReducer = (state, action) => {
         },
       };
     case SINGLE_POST_COMMENT_LIKE_SUCCESS:
-      const { commentId, type } = action.payload;
+      const { commentId, type, userId } = action.payload;
       const newComments = state.post.comments.map(comment => {
         if (comment._id === commentId) {
-          type === 'del' ? comment.commnetLikes-- : comment.commnetLikes++;
+          if (type === 'add') {
+            comment.commentLikes.push({ user: userId });
+          } else {
+            comment.commentLikes = comment.commentLikes.filter(
+              user => user.user.toString() !== userId.toString()
+            );
+          }
         }
         return comment;
       });
@@ -69,6 +78,18 @@ export const singlePostReducer = (state, action) => {
         post: {
           ...state.post,
           comments: newComments,
+        },
+      };
+    case SINGLE_POST_LOADING_ADDITIONAL:
+      return { ...state, loadingAdditionalComments: true };
+    case SINGLE_POST_GET_ADDITIONAL_COMMENTS_SUCCESS:
+      const { comments: additionalComments } = action.payload;
+      return {
+        ...state,
+        loadingAdditionalComments: false,
+        post: {
+          ...state.post,
+          comments: [...additionalComments, ...state.post.comments],
         },
       };
     default:
