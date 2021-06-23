@@ -19,7 +19,6 @@ const createComment = asyncHandler(async (req, res) => {
   const { _id } = req.user;
 
   const post = await Post.findById(postId);
-  const user = await User.findById(_id);
 
   if (!post) {
     return res
@@ -50,7 +49,7 @@ const createComment = asyncHandler(async (req, res) => {
       receiver: post.user,
       notificationType: 'comment',
       notificationData: {
-        postId: id,
+        postId,
         postImage: resizedImage,
         comment,
       },
@@ -61,15 +60,18 @@ const createComment = asyncHandler(async (req, res) => {
       ...notification.toObject(),
       senderDetails: {
         _id: req.user._id,
-        username: user.username,
-        profileImage: user.profileImage,
+        username: req.user.username,
+        profileImage: req.user.profileImage,
       },
     });
   }
 
   res.status(201).json({
     ...newComment.toObject(),
-    author: { username: user.username, profileImage: user.profileImage },
+    author: {
+      username: req.user.username,
+      profileImage: req.user.profileImage,
+    },
   });
 });
 
@@ -103,8 +105,8 @@ const likeComment = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc Create new comment for post
-// @route POST /api/comments/:postId/:offset/:exclude
+// @desc Get comments of a certain post
+// @route GET /api/comments/:postId/:offset/:exclude
 // @access User
 const getComments = asyncHandler(async (req, res) => {
   //  exclude
@@ -117,4 +119,124 @@ const getComments = asyncHandler(async (req, res) => {
   }
 });
 
-export { createComment, likeComment, getComments };
+// @desc Create comment reply for a certain comment
+// @route POST /api/comments/reply/:parentCommentId
+// @access User
+const createCommentReply = asyncHandler(async (req, res) => {
+  const { parentCommentId } = req.params;
+  const { commentReply } = req.body;
+  const { _id } = req.user;
+
+  const comment = await Comment.findById(parentCommentId);
+
+  if (!comment) {
+    return res
+      .status(401)
+      .json({ success: false, message: 'comment id is incorrect' });
+  }
+
+  const newCommentReply = new CommentReply({
+    parentComment: parentCommentId,
+    message: commentReply,
+    user: _id,
+    replyLikes: [],
+  });
+  await newCommentReply.save();
+  console.log(newCommentReply);
+
+  res.status(201).json({
+    ...newCommentReply.toObject(),
+    author: {
+      username: req.user.username,
+      profileImage: req.user.profileImage,
+    },
+  });
+});
+
+// @desc Get comment replies of a comment
+// @route GET /api/comments/replies/:parentCommentId/:offset
+// @access User
+const getCommentReplies = asyncHandler(async (req, res) => {
+  const { parentCommentId, offset = 0 } = req.params;
+
+  const comment = await Comment.findById(parentCommentId);
+  if (!comment) {
+    return res
+      .status(404)
+      .json({ success: false, message: 'No comment found' });
+  }
+
+  const commentReplies = await CommentReply.aggregate([
+    { $match: { parentComment: ObjectId(parentCommentId) } },
+    { $sort: { createdAt: -1 } },
+    { $skip: Number(offset) },
+    { $limit: 3 },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'user',
+        foreignField: '_id',
+        as: 'author',
+      },
+    },
+    { $unwind: '$author' },
+    {
+      $project: {
+        parentComment: true,
+        createdAt: true,
+        message: true,
+        replyLikes: true,
+        'author.username': true,
+        'author.profileImage': true,
+        'author._id': true,
+      },
+    },
+  ]);
+
+  if (commentReplies.length === 0) {
+    res
+      .status(401)
+      .json({ success: false, message: 'No message replies found' });
+  } else {
+    res.send(commentReplies);
+  }
+});
+
+// @desc Like a comment reply
+// @route POST /api/comments/like/reply/:commentReplyId
+// @access User
+const likeCommentReply = asyncHandler(async (req, res) => {
+  const { commentReplyId } = req.params;
+  const { _id } = req.user;
+
+  const commentReply = await CommentReply.findById(commentReplyId);
+
+  if (commentReply) {
+    const alreadyLikeIndex = commentReply.replyLikes.findIndex(
+      like => like.user.toString() === _id.toString()
+    );
+
+    if (alreadyLikeIndex > -1) {
+      commentReply.replyLikes.splice(alreadyLikeIndex, 1);
+      await commentReply.save();
+    } else {
+      commentReply.replyLikes.push({ user: _id });
+      await commentReply.save();
+
+      // TODO: Send notification for like comment
+      // const user = await User.findById(_id);
+    }
+    return res.json({ success: true });
+  } else {
+    res.status(404).json({ success: false, message: 'Comment not found' });
+  }
+});
+
+export {
+  createComment,
+  likeComment,
+  getComments,
+  createCommentReply,
+  getCommentReplies,
+  likeCommentReply,
+};

@@ -7,6 +7,10 @@ import {
   SINGLE_POST_COMMENT_LIKE_SUCCESS,
   SINGLE_POST_LOADING_ADDITIONAL,
   SINGLE_POST_GET_ADDITIONAL_COMMENTS_SUCCESS,
+  SINGLE_POST_IS_REPLYING,
+  SINGLE_POST_COMMENT_REPLY_SUCCESS,
+  SINGLE_POST_ADD_REPLIES_SUCCESS,
+  SINGLE_POST_REPLY_LIKE_SUCCESS,
 } from '../../constants/singlePostConstants';
 
 const defaultProfileImage =
@@ -31,7 +35,7 @@ export const INITIAL_STATE = {
     user: '',
     commentCount: 0,
   },
-  replying: false,
+  replying: null,
 };
 
 export const singlePostReducer = (state, action) => {
@@ -41,6 +45,7 @@ export const singlePostReducer = (state, action) => {
     case SINGLE_POST_ERROR:
       return { ...state, loading: false, error: action.payload };
     case SINGLE_POST_GET_SUCCESS:
+      console.log(action.payload);
       const { author, ...post } = action.payload;
       return {
         ...state,
@@ -90,6 +95,83 @@ export const singlePostReducer = (state, action) => {
         post: {
           ...state.post,
           comments: [...additionalComments, ...state.post.comments],
+        },
+      };
+    case SINGLE_POST_IS_REPLYING:
+      // action.payload can be null if we want to remove else user and comment details
+      if (action.payload) {
+        const { username, commentId } = action.payload;
+        // prevent unnessecary rerendering
+        if (
+          state.replying &&
+          state.replying.commentId === commentId &&
+          state.replying.commentUsername === username
+        ) {
+          return state;
+        }
+
+        return {
+          ...state,
+          replying: { commentUsername: username, commentId },
+        };
+      } else {
+        return { ...state, replying: null };
+      }
+    case SINGLE_POST_COMMENT_REPLY_SUCCESS:
+      const newCommentReply = action.payload;
+      const modifiedComments = state.post.comments.map(comment => {
+        if (comment._id === newCommentReply.parentComment) {
+          comment.commentReplies.push(newCommentReply);
+          comment.commentRepliesCount += 1;
+          return comment;
+        }
+        return comment;
+      });
+
+      return {
+        ...state,
+        replying: null,
+        post: { ...state.post, comments: modifiedComments },
+      };
+    case SINGLE_POST_ADD_REPLIES_SUCCESS:
+      const { parentCommentId, replies } = action.payload;
+      const updatedComments = state.post.comments.map(comment => {
+        if (comment._id === parentCommentId) {
+          comment.commentReplies.push(...replies);
+          return comment;
+        }
+        return comment;
+      });
+      return { ...state, post: { ...state.post, comments: updatedComments } };
+    case SINGLE_POST_REPLY_LIKE_SUCCESS:
+      const {
+        replyId,
+        type: addOrDelType,
+        userLikeId,
+        parentComment,
+      } = action.payload;
+      const newCommentReplies = state.post.comments.map(comment => {
+        if (comment._id === parentComment) {
+          comment.commentReplies = comment.commentReplies.map(reply => {
+            if (reply._id === replyId) {
+              if (addOrDelType === 'add') {
+                reply.replyLikes.push({ user: userLikeId });
+              } else {
+                reply.replyLikes = reply.replyLikes.filter(
+                  user => user.user.toString() !== userLikeId.toString()
+                );
+              }
+            }
+            return reply;
+          });
+        }
+        return comment;
+      });
+      return {
+        ...state,
+        post: {
+          ...state.post,
+          comments: newCommentReplies,
         },
       };
     default:

@@ -1,4 +1,4 @@
-.single-message {
+.single-comment {
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -26,13 +26,16 @@
       justify-content: stretch;
 
       a {
+        display: inline-block;
         margin-right: 0.5rem;
       }
 
       p {
+        display: inline-block;
         word-wrap: break-word;
         word-break: break-word;
         text-align: left;
+        padding-right: 0.4rem;
       }
     }
 
@@ -40,11 +43,13 @@
       display: flex;
       margin-top: 0.5rem;
 
-      p {
+      p,
+      button {
         font-size: 0.8rem;
         font-weight: bold;
         color: $clr-grey-3;
         margin-right: 0.6rem;
+        font-family: inherit;
       }
     }
   }
@@ -56,5 +61,26 @@
     transform: translateY(-50%);
     font-size: 0.85rem;
     cursor: pointer;
+  }
+
+  &__toggle {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: $clr-grey-3;
+    margin: 0.8rem 0 0.8rem 1.6rem;
+    font-family: inherit;
+
+    &--dash {
+      height: 1px;
+      background-color: $clr-grey-3;
+      width: 1.8rem;
+      display: inline-block;
+      margin-right: 0.7rem;
+      vertical-align: middle;
+    }
+  }
+
+  &__replies {
+    margin-left: 1.6rem;
   }
 }

@@ -1,11 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import axios from 'axios';
-import { SINGLE_POST_COMMENT_SUCCESS } from '../../constants/singlePostConstants';
+import {
+  createComment,
+  createCommentReply,
+} from '../../services/commentService';
+import {
+  SINGLE_POST_COMMENT_SUCCESS,
+  SINGLE_POST_COMMENT_REPLY_SUCCESS,
+} from '../../constants/singlePostConstants';
 
-const SinglePostForm = ({ dispatch, uniqueId, commentRef }) => {
+const SinglePostForm = ({ dispatch, uniqueId, commentRef, replying }) => {
   const [addedComment, setAddedComment] = useState('');
   const { userInfo } = useSelector(state => state.userLogin);
+
+  useEffect(() => {
+    if (replying && commentRef.current) {
+      commentRef.current.value = `@${replying.commentUsername} `;
+      commentRef.current.focus();
+    }
+  }, [replying, commentRef]);
 
   const commentHandler = async e => {
     e.preventDefault();
@@ -16,12 +29,23 @@ const SinglePostForm = ({ dispatch, uniqueId, commentRef }) => {
           Authorization: `Bearer ${userInfo.token}`,
         },
       };
-      const { data } = await axios.post(
-        `/api/comments/${uniqueId}`,
-        { comment: addedComment },
-        config
-      );
-      dispatch({ type: SINGLE_POST_COMMENT_SUCCESS, payload: data });
+
+      if (!replying) {
+        const comment = await createComment(uniqueId, addedComment, config);
+        dispatch({ type: SINGLE_POST_COMMENT_SUCCESS, payload: comment });
+        // commentsRef to bottom
+        // commentsRef.current.scrollTop = commentsRef.current.scrollHeight;
+      } else {
+        const commentReply = await createCommentReply(
+          replying.commentId,
+          addedComment,
+          config
+        );
+        dispatch({
+          type: SINGLE_POST_COMMENT_REPLY_SUCCESS,
+          payload: commentReply,
+        });
+      }
     } catch (error) {}
     setAddedComment('');
   };

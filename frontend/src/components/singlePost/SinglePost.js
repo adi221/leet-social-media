@@ -152,6 +152,7 @@ const SinglePost = ({ uniqueId, simple = false }) => {
           dispatch={dispatch}
           uniqueId={uniqueId}
           commentRef={commentRef}
+          replying={state.replying}
         />
       </div>
     </article>

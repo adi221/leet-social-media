@@ -6,7 +6,6 @@ import {
   LoginPage,
   SignUpPage,
   SettingsPage,
-  UploadPage,
   ProfilePage,
   SinglePostPage,
   ErrorPage,
@@ -48,7 +47,6 @@ const App = () => {
       <Navbar />
       <div className='page-container'>
         <Switch>
-          <PrivateRoute path='/upload' component={UploadPage} />
           <PrivateRoute path='/profile/:username' component={ProfilePage} />
           <PrivateRoute path='/settings' component={SettingsPage} />
           <PrivateRoute path='/direct/inbox' component={ChatPage} />

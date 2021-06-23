@@ -1,30 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import { useSelector } from 'react-redux';
 import LikeIcon from '../icons/LikeIcon';
 import { formatDateDistance } from '../../helpers/timeHelpers';
-import { SINGLE_POST_COMMENT_LIKE_SUCCESS } from '../../constants/singlePostConstants';
+import { likeCommentReply } from '../../services/commentService';
+import { SINGLE_POST_REPLY_LIKE_SUCCESS } from '../../constants/singlePostConstants';
 
-const SingleMessage = ({
+const SingleReply = ({
   _id,
-  author,
-  comment,
-  commentLikes,
   createdAt,
+  message,
+  parentComment,
+  replyLikes,
+  author,
   dispatch,
-  isDesc = false,
 }) => {
   const [isLiked, setIsLiked] = useState(false);
   const { userInfo } = useSelector(state => state.userLogin);
 
   useEffect(() => {
-    if (commentLikes && commentLikes.some(like => like.user === userInfo._id)) {
+    if (replyLikes && replyLikes.some(like => like.user === userInfo._id)) {
       setIsLiked(true);
     }
-  }, [commentLikes, userInfo]);
+  }, [replyLikes, userInfo]);
 
-  const likeCommentHandler = async () => {
+  const replyLikeHandler = async () => {
     try {
       const config = {
         headers: {
@@ -32,15 +32,16 @@ const SingleMessage = ({
           Authorization: `Bearer ${userInfo.token}`,
         },
       };
-      await axios.put(`/api/comments/like/${_id}`, {}, config);
-      // dispatch new action to singlePostReducer
+      await likeCommentReply(_id, config);
+      // dispatch new action, if so - convey dispatch as prop
       const delOrIncLikeCount = isLiked ? 'del' : 'add';
       dispatch({
-        type: SINGLE_POST_COMMENT_LIKE_SUCCESS,
+        type: SINGLE_POST_REPLY_LIKE_SUCCESS,
         payload: {
-          commentId: _id,
+          replyId: _id,
           type: delOrIncLikeCount,
-          userId: userInfo._id,
+          userLikeId: author._id,
+          parentComment,
         },
       });
       setIsLiked(!isLiked);
@@ -48,34 +49,29 @@ const SingleMessage = ({
       console.log(error);
     }
   };
-
   return (
-    <div className='single-message'>
+    <div className='single-comment'>
       <img src={author.profileImage} alt={author.username} />
-      <div className='single-message__details'>
-        <div className='single-message__details--user'>
+      <div className='single-comment__details'>
+        <div className='single-comment__details--user'>
           <Link to={`/profile/${author.username}`} className='bold underline'>
             {author.username}
           </Link>
-          {comment}
+          <p>{message}</p>
         </div>
-        <div className='single-message__details--info'>
+        <div className='single-comment__details--info'>
           <p> {formatDateDistance(createdAt)}</p>
-          {!isDesc && commentLikes.length > 0 && (
-            <p>{commentLikes.length} likes</p>
-          )}
-          {!isDesc && <p>reply</p>}
+          {replyLikes.length > 0 && <p>{replyLikes.length} likes</p>}
+          <button onClick={() => console.log('Hey')}>reply</button>
         </div>
       </div>
-      {!isDesc && (
-        <LikeIcon
-          isLiked={isLiked}
-          styleClass='single-message__like'
-          onClick={likeCommentHandler}
-        />
-      )}
+      <LikeIcon
+        isLiked={isLiked}
+        styleClass='single-comment__like'
+        onClick={replyLikeHandler}
+      />
     </div>
   );
 };
 
-export default SingleMessage;
+export default SingleReply;

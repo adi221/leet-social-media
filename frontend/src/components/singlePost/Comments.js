@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import useScrollPositionThrottled from '../../hooks/useScrollPositionThrottled';
 import { getComments } from '../../services/commentService';
-import SingleMessage from './SingleMessage';
+import SingleComment from './SingleComment';
 import {
   SINGLE_POST_LOADING_ADDITIONAL,
   SINGLE_POST_GET_ADDITIONAL_COMMENTS_SUCCESS,
@@ -27,22 +27,22 @@ const Comments = ({
     commentBoxRef.current.scrollTop = commentBoxRef.current.scrollHeight;
   }, [simple, comments, postId]);
 
-  useScrollPositionThrottled(
-    async ({ atTop }) => {
-      if (atTop && commentCount > comments.length && !loadingAdditional) {
-        // dispatch({ type: SINGLE_POST_LOADING_ADDITIONAL });
+  // useScrollPositionThrottled(
+  //   async ({ atTop }) => {
+  //     if (atTop && commentCount > comments.length && !loadingAdditional) {
+  //       // dispatch({ type: SINGLE_POST_LOADING_ADDITIONAL });
 
-        const data = await getComments(postId, comments.length);
-        console.log(data);
-        // dispatch({
-        //   type: SINGLE_POST_GET_ADDITIONAL_COMMENTS_SUCCESS,
-        //   payload: data,
-        // });
-      }
-    },
-    commentBoxRef.current,
-    [commentCount, loadingAdditional]
-  );
+  //       const data = await getComments(postId, comments.length);
+  //       console.log(data);
+  //       // dispatch({
+  //       //   type: SINGLE_POST_GET_ADDITIONAL_COMMENTS_SUCCESS,
+  //       //   payload: data,
+  //       // });
+  //     }
+  //   },
+  //   commentBoxRef.current,
+  //   [commentCount, loadingAdditional]
+  // );
 
   if (simple) {
     if (commentCount === 0) return null;
@@ -81,9 +81,9 @@ const Comments = ({
       ref={commentBoxRef}
       style={{ marginTop: '0.5rem' }}
     >
-      <SingleMessage {...description} isDesc={true} />
+      <SingleComment {...description} isDesc={true} />
       {comments.map(c => {
-        return <SingleMessage key={c._id} {...c} dispatch={dispatch} />;
+        return <SingleComment key={c._id} {...c} dispatch={dispatch} />;
       })}
     </div>
   );

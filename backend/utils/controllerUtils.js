@@ -12,23 +12,23 @@ export const getCommentsOfPost = async (postId, offset = 0, exclude = 0) => {
           comments: [
             { $match: { post: ObjectId(postId) } },
             // sort the newest comments to the top
-            { $sort: { createdAt: -1 } },
+            // { $sort: { createdAt: -1 } },
             // Skip the comments we do not want
             // This is desireable in the even that a comment has been created
             // and stored locally, we'd not want duplicate comments
             // { $skip: Number(exclude) },
             // get 10 last comments and then resort comments to ascending order
             { $skip: Number(offset) },
-            { $limit: 10 },
-            { $sort: { createdAt: 1 } },
-            // {
-            //   $lookup: {
-            //     from: 'commentreplies',
-            //     localField: '_id',
-            //     foreignField: 'parentComment',
-            //     as: 'commentReplies',
-            //   },
-            // },
+            // { $limit: 10 },
+            // { $sort: { createdAt: 1 } },
+            {
+              $lookup: {
+                from: 'commentreplies',
+                localField: '_id',
+                foreignField: 'parentComment',
+                as: 'commentReplies',
+              },
+            },
             {
               $lookup: {
                 from: 'users',
@@ -38,12 +38,19 @@ export const getCommentsOfPost = async (postId, offset = 0, exclude = 0) => {
               },
             },
             { $unwind: '$author' },
-            // { $addFields: { commentReplies: { $size: '$commentReplies' } } },
+            {
+              $addFields: {
+                commentRepliesCount: { $size: '$commentReplies' },
+                commentReplies: [],
+              },
+            },
             {
               $project: {
                 createdAt: true,
                 comment: true,
                 commentLikes: true,
+                commentReplies: true,
+                commentRepliesCount: true,
                 'author.username': true,
                 'author.profileImage': true,
                 'author._id': true,
