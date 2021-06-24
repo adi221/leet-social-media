@@ -35,13 +35,7 @@ const SingleComment = ({
 
   const likeCommentHandler = async () => {
     try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
-      await likeComment(_id, config);
+      await likeComment(_id, userInfo.token);
       // dispatch new action to singlePostReducer
       const delOrIncLikeCount = isLiked ? 'del' : 'add';
       dispatch({
@@ -66,7 +60,6 @@ const SingleComment = ({
   };
 
   const getCommentRepliesHandler = async () => {
-    console.log(commentReplies.length, commentRepliesCount);
     // open/close and all replies are loaded so toggle
     if (commentReplies.length === commentRepliesCount) {
       setShowReplies(!showReplies);

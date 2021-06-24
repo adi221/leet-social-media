@@ -23,15 +23,12 @@ const SinglePostForm = ({ dispatch, uniqueId, commentRef, replying }) => {
   const commentHandler = async e => {
     e.preventDefault();
     try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
-
       if (!replying) {
-        const comment = await createComment(uniqueId, addedComment, config);
+        const comment = await createComment(
+          uniqueId,
+          addedComment,
+          userInfo.token
+        );
         dispatch({ type: SINGLE_POST_COMMENT_SUCCESS, payload: comment });
         // commentsRef to bottom
         // commentsRef.current.scrollTop = commentsRef.current.scrollHeight;
@@ -39,7 +36,7 @@ const SinglePostForm = ({ dispatch, uniqueId, commentRef, replying }) => {
         const commentReply = await createCommentReply(
           replying.commentId,
           addedComment,
-          config
+          userInfo.token
         );
         dispatch({
           type: SINGLE_POST_COMMENT_REPLY_SUCCESS,

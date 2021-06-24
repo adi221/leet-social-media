@@ -13,11 +13,11 @@ import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-router.route('/').get(getPosts).post(protect, createPost);
+router.route('/').get(protect, getPosts).post(protect, createPost);
 router.route('/:id').get(getPostDetails);
 router.route('/comment/:id').post(protect, commentPost);
 router.route('/like/:id').post(protect, likePost);
-router.route('/delete/:postId/:userId').delete(deletePost);
+router.route('/delete/:postId').delete(protect, deletePost);
 router.route('/:postId/:offset/likes').get(getPostLikes);
 router.route('/explore/:offset').get(getExplorePostPreviews);
 

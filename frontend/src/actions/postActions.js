@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {
   POSTS_GET_REQUEST,
   POSTS_GET_SUCCESS,
@@ -16,11 +15,21 @@ import {
   SHARE_POST_SUCCESS,
   ADD_NEW_POST,
 } from '../constants/postConstants';
+import {
+  getPostsApi,
+  createPostApi,
+  deletePostApi,
+  getExplorePostsApi,
+} from '../services/postService';
 
-export const getPosts = () => async dispatch => {
+export const getPosts = () => async (dispatch, getState) => {
   try {
     dispatch({ type: POSTS_GET_REQUEST });
-    const { data } = await axios.get('/api/posts');
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const data = await getPostsApi(userInfo.token);
     dispatch({ type: POSTS_GET_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
@@ -39,13 +48,8 @@ export const createPost = (file, description) => async (dispatch, getState) => {
     const {
       userLogin: { userInfo },
     } = getState();
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
-    await axios.post('/api/posts', { file, description }, config);
+
+    await createPostApi({ file, description }, userInfo.token);
     dispatch({ type: POST_CREATE_SUCCESS });
   } catch (error) {
     dispatch({
@@ -64,13 +68,8 @@ export const deletePost = (postId, userId) => async (dispatch, getState) => {
     const {
       userLogin: { userInfo },
     } = getState();
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
-    await axios.delete(`/api/posts/delete/${postId}/${userId}`, {}, config);
+
+    await deletePostApi(postId, userInfo.token);
     dispatch({ type: POST_DELETE_SUCCESS });
   } catch (error) {
     dispatch({
@@ -86,7 +85,7 @@ export const deletePost = (postId, userId) => async (dispatch, getState) => {
 export const getExplorePostPreviews = offset => async dispatch => {
   try {
     dispatch({ type: POSTS_EXPLORE_REQUEST });
-    const { data } = await axios.get(`/api/posts/explore/${offset}`);
+    const data = await getExplorePostsApi(offset);
     dispatch({ type: POSTS_EXPLORE_SUCCESS, payload: data });
   } catch (error) {
     dispatch({

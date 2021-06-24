@@ -1,19 +1,20 @@
 import axios from 'axios';
+import { sendConfig } from '../helpers/configHeaders';
 
 /**
  * Creates new comment on a specific post
  * @function createComment
  * @param {string} postId The id of a post to retrieve comments from
  * @param {string} comment The comment to add to the post
- * @param {object} config Headers config for authorization token
+ * @param {string} token authorization token
  * @returns {object} The newly created comment
  */
-export const createComment = async (postId, comment, config) => {
+export const createComment = async (postId, comment, token) => {
   try {
     const { data } = await axios.post(
       `/api/comments/${postId}`,
       { comment },
-      config
+      sendConfig(token)
     );
     return data;
   } catch (error) {
@@ -25,11 +26,11 @@ export const createComment = async (postId, comment, config) => {
  * Like a specific comment of a specific post
  * @function likeComment
  * @param {string} commentId The id of a comment to like
- * @param {object} config Headers config for authorization token
+ * @param {string} token authorization token
  */
-export const likeComment = async (commentId, config) => {
+export const likeComment = async (commentId, token) => {
   try {
-    await axios.put(`/api/comments/like/${commentId}`, {}, config);
+    await axios.put(`/api/comments/like/${commentId}`, {}, sendConfig(token));
   } catch (error) {
     throw new Error(error);
   }
@@ -57,19 +58,19 @@ export const getComments = async (postId, offset = 0, exclude = 0) => {
  * @function createCommentReply
  * @param {string} parentCommentId The id of a parent comment
  * @param {string} commentReply The comment reply to add to the parent comment
- * @param {object} config Headers config for authorization token
+ * @param {string} token authorization token
  * @returns {object} The newly created comment reply
  */
 export const createCommentReply = async (
   parentCommentId,
   commentReply,
-  config
+  token
 ) => {
   try {
     const { data } = await axios.post(
       `/api/comments/reply/${parentCommentId}`,
       { commentReply },
-      config
+      sendConfig(token)
     );
     return data;
   } catch (error) {
@@ -99,11 +100,15 @@ export const getCommentReplies = async (parentCommentId, offset = 0) => {
  * Like a specific comment of a specific post
  * @function likeCommentReply
  * @param {string} commentReplyId The id of a comment reply to like
- * @param {object} config Headers config for authorization token
+ * @param {string} token authorization token
  */
-export const likeCommentReply = async (commentReplyId, config) => {
+export const likeCommentReply = async (commentReplyId, token) => {
   try {
-    await axios.put(`/api/comments/like/reply/${commentReplyId}`, {}, config);
+    await axios.put(
+      `/api/comments/like/reply/${commentReplyId}`,
+      {},
+      sendConfig(token)
+    );
   } catch (error) {
     throw new Error(error);
   }

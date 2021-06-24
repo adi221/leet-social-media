@@ -26,14 +26,7 @@ const SingleReply = ({
 
   const replyLikeHandler = async () => {
     try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
-      await likeCommentReply(_id, config);
-      // dispatch new action, if so - convey dispatch as prop
+      await likeCommentReply(_id, userInfo.token);
       const delOrIncLikeCount = isLiked ? 'del' : 'add';
       dispatch({
         type: SINGLE_POST_REPLY_LIKE_SUCCESS,

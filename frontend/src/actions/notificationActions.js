@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {
   ADD_NOTIFICATION,
   GET_NOTIFICATIONS_REQUEST,
@@ -13,6 +12,11 @@ import {
   ADD_CHAT_NOTIFICATION,
   READ_CHAT_NOTIFICATION,
 } from '../constants/notificationConstants';
+import {
+  getNotificationsApi,
+  readNotificationsApi,
+  getChatNotificationsApi,
+} from '../services/notificationService';
 
 export const addNotification = notification => ({
   type: ADD_NOTIFICATION,
@@ -26,18 +30,11 @@ export const resetNotifications = () => ({ type: GET_NOTIFICATIONS_RESET });
 export const getNotifications = () => async (dispatch, getState) => {
   try {
     dispatch({ type: GET_NOTIFICATIONS_REQUEST });
-
     const {
       userLogin: { userInfo },
     } = getState();
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
-
-    const { data } = await axios.get(`/api/notifications`, config);
+    const data = await getNotificationsApi(userInfo.token);
     dispatch({ type: GET_NOTIFICATIONS_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
@@ -56,14 +53,7 @@ export const readNotifications = () => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState();
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
-
-    await axios.put(`/api/notifications`, {}, config);
+    await readNotificationsApi(userInfo.token);
     dispatch({ type: READ_NOTIFICATIONS });
   } catch (error) {
     console.error(error);
@@ -78,13 +68,7 @@ export const getChatNotifications = () => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState();
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
-
-    const { data } = await axios.get(`/api/notifications/chat`, config);
+    const data = await getChatNotificationsApi(userInfo.token);
     dispatch({ type: GET_CHAT_NOTIFICATIONS_SUCCESS, payload: data });
   } catch (error) {
     dispatch({

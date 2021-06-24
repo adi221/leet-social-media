@@ -13,8 +13,30 @@ const ObjectId = mongoose.Types.ObjectId;
 // @route GET /api/posts
 // @access User
 const getPosts = asyncHandler(async (req, res) => {
-  const posts = await Post.find({}, '_id').sort({ createdAt: -1 });
-  res.json(posts);
+  const { _id, following } = req.user;
+  const followingIds = following.map(user => ObjectId(user.user));
+
+  const posts = await Post.aggregate([
+    {
+      $match: {
+        $or: [{ user: { $in: followingIds } }, { user: ObjectId(_id) }],
+      },
+    },
+    {
+      $sort: { createdAt: -1 },
+    },
+    {
+      $project: {
+        _id: true,
+      },
+    },
+  ]);
+
+  if (posts) {
+    res.json(posts);
+  } else {
+    res.status(401).json({ success: false, message: 'No posts are available' });
+  }
 });
 
 // @desc Create a post
@@ -241,9 +263,10 @@ const getPostLikes = asyncHandler(async (req, res) => {
 // @route DELETE /api/posts/delete/:id
 // @access User
 const deletePost = asyncHandler(async (req, res) => {
-  const { postId, userId } = req.params;
+  const { postId } = req.params;
+  const { _id } = req.user;
   const post = await Post.findById(postId);
-  const user = await User.findById(userId);
+  const user = await User.findById(_id);
 
   if (post) {
     await post.remove();
