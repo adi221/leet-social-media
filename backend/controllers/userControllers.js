@@ -137,7 +137,12 @@ const getUserSavedLikedPosts = asyncHandler(async (req, res) => {
 
   const getPostData = async id => {
     return await Post.aggregate([
-      { $match: { _id: ObjectId(id) } },
+      {
+        $match: {
+          $and: [{ image: { $ne: undefined } }, { _id: ObjectId(id) }],
+        },
+      },
+      // { $match: { _id: ObjectId(id) } },
       {
         $project: {
           image: true,
@@ -386,8 +391,9 @@ const getUserStats = asyncHandler(async (req, res) => {
 // @access User
 const getUserSuggestions = asyncHandler(async (req, res) => {
   const { id } = req.params;
+
   const users = await User.find(
-    { _id: { $ne: id } },
+    { _id: { $ne: ObjectId(id) } },
     '_id name username profileImage'
   ).limit(5);
   if (users) {

@@ -12,6 +12,7 @@ const ProfileContent = ({ list, username }) => {
     <>
       {list &&
         list.map(post => {
+          if (post === null) return null;
           const { _id, image, comments, likes } = post;
           return (
             <PreviewImage

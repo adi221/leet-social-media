@@ -35,20 +35,21 @@ import {
   USER_STATS_SUCCESS,
   USER_STATS_FAIL,
 } from '../constants/userConstants';
+import {
+  loginApi,
+  registerApi,
+  getUserProfileDetailsApi,
+  getUserProfileRelatedPostsApi,
+  getUserDetailsApi,
+  updateUserProfileApi,
+  updateUserPasswordApi,
+  getUserSuggestionsApi,
+} from '../services/userService';
 
 export const login = (email, password) => async dispatch => {
   try {
     dispatch({ type: USER_LOGIN_REQUEST });
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-    const { data } = await axios.post(
-      '/api/users/login',
-      { email, password },
-      config
-    );
+    const data = await loginApi({ email, password });
     dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
 
     localStorage.setItem('userInfoLeet', JSON.stringify(data));
@@ -71,16 +72,8 @@ export const logout = () => dispatch => {
 export const register = (username, name, email, password) => async dispatch => {
   try {
     dispatch({ type: USER_REGISTER_REQUEST });
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-    const { data } = await axios.post(
-      '/api/users',
-      { username, name, email, password },
-      config
-    );
+
+    const data = await registerApi({ username, name, email, password });
     dispatch({ type: USER_REGISTER_SUCCESS, payload: data });
     dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
 
@@ -99,7 +92,7 @@ export const register = (username, name, email, password) => async dispatch => {
 export const getUserProfileDetails = username => async dispatch => {
   try {
     dispatch({ type: USER_DETAILS_PROFILE_GET_REQUEST });
-    const { data } = await axios.get(`/api/users/${username}`);
+    const data = await getUserProfileDetailsApi(username);
     dispatch({ type: USER_DETAILS_PROFILE_GET_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
@@ -115,7 +108,7 @@ export const getUserProfileDetails = username => async dispatch => {
 export const getUserProfileRelatedPosts = username => async dispatch => {
   try {
     dispatch({ type: USER_DETAILS_PROFILE_RELATED_REQUEST });
-    const { data } = await axios.get(`/api/users/relatedposts/${username}`);
+    const data = await getUserProfileRelatedPostsApi(username);
     dispatch({ type: USER_DETAILS_PROFILE_RELATED_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
@@ -131,19 +124,11 @@ export const getUserProfileRelatedPosts = username => async dispatch => {
 export const getUserDetails = () => async (dispatch, getState) => {
   try {
     dispatch({ type: USER_DETAILS_GET_REQUEST });
-
     const {
       userLogin: { userInfo },
     } = getState();
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
-
-    const { data } = await axios.put(`/api/users/settings`, {}, config);
+    const data = await getUserDetailsApi(userInfo.token);
     dispatch({ type: USER_DETAILS_GET_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
@@ -163,18 +148,7 @@ export const updateUserProfile = userDetails => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState();
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
-
-    const { data } = await axios.put(
-      `/api/users/profile`,
-      { ...userDetails },
-      config
-    );
+    const data = await updateUserProfileApi({ ...userDetails }, userInfo.token);
     dispatch({ type: USER_UPDATE_PROFILE_SUCCESS, payload: data });
     dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
     localStorage.setItem('userInfoLeet', JSON.stringify(data));
@@ -198,17 +172,10 @@ export const updateUserPassword =
         userLogin: { userInfo },
       } = getState();
 
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
-
-      const { data } = await axios.put(
-        `/api/users/profile/password`,
-        { oldPassword, newPassword },
-        config
+      const data = await updateUserPasswordApi(
+        oldPassword,
+        newPassword,
+        userInfo.token
       );
       dispatch({ type: USER_UPDATE_PASSWORD_SUCCESS });
       dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
@@ -227,7 +194,8 @@ export const updateUserPassword =
 export const getUserSuggestions = id => async dispatch => {
   try {
     dispatch({ type: USER_SUGGESTIONS_REQUEST });
-    const { data } = await axios.get(`/api/users/suggest/${id}`);
+
+    const data = await getUserSuggestionsApi(id);
     dispatch({ type: USER_SUGGESTIONS_SUCCESS, payload: data });
   } catch (error) {
     dispatch({

@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {
   CHANGE_CHAT_PARTNERS,
   RESET_CHAT_PARTNERS,
@@ -24,6 +23,13 @@ import {
   ADD_NEW_GROUP_MEMBER,
   REMOVE_CHAT_FROM_LIST,
 } from '../constants/chatConstants';
+import {
+  createChatApi,
+  addUsersToGroupApi,
+  getChatListsApi,
+  getChatFeedApi,
+  getAdditionalMessagesApi,
+} from '../services/chatService';
 
 export const changePartnerUsersId = (id, type) => (dispatch, getState) => {
   const {
@@ -44,20 +50,12 @@ export const changePartnerUsersId = (id, type) => (dispatch, getState) => {
 export const createChat = () => async (dispatch, getState) => {
   try {
     dispatch({ type: CREATE_CHAT_REQUEST });
-
     const {
       createChat: { partnerUsersId },
       userLogin: { userInfo },
     } = getState();
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
-
-    const { data } = await axios.post('/api/chats', { partnerUsersId }, config);
+    const data = await createChatApi(partnerUsersId, userInfo.token);
     dispatch({ type: CREATE_CHAT_SUCCESS, payload: data });
     dispatch({ type: RESET_CHAT_PARTNERS });
   } catch (error) {
@@ -80,14 +78,7 @@ export const addUsersToGroup = chatId => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState();
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
-
-    await axios.put(`/api/chats/${chatId}`, { partnerUsersId }, config);
+    await addUsersToGroupApi(chatId, partnerUsersId, userInfo.token);
     dispatch({ type: ADD_USER_GROUP_SUCCESS });
     dispatch({ type: RESET_CHAT_PARTNERS });
   } catch (error) {
@@ -104,18 +95,11 @@ export const addUsersToGroup = chatId => async (dispatch, getState) => {
 export const getChatLists = () => async (dispatch, getState) => {
   try {
     dispatch({ type: GET_CHAT_LIST_REQUEST });
-
     const {
       userLogin: { userInfo },
     } = getState();
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
-
-    const { data } = await axios.get('/api/chats/list', config);
+    const data = await getChatListsApi(userInfo.token);
     dispatch({ type: GET_CHAT_LIST_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
@@ -131,18 +115,11 @@ export const getChatLists = () => async (dispatch, getState) => {
 export const getChatFeed = chatId => async (dispatch, getState) => {
   try {
     dispatch({ type: GET_CHAT_FEED_REQUEST });
-
     const {
       userLogin: { userInfo },
     } = getState();
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
-
-    const { data } = await axios.get(`/api/chats/${chatId}`, config);
+    const data = await getChatFeedApi(chatId, userInfo.token);
     dispatch({ type: GET_CHAT_FEED_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
@@ -158,7 +135,7 @@ export const getChatFeed = chatId => async (dispatch, getState) => {
 export const getAdditionalMessages = (chatId, offset) => async dispatch => {
   try {
     dispatch({ type: GET_ADDITIONAL_MESSAGES_REQUEST });
-    const { data } = await axios.get(`/api/chats/${chatId}/${offset}`);
+    const data = await getAdditionalMessagesApi(chatId, offset);
     dispatch({ type: GET_ADDITIONAL_MESSAGES_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
