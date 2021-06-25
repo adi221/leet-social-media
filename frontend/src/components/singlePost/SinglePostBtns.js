@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import {
-  FaRegHeart,
-  FaHeart,
   FaRegComment,
   FaRegBookmark,
   FaBookmark,

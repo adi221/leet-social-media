@@ -5,6 +5,7 @@ import axios from 'axios';
 import { openModal } from '../../actions/utilActions';
 import { USER_STATS_FOLLOWING } from '../../constants/userConstants';
 import LoaderSvg from '../loaders/LoaderSvg';
+import { followUserApi } from '../../services/userService';
 
 const FollowButton = ({
   style = {},
@@ -31,25 +32,14 @@ const FollowButton = ({
   const followUser = async () => {
     try {
       setLoading(true);
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
+      const data = await followUserApi(userId, userInfo.token);
 
-      const { data } = await axios.put(
-        `/api/users/follow/${userId}`,
-        {},
-        config
-      );
-      setLoading(false);
       setIsFollowing(!isFollowing);
       dispatch({ type: USER_STATS_FOLLOWING, payload: data });
     } catch (error) {
       console.log(error);
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   const followHandler = () => {

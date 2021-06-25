@@ -86,6 +86,46 @@ export const getUserDetailsApi = async token => {
 
 /**
  * Updates user's details
+ * @function followUserApi
+ * @param {string} userId the user to follow
+ * @param {string} token Authorization token
+ * @returns {array} new following stats
+ */
+export const followUserApi = async (userId, token) => {
+  try {
+    const { data } = await axios.put(
+      `/api/users/follow/${userId}`,
+      {},
+      sendConfig(token)
+    );
+    return data;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+/**
+ * Updates user's details
+ * @function unfollowUserApi
+ * @param {string} userId the user to unfollow
+ * @param {string} token Authorization token
+ * @returns {array} new following stats
+ */
+export const unfollowUserApi = async (userId, token) => {
+  try {
+    const { data } = await axios.put(
+      `/api/users/unfollow/${userId}`,
+      {},
+      sendConfig(token)
+    );
+    return data;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+/**
+ * Updates user's details
  * @function updateUserProfileApi
  * @param {object} userDetails user details to update
  * @param {string} token Authorization token
@@ -138,6 +178,49 @@ export const getUserSuggestionsApi = async id => {
   try {
     const { data } = await axios.get(`/api/users/suggest/${id}`);
     return data;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+/**
+ * Retrieves user stats - following and bookmark ids
+ * @function getUserStatsApi
+ * @param {string} id id of user
+ * @returns {object} Object contains two arrays
+ */
+export const getUserStatsApi = async id => {
+  try {
+    const { data } = await axios.get(`/api/users/stats/${id}`);
+    return data;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+/**
+ * Retrieves user stats - following and bookmark ids
+ * @function getUserSearchApi
+ * @param {string} keyword keyword to search
+ * @returns {object} Object contains two arrays
+ */
+export const getUserSearchApi = async keyword => {
+  try {
+    const { data } = await axios.get(`/api/users?keyword=${keyword}`);
+    return data;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+/**
+ * Delete user
+ * @function deleteUserApi
+ * @param {string} userId to delete
+ */
+export const deleteUserApi = async userId => {
+  try {
+    await axios.delete(`/api/users/${userId}`);
   } catch (error) {
     throw new Error(error);
   }

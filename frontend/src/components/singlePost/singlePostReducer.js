@@ -11,6 +11,8 @@ import {
   SINGLE_POST_COMMENT_REPLY_SUCCESS,
   SINGLE_POST_ADD_REPLIES_SUCCESS,
   SINGLE_POST_REPLY_LIKE_SUCCESS,
+  SINGLE_POST_DELETE_COMMENT_SUCCESS,
+  SINGLE_POST_DELETE_REPLY_SUCCESS,
 } from '../../constants/singlePostConstants';
 
 const defaultProfileImage =
@@ -173,6 +175,28 @@ export const singlePostReducer = (state, action) => {
           ...state.post,
           comments: newCommentReplies,
         },
+      };
+    case SINGLE_POST_DELETE_COMMENT_SUCCESS:
+      const updatedCommentsDelete = state.post.comments.filter(
+        comment => comment._id !== action.payload
+      );
+      return {
+        ...state,
+        post: { ...state.post, comments: updatedCommentsDelete },
+      };
+    case SINGLE_POST_DELETE_REPLY_SUCCESS:
+      const updatedCommentsDeleteReply = state.post.comments.map(comment => {
+        if (comment._id === action.payload.parentCommentId) {
+          comment.commentReplies = comment.commentReplies.filter(
+            reply => reply._id !== action.payload.replyId
+          );
+          comment.commentRepliesCount -= 1;
+        }
+        return comment;
+      });
+      return {
+        ...state,
+        post: { ...state.post, comments: updatedCommentsDeleteReply },
       };
     default:
       return state;

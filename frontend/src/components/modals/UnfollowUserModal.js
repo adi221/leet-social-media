@@ -1,8 +1,8 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
 import { closeModal } from '../../actions/utilActions';
 import { USER_STATS_FOLLOWING } from '../../constants/userConstants';
+import { unfollowUserApi } from '../../services/userService';
 
 const UnfollowUserModal = props => {
   const { userId, username, profileImage } = props;
@@ -11,17 +11,8 @@ const UnfollowUserModal = props => {
 
   const unfollowUser = async () => {
     try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
-      const { data } = await axios.put(
-        `/api/users/unfollow/${userId}`,
-        {},
-        config
-      );
+      const data = await unfollowUserApi(userId, userInfo.token);
+
       dispatch({ type: USER_STATS_FOLLOWING, payload: data });
       dispatch(closeModal());
     } catch (error) {

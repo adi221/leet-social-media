@@ -142,7 +142,6 @@ const createCommentReply = asyncHandler(async (req, res) => {
     replyLikes: [],
   });
   await newCommentReply.save();
-  console.log(newCommentReply);
 
   res.status(201).json({
     ...newCommentReply.toObject(),
@@ -232,6 +231,51 @@ const likeCommentReply = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc Delete a comment
+// @route DELETE /api/comments/:commentId
+// @access User
+const deleteComment = asyncHandler(async (req, res) => {
+  const { commentId } = req.params;
+  console.log(req.user._id, commentId);
+
+  const comment = await Comment.findOne({
+    _id: commentId,
+  });
+
+  if (!comment) {
+    return res
+      .status(404)
+      .send({ success: false, message: 'Comment was not found' });
+  }
+
+  // remove comment replies attached to comment and comment itself
+  await CommentReply.deleteMany({ parentComment: commentId });
+  await Comment.deleteOne({ _id: commentId });
+
+  res.status(204).json({ success: true, message: 'Comment deleted' });
+});
+
+// @desc Delete a comment
+// @route DELETE /api/comments/reply/:commentReplyId
+// @access User
+const deleteCommentReply = asyncHandler(async (req, res) => {
+  const { commentReplyId } = req.params;
+
+  const commentReply = await CommentReply.findOne({
+    _id: commentReplyId,
+  });
+
+  if (!commentReply) {
+    return res
+      .status(404)
+      .send({ success: false, message: 'Comment reply was not found' });
+  }
+
+  await CommentReply.deleteOne({ _id: commentReplyId });
+
+  res.status(204).json({ success: true, message: 'Comment deleted' });
+});
+
 export {
   createComment,
   likeComment,
@@ -239,4 +283,6 @@ export {
   createCommentReply,
   getCommentReplies,
   likeCommentReply,
+  deleteComment,
+  deleteCommentReply,
 };

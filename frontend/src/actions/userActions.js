@@ -44,6 +44,9 @@ import {
   updateUserProfileApi,
   updateUserPasswordApi,
   getUserSuggestionsApi,
+  getUserStatsApi,
+  getUserSearchApi,
+  deleteUserApi,
 } from '../services/userService';
 
 export const login = (email, password) => async dispatch => {
@@ -211,7 +214,7 @@ export const getUserSuggestions = id => async dispatch => {
 export const getUserStats = id => async dispatch => {
   try {
     dispatch({ type: USER_STATS_REQUEST });
-    const { data } = await axios.get(`/api/users/stats/${id}`);
+    const data = await getUserStatsApi(id);
     dispatch({ type: USER_STATS_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
@@ -227,7 +230,7 @@ export const getUserStats = id => async dispatch => {
 export const getUserSearch = keyword => async dispatch => {
   try {
     dispatch({ type: USER_SEARCH_REQUEST });
-    const { data } = await axios.get(`/api/users?keyword=${keyword}`);
+    const data = await getUserSearchApi(keyword);
     dispatch({ type: USER_SEARCH_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
@@ -243,7 +246,7 @@ export const getUserSearch = keyword => async dispatch => {
 export const deleteUser = userId => async dispatch => {
   try {
     dispatch({ type: USER_DELETE_REQUEST });
-    await axios.delete(`/api/users/${userId}`);
+    await deleteUserApi(userId);
     dispatch({ type: USER_DELETE_SUCCESS });
     localStorage.removeItem('userInfoLeet');
     dispatch({ type: USER_LOGOUT });

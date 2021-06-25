@@ -1,15 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import LikeIcon from '../icons/LikeIcon';
+import OptionsIcon from '../icons/OptionsIcon';
 import SingleReply from './SingleReply';
 import { formatDateDistance } from '../../helpers/timeHelpers';
 import {
   SINGLE_POST_COMMENT_LIKE_SUCCESS,
   SINGLE_POST_IS_REPLYING,
   SINGLE_POST_ADD_REPLIES_SUCCESS,
+  SINGLE_POST_DELETE_COMMENT_SUCCESS,
 } from '../../constants/singlePostConstants';
-import { likeComment, getCommentReplies } from '../../services/commentService';
+import {
+  likeComment,
+  getCommentReplies,
+  deleteComment,
+} from '../../services/commentService';
+import { openModal, closeModal, showAlert } from '../../actions/utilActions';
 
 const SingleComment = ({
   _id,
@@ -24,6 +31,7 @@ const SingleComment = ({
 }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
+  const dispatchRedux = useDispatch();
 
   const { userInfo } = useSelector(state => state.userLogin);
 
@@ -79,6 +87,29 @@ const SingleComment = ({
     // TODO: What if there is new comments written
   };
 
+  const handleDeleteComment = async () => {
+    try {
+      await deleteComment(_id, userInfo.token);
+      dispatch({
+        type: SINGLE_POST_DELETE_COMMENT_SUCCESS,
+        payload: _id,
+      });
+      dispatchRedux(closeModal());
+      dispatchRedux(showAlert('Message successfully deleted'));
+    } catch (error) {
+      dispatchRedux(showAlert('Could not delete comment, please try again'));
+    }
+  };
+
+  const commentOptionsHandler = () => {
+    dispatchRedux(
+      openModal('COMMENT_OPTIONS', {
+        type: 'deleteComment',
+        deleteHandler: handleDeleteComment,
+      })
+    );
+  };
+
   return (
     <>
       <div className='single-comment'>
@@ -98,6 +129,12 @@ const SingleComment = ({
             {!isDesc && <button onClick={replyCommentHandler}>reply</button>}
           </div>
         </div>
+        {!isDesc && userInfo._id === author._id && (
+          <OptionsIcon
+            styleClass='single-comment__open-modal'
+            onClick={commentOptionsHandler}
+          />
+        )}
         {!isDesc && (
           <LikeIcon
             isLiked={isLiked}

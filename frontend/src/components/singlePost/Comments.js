@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import useScrollPositionThrottled from '../../hooks/useScrollPositionThrottled';
 import { getComments } from '../../services/commentService';
 import SingleComment from './SingleComment';
@@ -25,7 +24,7 @@ const Comments = ({
     if (simple) return;
     // Get to the bottom of the comments list when mounting or getting new message
     commentBoxRef.current.scrollTop = commentBoxRef.current.scrollHeight;
-  }, [simple, comments, postId]);
+  }, [simple, postId]);
 
   // useScrollPositionThrottled(
   //   async ({ atTop }) => {

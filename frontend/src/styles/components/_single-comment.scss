@@ -7,6 +7,10 @@
   padding: 0.5rem 0;
   position: relative;
 
+  &:hover .single-comment__open-modal {
+    opacity: 1;
+  }
+
   img {
     width: 2.5rem;
     height: 2.5rem;
@@ -61,6 +65,23 @@
     transform: translateY(-50%);
     font-size: 0.85rem;
     cursor: pointer;
+  }
+
+  &__open-modal {
+    position: absolute;
+    top: 50%;
+    right: 2.5rem;
+    transform: translateY(-50%);
+    font-weight: bold;
+    font-size: 1.6rem;
+    cursor: pointer;
+    color: $clr-grey-2;
+    opacity: 0;
+    transition: opacity 0.1s ease-in-out;
+
+    &:hover {
+      opacity: 1;
+    }
   }
 
   &__toggle {

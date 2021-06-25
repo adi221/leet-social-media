@@ -113,3 +113,35 @@ export const likeCommentReply = async (commentReplyId, token) => {
     throw new Error(error);
   }
 };
+
+/**
+ * Deletes a comment
+ * @function deleteComment
+ * @param {string} commentId The id of a comment to delete
+ * @param {string} token authorization token
+ */
+export const deleteComment = async (commentId, token) => {
+  try {
+    await axios.delete(`/api/comments/${commentId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+/**
+ * Deletes a comment reply
+ * @function deleteCommentReply
+ * @param {string} commentReplyId The id of a comment to delete
+ * @param {string} token authorization token
+ */
+export const deleteCommentReply = async (commentReplyId, token) => {
+  try {
+    await axios.delete(`/api/comments/reply/${commentReplyId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
+};

@@ -8,6 +8,7 @@ import NewMessageModal from './NewMessageModal';
 import AddUserGroupModal from './AddUserGroupModal';
 import SharePostModal from './SharePostModal';
 import UploadPostModal from './UploadPostModal';
+import CommentOptionsModal from './CommentOptionsModal';
 import { closeModal } from '../../actions/utilActions';
 import { RESET_CHAT_PARTNERS } from '../../constants/chatConstants';
 import { RESET_POST_RECEIVERS } from '../../constants/postConstants';
@@ -21,6 +22,7 @@ const MODAL_COMPONENTS = {
   ADD_USER_GROUP: AddUserGroupModal,
   SHARE_POST: SharePostModal,
   UPLOAD_POST: UploadPostModal,
+  COMMENT_OPTIONS: CommentOptionsModal,
 };
 
 const RootModal = () => {
