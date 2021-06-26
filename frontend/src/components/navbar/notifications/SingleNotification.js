@@ -70,7 +70,10 @@ const SingleNotification = ({ notification }) => {
           />
         </li>
       );
-    } else if (notificationType === 'comment') {
+    } else if (
+      notificationType === 'comment' ||
+      notificationType === 'mention'
+    ) {
       return (
         <li className='drop nav-notifications__item'>
           <div className='is-flexed'>
@@ -83,7 +86,10 @@ const SingleNotification = ({ notification }) => {
               <Link to={`/profile/${username}`} className='bold'>
                 {username}
               </Link>{' '}
-              commented:{' '}
+              {notificationType === 'comment'
+                ? 'commented'
+                : 'mentioned you in a comment'}
+              :{' '}
               {notificationData.comment.length > 40
                 ? notificationData.comment.substring(0, 35) + ' ...'
                 : notificationData.comment}
@@ -98,6 +104,9 @@ const SingleNotification = ({ notification }) => {
           />
         </li>
       );
+    } else {
+      //shouldnt get here
+      return null;
     }
   };
 

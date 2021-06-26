@@ -1,6 +1,5 @@
 import Comment from '../models/commentModel.js';
-import CommentReply from '../models/commentReplyModel.js';
-import Post from '../models/postModel.js';
+import User from '../models/userModel.js';
 import mongoose from 'mongoose';
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -80,6 +79,20 @@ export const getCommentsOfPost = async (postId, offset = 0, exclude = 0) => {
       return { comments: [], commentCount: 0 };
     } else {
       return commentsAggregation[0];
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const findUserDetails = async username => {
+  try {
+    const user = await User.find({ username }, '_id');
+    // if empty returns undefined
+    if (user[0] && user[0]._id) {
+      return user[0]._id.toString();
+    } else {
+      return undefined;
     }
   } catch (error) {
     throw new Error(error);

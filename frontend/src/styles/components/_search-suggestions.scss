@@ -1,0 +1,27 @@
+.search-suggestions {
+  background-color: $clr-white;
+  position: absolute;
+  left: 0rem;
+  bottom: 103%;
+  max-height: 13rem;
+  width: 19rem;
+  overflow-y: auto;
+  box-shadow: 0 0 1rem -5px $clr-grey-1;
+
+  &__user {
+    width: 100%;
+    display: flex;
+    justify-content: stretch;
+    align-items: center;
+    padding: 0.4rem;
+    cursor: pointer;
+
+    img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 1rem;
+    }
+  }
+}

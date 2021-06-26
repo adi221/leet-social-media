@@ -84,6 +84,7 @@
       grid-template-columns: 1fr auto;
       margin-bottom: 0.5rem;
       column-gap: 0.5rem;
+      position: relative;
 
       input {
         border: none;
@@ -93,6 +94,7 @@
 
       button {
         color: rgb(4, 104, 255);
+        position: relative;
         &:disabled {
           opacity: 0.5;
           cursor: initial;

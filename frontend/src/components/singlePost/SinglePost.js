@@ -153,6 +153,7 @@ const SinglePost = ({ uniqueId, simple = false }) => {
           uniqueId={uniqueId}
           commentRef={commentRef}
           replying={state.replying}
+          inputLoading={state.inputLoading}
         />
       </div>
     </article>

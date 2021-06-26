@@ -4,9 +4,13 @@ import CommentReply from '../models/commentReplyModel.js';
 import Post from '../models/postModel.js';
 import Notification from '../models/notificationModel.js';
 import User from '../models/userModel.js';
+import { findMentions } from '../utils/tagUtils.js';
 import { sendNotification } from '../handlers/socketHandlers.js';
 import { resizeImage } from '../handlers/imageResizeHandlers.js';
-import { getCommentsOfPost } from '../utils/controllerUtils.js';
+import {
+  getCommentsOfPost,
+  findUserDetails,
+} from '../utils/controllerUtils.js';
 import mongoose from 'mongoose';
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -40,9 +44,10 @@ const createComment = asyncHandler(async (req, res) => {
       .json({ success: false, message: 'Could not create a new comment' });
   }
 
+  let resizedImage;
   // Send notification to post owner if he did not write the comment
   if (post.user.toString() !== _id.toString()) {
-    const resizedImage = await resizeImage(post.image, 50, 50);
+    resizedImage = await resizeImage(post.image, 50, 50);
 
     const notification = new Notification({
       sender: req.user._id,
@@ -64,6 +69,41 @@ const createComment = asyncHandler(async (req, res) => {
         profileImage: req.user.profileImage,
       },
     });
+  }
+
+  // Send notifications for mentioned users if exist
+  const mentionedUsers = findMentions(comment);
+  if (mentionedUsers.length > 0) {
+    if (!resizedImage) resizedImage = await resizeImage(post.image, 50, 50);
+
+    for (let i = 0; i < mentionedUsers.length; i++) {
+      let username = mentionedUsers[i];
+      // continue because we already send notification of comment
+      if (username === post.username) continue;
+      const userDocumentId = await findUserDetails(username);
+      if (!userDocumentId) continue;
+
+      const notification = new Notification({
+        sender: req.user._id,
+        receiver: userDocumentId,
+        notificationType: 'mention',
+        notificationData: {
+          postId,
+          postImage: resizedImage,
+          comment,
+        },
+      });
+      await notification.save();
+
+      sendNotification(req, {
+        ...notification.toObject(),
+        senderDetails: {
+          _id: req.user._id,
+          username: req.user.username,
+          profileImage: req.user.profileImage,
+        },
+      });
+    }
   }
 
   res.status(201).json({
@@ -236,7 +276,6 @@ const likeCommentReply = asyncHandler(async (req, res) => {
 // @access User
 const deleteComment = asyncHandler(async (req, res) => {
   const { commentId } = req.params;
-  console.log(req.user._id, commentId);
 
   const comment = await Comment.findOne({
     _id: commentId,

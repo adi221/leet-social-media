@@ -4,7 +4,7 @@ import User from '../models/userModel.js';
 import Notification from '../models/notificationModel.js';
 import { sendNotification, sendNewPost } from '../handlers/socketHandlers.js';
 import { resizeImage } from '../handlers/imageResizeHandlers.js';
-import { findHashtags } from '../utils/hashtags.js';
+import { findHashtags } from '../utils/tagUtils.js';
 import { getCommentsOfPost } from '../utils/controllerUtils.js';
 import mongoose from 'mongoose';
 const ObjectId = mongoose.Types.ObjectId;

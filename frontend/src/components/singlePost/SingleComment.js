@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import LikeIcon from '../icons/LikeIcon';
 import OptionsIcon from '../icons/OptionsIcon';
 import SingleReply from './SingleReply';
+import HashtagAtComment from './HashtagAtComment';
 import { formatDateDistance } from '../../helpers/timeHelpers';
 import {
   SINGLE_POST_COMMENT_LIKE_SUCCESS,
@@ -119,7 +120,7 @@ const SingleComment = ({
             <Link to={`/profile/${author.username}`} className='bold underline'>
               {author.username}
             </Link>
-            {comment}
+            <HashtagAtComment comment={comment} isTagged={isDesc} />
           </div>
           <div className='single-comment__details--info'>
             <p> {formatDateDistance(createdAt)}</p>

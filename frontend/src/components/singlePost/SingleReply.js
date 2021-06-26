@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import LikeIcon from '../icons/LikeIcon';
 import OptionsIcon from '../icons/OptionsIcon';
+import HashtagAtComment from './HashtagAtComment';
 import { formatDateDistance } from '../../helpers/timeHelpers';
 import {
   likeCommentReply,
@@ -11,6 +12,7 @@ import {
 import {
   SINGLE_POST_REPLY_LIKE_SUCCESS,
   SINGLE_POST_DELETE_REPLY_SUCCESS,
+  SINGLE_POST_IS_REPLYING,
 } from '../../constants/singlePostConstants';
 import { openModal, closeModal, showAlert } from '../../actions/utilActions';
 
@@ -67,6 +69,13 @@ const SingleReply = ({
     }
   };
 
+  const replyCommentHandler = () => {
+    dispatch({
+      type: SINGLE_POST_IS_REPLYING,
+      payload: { commentId: parentComment, username: author.username },
+    });
+  };
+
   const commentOptionsHandler = () => {
     dispatchRedux(
       openModal('COMMENT_OPTIONS', {
@@ -84,12 +93,12 @@ const SingleReply = ({
           <Link to={`/profile/${author.username}`} className='bold underline'>
             {author.username}
           </Link>
-          <p>{message}</p>
+          <HashtagAtComment comment={message} />
         </div>
         <div className='single-comment__details--info'>
           <p>{formatDateDistance(createdAt)}</p>
           {replyLikes.length > 0 && <p>{replyLikes.length} likes</p>}
-          <button onClick={() => console.log('TODO')}>reply</button>
+          <button onClick={replyCommentHandler}>reply</button>
         </div>
       </div>
       {userInfo._id === author._id && (
