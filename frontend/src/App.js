@@ -14,7 +14,7 @@ import {
 } from './pages';
 import { Navbar, PrivateRoute, RootModal } from './components';
 import Alert from './components/alert/Alert';
-import { connectSocket } from './actions/socketActions';
+import { connectSocket, disconnectSocket } from './actions/socketActions';
 import {
   getNotifications,
   getChatNotifications,
@@ -31,6 +31,8 @@ const App = () => {
       dispatch(getNotifications());
       dispatch(getChatNotifications());
     }
+
+    // return () => dispatch(disconnectSocket());
   }, [userInfo, dispatch]);
 
   useEffect(() => {

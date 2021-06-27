@@ -269,7 +269,7 @@ const deletePost = asyncHandler(async (req, res) => {
   const user = await User.findById(_id);
 
   if (post) {
-    await post.remove();
+    await Post.deleteOne({ _id: postId });
     // user.posts = user.posts.filter(post => post.post !== postId);
     user.posts.pull({ post: postId });
     await user.save();

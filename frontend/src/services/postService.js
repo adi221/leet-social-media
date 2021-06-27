@@ -17,6 +17,21 @@ export const getPostsApi = async token => {
 };
 
 /**
+ * Retrieves post ids for feed
+ * @function getSinglePostApi
+ * @param {string} postId Authorization token
+ * @returns {object} Post and post author info
+ */
+export const getSinglePostApi = async postId => {
+  try {
+    const { data } = await axios.get(`/api/posts/${postId}`);
+    return data;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+/**
  * Creates a new post
  * @function createPostApi
  * @param {object} postBody Description and picture of post
@@ -38,7 +53,7 @@ export const createPostApi = async (postBody, token) => {
  */
 export const deletePostApi = async (postId, token) => {
   try {
-    await axios.post(`/api/posts/delete/${postId}`, {}, sendConfig(token));
+    await axios.delete(`/api/posts/delete/${postId}`, sendConfig(token));
   } catch (error) {
     throw new Error(error);
   }

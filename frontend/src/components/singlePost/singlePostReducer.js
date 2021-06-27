@@ -47,14 +47,15 @@ export const INITIAL_STATE = {
 export const singlePostReducer = (state, action) => {
   switch (action.type) {
     case SINGLE_POST_LOADING:
-      return { ...state, loading: true };
+      return { ...state, loading: true, error: false };
     case SINGLE_POST_ERROR:
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, loading: false, error: true };
     case SINGLE_POST_GET_SUCCESS:
       const { author, ...post } = action.payload;
       return {
         ...state,
         loading: false,
+        error: false,
         post,
         author,
       };
@@ -67,7 +68,6 @@ export const singlePostReducer = (state, action) => {
     case SINGLE_POST_LIKE_SUCCESS:
       return { ...state, post: { ...state.post, likes: action.payload } };
     case SINGLE_POST_COMMENT_SUCCESS:
-      console.log(action.payload);
       return {
         ...state,
         post: {
@@ -131,6 +131,7 @@ export const singlePostReducer = (state, action) => {
       }
     case SINGLE_POST_COMMENT_REPLY_SUCCESS:
       const newCommentReply = action.payload;
+      console.log(action.payload);
       const modifiedComments = state.post.comments.map(comment => {
         if (comment._id === newCommentReply.parentComment) {
           comment.commentReplies.push(newCommentReply);

@@ -12,27 +12,6 @@ const likeSchema = mongoose.Schema({
   },
 });
 
-const commentSchema = mongoose.Schema(
-  {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: 'User',
-    },
-    username: {
-      type: String,
-      required: true,
-    },
-    comment: {
-      type: String,
-      required: true,
-    },
-  },
-  {
-    timestamps: true,
-  }
-);
-
 const postSchema = mongoose.Schema(
   {
     user: {
@@ -57,12 +36,22 @@ const postSchema = mongoose.Schema(
       required: true,
     },
     likes: [likeSchema],
-    comments: [commentSchema],
   },
   {
     timestamps: true,
   }
 );
+
+postSchema.pre('deleteOne', async function (next) {
+  const postId = this.getQuery()['_id'];
+  console.log('PostId from postSchema: ' + postId);
+  try {
+    await mongoose.model('Comment').deleteMany({ post: postId });
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 
 const Post = mongoose.model('Post', postSchema);
 export default Post;

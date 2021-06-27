@@ -31,5 +31,17 @@ const commentSchema = mongoose.Schema(
   }
 );
 
+commentSchema.pre('deleteOne', async function (next) {
+  const commentId = this.getQuery()['_id'];
+  try {
+    await mongoose
+      .model('CommentReply')
+      .deleteMany({ parentComment: commentId });
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
+
 const Comment = mongoose.model('Comment', commentSchema);
 export default Comment;

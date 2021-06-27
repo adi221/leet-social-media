@@ -108,7 +108,10 @@ const createComment = asyncHandler(async (req, res) => {
 
   res.status(201).json({
     ...newComment.toObject(),
+    commentReplies: [],
+    commentRepliesCount: 0,
     author: {
+      _id,
       username: req.user.username,
       profileImage: req.user.profileImage,
     },
@@ -186,6 +189,7 @@ const createCommentReply = asyncHandler(async (req, res) => {
   res.status(201).json({
     ...newCommentReply.toObject(),
     author: {
+      _id,
       username: req.user.username,
       profileImage: req.user.profileImage,
     },

@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useReducer } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import axios from 'axios';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { BsThreeDots } from 'react-icons/bs';
+import ErrorPage from '../../pages/ErrorPage';
 import {
   Tags,
   Comments,
@@ -19,6 +19,7 @@ import {
   SINGLE_POST_GET_SUCCESS,
 } from '../../constants/singlePostConstants';
 import { INITIAL_STATE, singlePostReducer } from './singlePostReducer';
+import { getSinglePostApi } from '../../services/postService';
 
 const SinglePost = ({ uniqueId, simple = false }) => {
   const [state, dispatch] = useReducer(singlePostReducer, INITIAL_STATE);
@@ -29,13 +30,12 @@ const SinglePost = ({ uniqueId, simple = false }) => {
   const getPostData = async id => {
     try {
       dispatch({ type: SINGLE_POST_LOADING });
-      const { data } = await axios.get(`/api/posts/${id}`);
+      const data = await getSinglePostApi(id);
 
       dispatch({ type: SINGLE_POST_GET_SUCCESS, payload: data });
     } catch (error) {
       dispatch({
         type: SINGLE_POST_ERROR,
-        payload: error.response.data.message,
       });
     }
   };
@@ -43,6 +43,11 @@ const SinglePost = ({ uniqueId, simple = false }) => {
   useEffect(() => {
     getPostData(uniqueId);
   }, [uniqueId]);
+
+  if (state.loading) return <SinglePostSkeleton simple={simple} />;
+  if (state.error) {
+    return simple ? null : <ErrorPage />;
+  }
 
   const {
     tags,
@@ -72,9 +77,6 @@ const SinglePost = ({ uniqueId, simple = false }) => {
       openModal('SINGLE_POST', { username, postId, userId, profileImage })
     );
   };
-
-  if (state.loading) return <SinglePostSkeleton simple={simple} />;
-  if (state.error) return null;
 
   return (
     <article className={`single-post ${simple && 'single-post--simple'}`}>
