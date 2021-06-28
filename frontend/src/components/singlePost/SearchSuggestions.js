@@ -2,8 +2,6 @@ import React from 'react';
 import UsersListSkeleton from '../loaders/UsersListSkeleton';
 
 const SearchSuggestions = ({ fetching, result, onClick, username }) => {
-  console.log(result);
-
   const renderSingleUser = user => {
     const { name, profileImage, username } = user;
 

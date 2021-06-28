@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import { findByTestAttr } from '../../utils/testUtils';
+import { findByTestAttr, mockState } from '../../utils/testUtils';
 import HomePage from '../../pages/HomePage';
 
 // https://stackoverflow.com/questions/59346079/using-jest-and-enzyme-to-test-functional-react-components-that-are-using-redux
@@ -12,12 +12,14 @@ import HomePage from '../../pages/HomePage';
 
 const mockStore = configureMockStore([thunk]);
 
+// {
+//   postsGet: { loading: false, posts: [{ _id: '1' }], loadedPosts: [] },
+//   userLogin: { userInfo: { _id: '1', username: '11', profileImage: '' } },
+//   userSuggestions: { loading: false, error: false, suggestions: [] },
+// }
+
 const setup = () => {
-  const store = mockStore({
-    postsGet: { loading: false, posts: [{ _id: '1' }], loadedPosts: [] },
-    userLogin: { userInfo: { _id: '1', username: '11', profileImage: '' } },
-    userSuggestions: { loading: false, error: false, suggestions: [] },
-  });
+  const store = mockStore(mockState);
 
   const wrapper = mount(
     <Provider store={store}>

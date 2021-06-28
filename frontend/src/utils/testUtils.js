@@ -44,3 +44,34 @@ export const checkProps = (Component, expectedProps) => {
 export const storeFactory = initialState => {
   return createStore(rootReducer, initialState, applyMiddleware(...middleware));
 };
+
+/**
+ * @object Mock state for tests
+ */
+export const mockState = {
+  userLogin: {
+    userInfo: { _id: '1', username: '11', profileImage: '', token: '11' },
+  },
+  userSuggestions: { loading: false, error: false, suggestions: [] },
+  userRegister: {},
+  userDetailsProfile: {
+    loading: false,
+    error: false,
+    user: { _id: '1', username: 'adi' },
+  },
+  userDetails: {},
+  userSearch: { users: [] },
+  userStats: { bookmarks: [], following: [] },
+  postsGet: { loading: false, posts: [{ _id: '1' }], loadedPosts: [] },
+  postCreate: { loading: false },
+  postsExplore: { postPreviews: [] },
+  sharePost: { postReceiversId: [] },
+  modal: { isShow: false },
+  alert: { isShow: false },
+  socket: { socket: {} },
+  notifications: { notifications: [] },
+  chatNotifications: { notifications: [] },
+  chatList: { chatList: [] },
+  createChat: { partnerUsersId: [], redirectChatId: null },
+  chatFeed: { partners: [], chatType: '', messages: [] },
+};

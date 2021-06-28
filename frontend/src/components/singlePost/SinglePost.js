@@ -79,7 +79,10 @@ const SinglePost = ({ uniqueId, simple = false }) => {
   };
 
   return (
-    <article className={`single-post ${simple && 'single-post--simple'}`}>
+    <article
+      className={`single-post ${simple && 'single-post--simple'}`}
+      data-test='component-single-post'
+    >
       <header
         className={`single-post__header ${
           simple && 'single-post__header--simple'
