@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import axios from 'axios';
 import {
   FaRegComment,
   FaRegBookmark,
@@ -8,6 +7,8 @@ import {
   FaRegPaperPlane,
 } from 'react-icons/fa';
 import LikeIcon from '../icons/LikeIcon';
+import { bookmarkPostApi } from '../../services/userService';
+import { likePostApi } from '../../services/postService';
 import { USER_STATS_BOOKMARKS } from '../../constants/userConstants';
 import { SINGLE_POST_LIKE_SUCCESS } from '../../constants/singlePostConstants';
 import { openModal } from '../../actions/utilActions';
@@ -35,17 +36,7 @@ const SinglePostBtns = ({ uniqueId, likes, commentRef, dispatch }) => {
 
   const likeHandler = async () => {
     try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
-      const { data } = await axios.post(
-        `/api/posts/like/${uniqueId}`,
-        {},
-        config
-      );
+      const data = await likePostApi(uniqueId, userInfo.token);
       dispatch({ type: SINGLE_POST_LIKE_SUCCESS, payload: data });
     } catch (error) {
       console.log(error);
@@ -54,17 +45,7 @@ const SinglePostBtns = ({ uniqueId, likes, commentRef, dispatch }) => {
 
   const bookmarkHandler = async () => {
     try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
-      const { data } = await axios.post(
-        `/api/users/save/${uniqueId}`,
-        {},
-        config
-      );
+      const data = await bookmarkPostApi(uniqueId, userInfo.token);
       dispatchRedux({ type: USER_STATS_BOOKMARKS, payload: data });
     } catch (error) {
       console.log(error);
@@ -76,8 +57,7 @@ const SinglePostBtns = ({ uniqueId, likes, commentRef, dispatch }) => {
       openModal('SHARE_POST', {
         postId: uniqueId,
         userOrPostId: userInfo._id,
-        listType: 'following',
-        users: true,
+        requestType: 'USER_FOLLOWING',
         checkButton: true,
       })
     );

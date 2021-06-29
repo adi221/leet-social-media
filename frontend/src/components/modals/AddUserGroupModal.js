@@ -15,6 +15,7 @@ const AddUserGroupModal = props => {
   const [query, setQuery] = useState('');
 
   const dispatch = useDispatch();
+  const { partners } = useSelector(state => state.chatFeed);
   const { partnerUsersId, addUserSuccess, loading } = useSelector(
     state => state.createChat
   );
@@ -39,6 +40,8 @@ const AddUserGroupModal = props => {
   const addNewUsersHandler = () => {
     dispatch(addUsersToGroup(chatId));
   };
+
+  const excludeUsers = partners.map(partner => partner._id);
 
   return (
     <>
@@ -73,7 +76,7 @@ const AddUserGroupModal = props => {
           >
             Suggested
           </p>
-          <UsersList {...props} />
+          <UsersList {...props} excludeUsers={excludeUsers} />
         </>
       ) : (
         <>
@@ -82,6 +85,10 @@ const AddUserGroupModal = props => {
           ) : (
             <>
               {users.map(user => {
+                if (excludeUsers.includes(user._id)) {
+                  return null;
+                }
+
                 return <SingleUserList key={user._id} {...user} checkButton />;
               })}
               {!searchLoading && users.length === 0 && <p>No users found</p>}

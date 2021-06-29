@@ -18,10 +18,8 @@ const ProfileHeader = ({ user }) => {
   const dispatch = useDispatch();
   const { userInfo } = useSelector(state => state.userLogin);
 
-  const openFollowingModal = listType => {
-    dispatch(
-      openModal('USER_LIST', { userOrPostId: userId, listType, users: true })
-    );
+  const openFollowingModal = requestType => {
+    dispatch(openModal('USER_LIST', { userOrPostId: userId, requestType }));
   };
 
   const renderFollowDiv = () => {
@@ -35,13 +33,13 @@ const ProfileHeader = ({ user }) => {
           style={{
             cursor: `${followers && followers.length > 0 ? 'pointer' : 'auto'}`,
           }}
-          onClick={() => openFollowingModal('followers')}
+          onClick={() => openFollowingModal('USER_FOLLOWERS')}
         >
           <span className='bold'>{followers && followers.length} </span>{' '}
           followers
         </p>
         <p
-          onClick={() => openFollowingModal('following')}
+          onClick={() => openFollowingModal('USER_FOLLOWING')}
           style={{
             cursor: `${following && following.length > 0 ? 'pointer' : 'auto'}`,
           }}

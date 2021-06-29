@@ -1,14 +1,29 @@
 import React, { useEffect, useReducer, useRef } from 'react';
-import axios from 'axios';
 import PropTypes from 'prop-types';
 import { UsersListSkeleton } from '../../components';
 import SingleUserList from './SingleUserList';
-import { INITIAL_STATE, usersListReducer } from './usersListReducer';
+import {
+  getUserFollowersApi,
+  getUserFollowingApi,
+} from '../../services/userService';
+import { getPostLikesApi } from '../../services/postService';
 import useScrollPositionThrottled from '../../hooks/useScrollPositionThrottled';
+import { INITIAL_STATE, usersListReducer } from './usersListReducer';
 
-const UsersList = ({ userOrPostId, listType, users, checkButton }) => {
+const userListRequests = {
+  USER_FOLLOWING: getUserFollowingApi,
+  USER_FOLLOWERS: getUserFollowersApi,
+  POST_LIKES_USERS: getPostLikesApi,
+};
+
+const UsersList = ({
+  userOrPostId,
+  requestType,
+  checkButton = false,
+  excludeUsers = [],
+}) => {
   const [state, dispatch] = useReducer(usersListReducer, INITIAL_STATE);
-  const usersOrPosts = users ? 'users' : 'posts';
+  const specificRequest = userListRequests[requestType];
   const componentRef = useRef();
 
   useScrollPositionThrottled(async ({ atBottom }) => {
@@ -21,12 +36,10 @@ const UsersList = ({ userOrPostId, listType, users, checkButton }) => {
       try {
         dispatch({ type: 'FETCH_ADDITIONAL_START' });
         const offset = state.data.length;
-        const { data } = await axios.get(
-          `/api/${usersOrPosts}/${userOrPostId}/${offset}/${listType}`
-        );
-        dispatch({ type: 'ADD_USERS', payload: data });
+        const users = await specificRequest(userOrPostId, offset);
+        dispatch({ type: 'ADD_USERS', payload: users });
       } catch (error) {
-        dispatch({ type: 'FETCH_FAILURE', payload: error.response.message });
+        dispatch({ type: 'FETCH_FAILURE', payload: error });
       }
     }
   }, componentRef.current);
@@ -38,15 +51,13 @@ const UsersList = ({ userOrPostId, listType, users, checkButton }) => {
       try {
         dispatch({ type: 'FETCH_START' });
         const offset = stateRef ? stateRef.length : 0;
-        const { data } = await axios.get(
-          `/api/${usersOrPosts}/${userOrPostId}/${offset}/${listType}`
-        );
-        dispatch({ type: 'FETCH_SUCCESS', payload: data });
+        const users = await specificRequest(userOrPostId, offset);
+        dispatch({ type: 'FETCH_SUCCESS', payload: users });
       } catch (error) {
-        dispatch({ type: 'FETCH_FAIL', payload: error.response.message });
+        dispatch({ type: 'FETCH_FAIL', payload: error });
       }
     })();
-  }, [userOrPostId, listType, stateRef, usersOrPosts]);
+  }, [userOrPostId, stateRef, specificRequest]);
 
   return (
     <ul className='modal__users' ref={componentRef}>
@@ -54,6 +65,9 @@ const UsersList = ({ userOrPostId, listType, users, checkButton }) => {
         <UsersListSkeleton style={{ width: 'min(420px, 95vw)' }} />
       ) : (
         state.data.map(user => {
+          if (excludeUsers.length > 0 && excludeUsers.includes(user._id)) {
+            return null;
+          }
           return (
             <SingleUserList
               key={user._id}
@@ -72,9 +86,9 @@ const UsersList = ({ userOrPostId, listType, users, checkButton }) => {
 
 UsersList.propTypes = {
   userOrPostId: PropTypes.string.isRequired,
-  listType: PropTypes.string.isRequired,
-  users: PropTypes.bool.isRequired,
-  checkButton: PropTypes.bool.isRequired,
+  requestType: PropTypes.string.isRequired,
+  checkButton: PropTypes.bool,
+  excludeUsers: PropTypes.array,
 };
 
 export default UsersList;

@@ -5,7 +5,10 @@ import Notification from '../models/notificationModel.js';
 import { sendNotification, sendNewPost } from '../handlers/socketHandlers.js';
 import { resizeImage } from '../handlers/imageResizeHandlers.js';
 import { findHashtags } from '../utils/tagUtils.js';
-import { getCommentsOfPost } from '../utils/controllerUtils.js';
+import {
+  getCommentsOfPost,
+  getRelatedUsers,
+} from '../utils/controllerUtils.js';
 import mongoose from 'mongoose';
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -50,12 +53,14 @@ const createPost = asyncHandler(async (req, res) => {
 
   const hashtags = findHashtags(description);
 
+  const resizedImage = await resizeImage(file, 500, 500);
+
   const post = new Post({
     user: _id,
     username,
     description,
     tags: hashtags,
-    image: file,
+    image: resizedImage,
     likes: [],
     comments: [],
   });
@@ -226,22 +231,6 @@ const getPostDetails = asyncHandler(async (req, res) => {
     res.status(404).json({ success: false, message: 'Post was not found' });
   }
 });
-
-const getRelatedUsers = async (users, offset) => {
-  // same as collection.skip(offset).limit(10)
-  const partitionedUsers = users.slice(offset, offset + 10);
-  let usersArr = [];
-  for (const user of partitionedUsers) {
-    const userData = await User.findById(
-      user.user,
-      '_id name username profileImage'
-    );
-    if (userData) {
-      usersArr.push(userData);
-    }
-  }
-  return usersArr;
-};
 
 // @desc Get list of users that like the post
 // @route GET /api/posts/:postId/:offset/likes

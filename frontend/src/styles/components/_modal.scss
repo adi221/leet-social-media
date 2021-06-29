@@ -85,8 +85,9 @@
 
   &__users {
     padding: 0;
-    max-height: 20rem;
+    max-height: 18rem;
     overflow-y: auto;
+    min-height: 11rem;
 
     &--item {
       display: flex;

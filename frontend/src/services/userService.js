@@ -125,6 +125,26 @@ export const unfollowUserApi = async (userId, token) => {
 };
 
 /**
+ * Bookmark a post
+ * @function bookmarkPostApi
+ * @param {string} postId id of a post
+ * @param {string} token authorization token
+ * @returns {array} updated array of bookmarks
+ */
+export const bookmarkPostApi = async (postId, token) => {
+  try {
+    const { data } = await axios.post(
+      `/api/users/save/${postId}`,
+      {},
+      sendConfig(token)
+    );
+    return data;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+/**
  * Updates user's details
  * @function updateUserProfileApi
  * @param {object} userDetails user details to update
@@ -221,6 +241,42 @@ export const getUserSearchApi = async keyword => {
 export const deleteUserApi = async userId => {
   try {
     await axios.delete(`/api/users/${userId}`);
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+/**
+ * Retrieves list of followers of certain user
+ * @function getUserFollowersApi
+ * @param {string} userId id of user
+ * @param {number} offset number of users to skip
+ * @returns {array} Array of followers
+ */
+export const getUserFollowersApi = async (userId, offset) => {
+  try {
+    const { data } = await axios.get(
+      `/api/users/${userId}/${offset}/followers`
+    );
+    return data;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+/**
+ * Retrieves list of following users of certain user
+ * @function getUserFollowingApi
+ * @param {string} userId id of user
+ * @param {number} offset number of users to skip
+ * @returns {array} Array of followers
+ */
+export const getUserFollowingApi = async (userId, offset) => {
+  try {
+    const { data } = await axios.get(
+      `/api/users/${userId}/${offset}/following`
+    );
+    return data;
   } catch (error) {
     throw new Error(error);
   }

@@ -3,9 +3,9 @@ import colors from 'colors';
 import Chat from '../models/chatModel.js';
 import ChatNotification from '../models/chatNotificationModel.js';
 import {
-  getSingleChatForList,
   doesChatAlreadyExist,
-} from '../controllers/chatControllers.js';
+  getSingleChatForList,
+} from '../utils/controllerUtils.js';
 
 // to check online / offline users
 const onlineUsersId = {};

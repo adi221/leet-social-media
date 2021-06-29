@@ -12,8 +12,7 @@ const ChatInfoMembers = ({ partners, chatId }) => {
       openModal('ADD_USER_GROUP', {
         chatId,
         userOrPostId: userInfo._id,
-        listType: 'following',
-        users: true,
+        requestType: 'USER_FOLLOWING',
         checkButton: true,
       })
     );

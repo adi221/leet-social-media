@@ -5,6 +5,7 @@ import Post from '../models/postModel.js';
 import Notification from '../models/notificationModel.js';
 import { sendNotification } from '../handlers/socketHandlers.js';
 import { resizeImage } from '../handlers/imageResizeHandlers.js';
+import { getRelatedUsers } from '../utils/controllerUtils.js';
 import mongoose from 'mongoose';
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -429,24 +430,8 @@ const getUserSearch = asyncHandler(async (req, res) => {
     const { _id, name, username, profileImage } = user;
     return { _id, name, username, profileImage };
   });
-  res.json(updatedUsers);
+  res.send(updatedUsers);
 });
-
-const getRelatedUsers = async (users, offset) => {
-  // same as collection.skip(offset).limit(10)
-  const partitionedUsers = users.slice(offset, offset + 10);
-  let usersArr = [];
-  for (const user of partitionedUsers) {
-    const userData = await User.findById(
-      user.user,
-      '_id name username profileImage'
-    );
-    if (userData) {
-      usersArr.push(userData);
-    }
-  }
-  return usersArr;
-};
 
 // @desc Get list of user's followers
 // @route GET /api/users/:userId/:offset/followers

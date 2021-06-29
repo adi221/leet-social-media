@@ -102,6 +102,16 @@ const SingleComment = ({
     }
   };
 
+  const determineReplyDescription = () => {
+    if (!showReplies) {
+      return `View replies (${commentRepliesCount})`;
+    } else if (commentReplies.length === commentRepliesCount && showReplies) {
+      return 'Hide replies';
+    } else {
+      return `View replies (${commentRepliesCount - commentReplies.length})`;
+    }
+  };
+
   const commentOptionsHandler = () => {
     dispatchRedux(
       openModal('COMMENT_OPTIONS', {
@@ -150,9 +160,7 @@ const SingleComment = ({
           onClick={getCommentRepliesHandler}
         >
           <span className='single-comment__toggle--dash'></span>
-          {!showReplies
-            ? `View replies (${commentRepliesCount})`
-            : 'Hide replies'}
+          {determineReplyDescription()}
         </button>
       )}
       {showReplies && (

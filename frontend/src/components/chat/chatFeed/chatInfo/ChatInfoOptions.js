@@ -1,7 +1,10 @@
 import React from 'react';
-import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import {
+  leaveGroupApi,
+  hideChatForUserApi,
+} from '../../../../services/chatService';
 
 const ChatInfoOptions = ({ chatId, chatType }) => {
   const history = useHistory();
@@ -9,12 +12,7 @@ const ChatInfoOptions = ({ chatId, chatType }) => {
 
   const leaveGroup = async () => {
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
-      await axios.put(`/api/chats/leave/${chatId}`, {}, config);
+      await leaveGroupApi(chatId, userInfo.token);
       history.push('/direct/inbox');
     } catch (error) {
       console.log(error);
@@ -23,12 +21,7 @@ const ChatInfoOptions = ({ chatId, chatType }) => {
 
   const hideChatForUser = async () => {
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
-      await axios.put(`/api/chats/hide/${chatId}`, {}, config);
+      await hideChatForUserApi(chatId, userInfo.token);
       history.push('/direct/inbox');
     } catch (error) {
       console.log(error);

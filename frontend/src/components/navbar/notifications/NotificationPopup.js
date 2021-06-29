@@ -7,7 +7,10 @@ const NotificationPopup = ({ numUnreadNotifications, notifications }) => {
   let newFollowers = 0;
 
   notifications.slice(0, numUnreadNotifications).forEach(notification => {
-    if (notification.notificationType === 'comment') {
+    if (
+      notification.notificationType === 'comment' ||
+      notification.notificationType === 'mention'
+    ) {
       newComments += 1;
     } else if (notification.notificationType === 'like') {
       newLikes += 1;

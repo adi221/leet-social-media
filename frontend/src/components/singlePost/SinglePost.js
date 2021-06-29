@@ -65,9 +65,8 @@ const SinglePost = ({ uniqueId, simple = false }) => {
   const openLikesModal = () => {
     dispatchRedux(
       openModal('USER_LIST', {
-        userOrPostId: postId,
-        listType: 'likes',
-        users: false,
+        userOrPostId: uniqueId,
+        requestType: 'POST_LIKES_USERS',
       })
     );
   };

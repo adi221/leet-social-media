@@ -80,7 +80,6 @@ const SinglePostForm = ({
     if (lastWord.match(/@[a-zA-Z]/)) {
       setFetching(true);
       const mention = lastWord.substring(1);
-      console.log(mention);
       setMention(mention);
       // Setting the result to an empty array to show skeleton
       setResult([]);

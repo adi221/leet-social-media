@@ -11,8 +11,7 @@ const ChatHeader = () => {
     dispatch(
       openModal('NEW_MESSAGE', {
         userOrPostId: userInfo._id,
-        listType: 'following',
-        users: true,
+        requestType: 'USER_FOLLOWING',
         checkButton: true,
       })
     );

@@ -87,3 +87,31 @@ export const getAdditionalMessagesApi = async (chatId, offset) => {
     throw new Error(error);
   }
 };
+
+/**
+ * User leaves group
+ * @function leaveGroupApi
+ * @param {string} chatId id of chat
+ * @param {string} token authorization token
+ */
+export const leaveGroupApi = async (chatId, token) => {
+  try {
+    await axios.put(`/api/chats/leave/${chatId}`, {}, sendConfig(token));
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+/**
+ * User deletes group from chat so hide it
+ * @function hideChatForUserApi
+ * @param {string} chatId id of chat
+ * @param {string} token authorization token
+ */
+export const hideChatForUserApi = async (chatId, token) => {
+  try {
+    await axios.put(`/api/chats/hide/${chatId}`, {}, sendConfig(token));
+  } catch (error) {
+    throw new Error(error);
+  }
+};
