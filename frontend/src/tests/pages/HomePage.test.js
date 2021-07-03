@@ -12,12 +12,6 @@ import HomePage from '../../pages/HomePage';
 
 const mockStore = configureMockStore([thunk]);
 
-// {
-//   postsGet: { loading: false, posts: [{ _id: '1' }], loadedPosts: [] },
-//   userLogin: { userInfo: { _id: '1', username: '11', profileImage: '' } },
-//   userSuggestions: { loading: false, error: false, suggestions: [] },
-// }
-
 const setup = () => {
   const store = mockStore(mockState);
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { FollowButton } from '../../components';
 import CheckButton from '../../components/buttons/CheckButton';
+import FollowButton from '../../components/buttons/FollowButton';
 import { CLOSE_MODAL } from '../../constants/utilConstants';
 
 const SingleUserList = ({ name, username, profileImage, _id, checkButton }) => {

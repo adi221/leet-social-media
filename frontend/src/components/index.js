@@ -4,6 +4,7 @@ import Notifications from './navbar/notifications/Notifications';
 import NotificationButton from './navbar/notifications/NotificationButton';
 import RootModal from './modals/RootModal';
 import HomeSidebar from './home/homeSidebar/HomeSidebar';
+import HomeSuggestions from './home/homeSuggestions/HomeSuggestions';
 import Feed from './home/feed/Feed';
 import SinglePost from './singlePost/SinglePost';
 import Tags from './singlePost/Tags';
@@ -41,6 +42,7 @@ export {
   SinglePostBtns,
   Loader,
   SkeletonLoader,
+  HomeSuggestions,
   UsersListSkeleton,
   SinglePostSkeleton,
   Message,

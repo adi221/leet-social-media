@@ -32,7 +32,7 @@ const App = () => {
       dispatch(getChatNotifications());
     }
 
-    // return () => dispatch(disconnectSocket());
+    return () => dispatch(disconnectSocket());
   }, [userInfo, dispatch]);
 
   useEffect(() => {

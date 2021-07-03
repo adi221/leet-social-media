@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Message } from '../../components';
 import { USER_UPDATE_PASSWORD_RESET } from '../../constants/userConstants';
 import { updateUserPassword } from '../../actions/userActions';
 import { showAlert } from '../../actions/utilActions';
 import SettingsHeader from './SettingsHeader';
+import LoaderSvg from '../loaders/LoaderSvg';
 
 const ChangePassword = ({ currSettings }) => {
   const { usernameCurr, profileImage } = currSettings;
@@ -20,6 +20,7 @@ const ChangePassword = ({ currSettings }) => {
 
   useEffect(() => {
     if (success) {
+      dispatch(showAlert('Password updated successfully'));
       setTimeout(() => {
         dispatch({ type: USER_UPDATE_PASSWORD_RESET });
         setOldPassword('');
@@ -27,6 +28,10 @@ const ChangePassword = ({ currSettings }) => {
         setNewPasswordConfirm('');
       }, 2500);
     } else if (error) {
+      console.log(error);
+      dispatch(
+        showAlert('There was an error updating the password, please try again')
+      );
       setTimeout(() => {
         dispatch({ type: USER_UPDATE_PASSWORD_RESET });
       }, 2500);
@@ -36,9 +41,9 @@ const ChangePassword = ({ currSettings }) => {
   const submitHandler = e => {
     e.preventDefault();
     if (!newPassword || !newPasswordConfirm || !oldPassword) {
-      window.alert('Please fill all the fields');
+      dispatch(showAlert('Please fill all the fields'));
     } else if (newPassword !== newPasswordConfirm) {
-      window.alert('New password and password confirm do not match');
+      dispatch(showAlert('New password and password confirm do not match'));
     } else {
       dispatch(updateUserPassword({ oldPassword, newPassword }));
     }
@@ -48,7 +53,7 @@ const ChangePassword = ({ currSettings }) => {
     <>
       <SettingsHeader username={usernameCurr} image={profileImage} />
       <form onSubmit={submitHandler} className='settings-form is-flexed'>
-        <div className=' settings-form__control'>
+        <div className='settings-form__control'>
           <label htmlFor='name' className='bold mr-md'>
             Old Password
           </label>
@@ -59,7 +64,7 @@ const ChangePassword = ({ currSettings }) => {
             onChange={e => setOldPassword(e.target.value)}
           />
         </div>
-        <div className=' settings-form__control'>
+        <div className='settings-form__control'>
           <label htmlFor='name' className='bold mr-md'>
             New Password
           </label>
@@ -70,7 +75,7 @@ const ChangePassword = ({ currSettings }) => {
             onChange={e => setNewPassword(e.target.value)}
           />
         </div>
-        <div className=' settings-form__control'>
+        <div className='settings-form__control'>
           <label htmlFor='name' className='bold mr-md'>
             Confirm New Password
           </label>
@@ -81,17 +86,18 @@ const ChangePassword = ({ currSettings }) => {
             onChange={e => setNewPasswordConfirm(e.target.value)}
           />
         </div>
-        <div className=' settings-form__control'>
+        <div className='settings-form__control'>
           <p></p>
           <button className='button is-primary' type='submit'>
             Submit
+            {loading && <LoaderSvg />}
           </button>
         </div>
-        {loading && <Message type='info' text='Loading...' />}
+        {/* {loading && <Message type='info' text='Loading...' />}
         {success && (
           <Message type='success' text='Password successfully changed' />
         )}
-        {error && <Message type='danger' text={error} />}
+        {error && <Message type='danger' text={error} />} */}
       </form>
     </>
   );

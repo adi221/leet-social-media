@@ -1,5 +1,5 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { mount, act } from 'enzyme';
 import { Provider } from 'react-redux';
 import { mockState, findByTestAttr } from '../../../utils/testUtils';
 import SinglePost from '../../../components/singlePost/SinglePost';
@@ -11,19 +11,16 @@ const defaultProps = {
   simple: false,
 };
 
-const initialStore = {
-  userLogin: { userInfo: { _id: '1', token: '11' } },
-};
-
 const mockStore = configureMockStore([thunk]);
 
-const setup = () => {
+const setup = async () => {
   const store = mockStore(mockState);
-  return mount(
+  const wrapper = mount(
     <Provider store={store}>
       <SinglePost {...defaultProps} />
     </Provider>
   );
+  return wrapper;
 };
 
 test('renders without error', () => {
@@ -32,15 +29,14 @@ test('renders without error', () => {
   expect(component.exists()).toBeTruthy();
 });
 
-describe('redux props', () => {
-  test('has token piece of state as prop', () => {
-    const wrapper = setup();
-    console.log(wrapper.props());
-    expect(wrapper.props()).toBeTruthy();
-  });
+// describe('redux props', () => {
+//   test('has token piece of state as prop', () => {
+//     const wrapper = setup();
+//     expect(wrapper.props()).toBeTruthy();
+//   });
 
-  // test('has currentUser piece of state as prop', () => {
-  //   const wrapper = setup();
-  //   expect(wrapper.props()._id).toBe('1');
-  // });
-});
+//   test('has currentUser piece of state as prop', () => {
+//     const wrapper = setup();
+//     expect(wrapper.props()._id).toBe('1');
+//   });
+// });

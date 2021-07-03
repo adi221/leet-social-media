@@ -1,0 +1,30 @@
+.home-suggestions {
+  width: 40rem;
+  max-width: 100%;
+  margin: 0 auto;
+  display: block;
+
+  &__title {
+    font-weight: 200;
+    margin-bottom: 0.3rem;
+    text-align: center;
+  }
+
+  &__subtitle {
+    color: $clr-grey-1;
+    margin-bottom: 0.7rem;
+    text-align: center;
+  }
+
+  &__users {
+    background-color: $clr-white;
+    padding: 0.3rem 1.2rem;
+    border: 1px solid $clr-border-light;
+  }
+
+  &__button {
+    display: block;
+    margin: 1rem auto 0;
+    padding: 0.5rem 1rem;
+  }
+}

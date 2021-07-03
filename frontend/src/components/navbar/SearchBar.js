@@ -48,12 +48,8 @@ const SearchBar = () => {
               const { _id, name, username, profileImage } = user;
               return (
                 <div className='search-bar-dropdown-item' key={_id}>
-                  <Link to={`/profile/${_id}`}>
-                    <img
-                      src={profileImage}
-                      alt={username}
-                      className='margin-right16'
-                    />
+                  <Link to={`/profile/${username}`}>
+                    <img src={profileImage} alt={username} className='mr-sm' />
                     <div>
                       <p className='bold'>{username}</p>
                       <p>{name}</p>

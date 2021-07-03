@@ -388,15 +388,15 @@ const getUserStats = asyncHandler(async (req, res) => {
 });
 
 // @desc Get user suggestions to follow
-// @route GET /api/users/suggest/:id
+// @route GET /api/users/suggest/:id/:offset
 // @access User
 const getUserSuggestions = asyncHandler(async (req, res) => {
-  const { id } = req.params;
+  const { id, offset } = req.params;
 
   const users = await User.find(
     { _id: { $ne: ObjectId(id) } },
     '_id name username profileImage'
-  ).limit(5);
+  ).limit(Number(offset));
   if (users) {
     res.json(users);
   } else {

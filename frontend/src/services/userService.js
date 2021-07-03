@@ -194,9 +194,9 @@ export const updateUserPasswordApi = async (
  * @param {string} id id of user
  * @returns {array} Array of suggestions
  */
-export const getUserSuggestionsApi = async id => {
+export const getUserSuggestionsApi = async (id, offset = 5) => {
   try {
-    const { data } = await axios.get(`/api/users/suggest/${id}`);
+    const { data } = await axios.get(`/api/users/suggest/${id}/${offset}`);
     return data;
   } catch (error) {
     throw new Error(error);

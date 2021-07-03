@@ -2,6 +2,7 @@ import {
   POSTS_GET_REQUEST,
   POSTS_GET_SUCCESS,
   POSTS_GET_FAIL,
+  CLEAR_POSTS,
   POST_CREATE_REQUEST,
   POST_CREATE_SUCCESS,
   POST_CREATE_FAIL,
@@ -41,6 +42,8 @@ export const getPosts = () => async (dispatch, getState) => {
     });
   }
 };
+
+export const clearPosts = () => ({ type: CLEAR_POSTS });
 
 export const createPost = (file, description) => async (dispatch, getState) => {
   try {

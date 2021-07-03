@@ -2,6 +2,7 @@ import {
   POSTS_GET_REQUEST,
   POSTS_GET_SUCCESS,
   POSTS_GET_FAIL,
+  CLEAR_POSTS,
   POSTS_ADD_LOADED,
   ADD_NEW_POST,
   POST_CREATE_REQUEST,
@@ -51,6 +52,8 @@ export const postsGetReducer = (
         ...state,
         loadedPosts: [{ _id: action.payload }, ...state.loadedPosts],
       };
+    case CLEAR_POSTS:
+      return { ...state, posts: [], loadedPosts: [] };
     default:
       return state;
   }

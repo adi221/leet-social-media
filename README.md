@@ -26,7 +26,8 @@
 - Skeleton loading
 - Fetching new posts while scrolling
 - Web sockets
-- Getting real time notifications when user gets follow, like, comment
+- Getting real time notifications when user gets follow, like, comment or mention
+- User can like comments and reply to comments
 - Direct inbox for chat
 - Ability to create chat groups and private dual chat
 - Notifications for chat
@@ -42,7 +43,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 - MongoDB database and ENV variables
 
-Create an .env file on the root of the project and put
+Create an .env file at the root of the project and put
 
 `NODE_ENV=development`
 `PORT=YOUR_PORT`
