@@ -39,7 +39,7 @@ const UserSuggestions = ({ offset = 5 }) => {
       <h4>Suggestions for you</h4>
       <div className='home-sidebar__suggestions-container'>
         {loading ? (
-          <UsersListSkeleton amount={offset} style={{ width: '20rem' }} />
+          <UsersListSkeleton amount={offset} style={{ width: '100%' }} />
         ) : (
           suggestions.map(suggestion => {
             return (
