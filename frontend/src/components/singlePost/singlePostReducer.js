@@ -18,15 +18,12 @@ import {
   SINGLE_POST_DELETE_REPLY_SUCCESS,
 } from '../../constants/singlePostConstants';
 
-const defaultProfileImage =
-  'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/600px-No_image_available.svg.png';
-
 export const INITIAL_STATE = {
   loading: true,
   error: false,
   loadingAdditionalComments: false,
   author: {
-    profileImage: defaultProfileImage,
+    profileImage: '',
     username: '',
   },
   post: {
