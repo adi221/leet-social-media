@@ -4,12 +4,13 @@ import { FiCamera } from 'react-icons/fi';
 import PreviewImage from '../previewImage/PreviewImage';
 import UploadButton from '../navbar/UploadButton';
 
-const ProfileContent = ({ list, username, currentProfile = '' }) => {
+const ProfileContent = ({ list, username, currentProfile = false }) => {
   const history = useHistory();
   const imgHandler = (username, postId) => {
     history.push(`/posts/${username}/${postId}`);
   };
 
+  // TODO: add the same for saved and liked
   if (list.length === 0) {
     return (
       <div className='profile-page__content--empty'>

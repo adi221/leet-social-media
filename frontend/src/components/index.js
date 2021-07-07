@@ -26,6 +26,7 @@ import UsersList from './usersList/UsersList';
 import ProfileHeader from './profile/ProfileHeader';
 import ChatFeed from './chat/chatFeed/ChatFeed';
 import ChatSidebar from './chat/chatSidebar/ChatSidebar';
+import ScrollTopButton from './buttons/ScrollTopButton';
 
 export {
   Navbar,
@@ -56,4 +57,5 @@ export {
   ProfileHeader,
   ChatFeed,
   ChatSidebar,
+  ScrollTopButton,
 };

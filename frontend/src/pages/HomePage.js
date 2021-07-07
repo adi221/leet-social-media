@@ -1,7 +1,13 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ErrorPage } from '../pages';
-import { HomeSidebar, Loader, Feed, HomeSuggestions } from '../components';
+import {
+  HomeSidebar,
+  Loader,
+  Feed,
+  HomeSuggestions,
+  ScrollTopButton,
+} from '../components';
 import useScrollPositionThrottled from '../hooks/useScrollPositionThrottled';
 import { getPosts, clearPosts } from '../actions/postActions';
 import { getUserStats } from '../actions/userActions';
@@ -48,6 +54,7 @@ const HomePage = () => {
           </aside>
         </div>
       )}
+      <ScrollTopButton />
     </div>
   );
 };

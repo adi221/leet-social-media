@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import PostMessageCard from './PostMessageCard';
+import OptionsIcon from '../../icons/OptionsIcon';
+import SingleChatMessagePopup from './SingleChatMessagePopup';
 
 const SingleChatMessage = ({
   fromUser,
@@ -15,6 +17,7 @@ const SingleChatMessage = ({
 }) => {
   const { userInfo } = useSelector(state => state.userLogin);
   const history = useHistory();
+  const [showOptions, setShowOptions] = useState(false);
 
   const determineMessageOwner = () => {
     const isOwner = userInfo._id === fromUser;
@@ -99,6 +102,13 @@ const SingleChatMessage = ({
       ) : (
         <p className='chat-feed__messages--message-content'>{message}</p>
       )}
+      {userInfo._id === fromUser && (
+        <OptionsIcon
+          styleClass='chat-feed__messages--message-options'
+          onClick={() => setShowOptions(!showOptions)}
+        />
+      )}
+      {showOptions && <SingleChatMessagePopup />}
     </div>
   );
 };

@@ -21,7 +21,7 @@ const getCurrentScrollPosition = element => {
 /*
   ClientHeight = The height of the screen
   ScrollHeight = The height of the whole document page
-  ScrollTop = The disctance from top of the document
+  ScrollTop = The distance from top of the document
 */
 const useScrollPositionThrottled = (callback, element, deps = []) => {
   const currentElement = element ? element : document.documentElement;

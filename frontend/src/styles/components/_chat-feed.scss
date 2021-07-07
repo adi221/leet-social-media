@@ -87,6 +87,10 @@
       position: relative !important;
       border-radius: 20px;
 
+      &:hover .chat-feed__messages--message-options {
+        display: block;
+      }
+
       &-content {
         word-wrap: break-word;
         word-break: break-word;
@@ -163,6 +167,50 @@
         color: #7e7e7e;
         font-size: 0.8rem;
         white-space: nowrap;
+      }
+
+      &-options {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: -1.5rem;
+        color: $clr-grey-1;
+        font-size: 1.3rem;
+        cursor: pointer;
+        display: none;
+
+        &:hover {
+          color: #262626;
+        }
+      }
+
+      &-popup {
+        position: absolute;
+        left: -2rem;
+        transform: translateX(-50%);
+        top: -50%;
+        padding: 0.5rem 0.9rem;
+        border-radius: 10px;
+        background-color: $clr-black;
+        display: flex;
+
+        &::before {
+          position: absolute;
+          right: 13%;
+          content: '';
+          background-color: $clr-black;
+          width: 1.4rem;
+          height: 0.6rem;
+          top: 98%;
+          position: absolute;
+          clip-path: polygon(0% 0, 50% 100%, 100% 0%); // Opposite triangle
+        }
+
+        p {
+          cursor: pointer;
+          color: $clr-white;
+          font-weight: bold;
+        }
       }
     }
   }
