@@ -16,9 +16,9 @@ const SingleChatUser = ({ partners, _id: chatId, lastMessage }) => {
     if (notifications.includes(chatId)) {
       setUnreadChat(true);
     } else {
-      setUnreadChat(false);
+      unreadChat && setUnreadChat(false);
     }
-  }, [notifications, chatId]);
+  }, [notifications, chatId, unreadChat]);
 
   useEffect(() => {
     const isTyping = chatPartnersTyping.find(

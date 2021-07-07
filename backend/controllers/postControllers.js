@@ -300,6 +300,14 @@ const getExplorePostPreviews = asyncHandler(async (req, res) => {
       $unwind: '$postOwner',
     },
     {
+      $lookup: {
+        from: 'comments',
+        localField: '_id',
+        foreignField: 'post',
+        as: 'comments',
+      },
+    },
+    {
       $addFields: {
         postOwnerUsername: '$postOwner.username',
       },
@@ -307,8 +315,8 @@ const getExplorePostPreviews = asyncHandler(async (req, res) => {
     {
       $project: {
         image: true,
-        comments: { $size: '$comments' },
-        likes: { $size: '$likes' },
+        comments: { $size: { $ifNull: ['$comments', []] } },
+        likes: { $size: { $ifNull: ['$likes', []] } },
         description: true,
         postOwnerUsername: true,
       },

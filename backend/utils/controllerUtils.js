@@ -274,3 +274,26 @@ export const getSingleChatForList = async chatAndUserId => {
 
   return chat;
 };
+
+/**
+ * Partial pipeline to project preview of the post for explore and profile
+ * @array populatePostPreviewPipeline
+ */
+export const populatePostPreviewPipeline = [
+  {
+    $lookup: {
+      from: 'comments',
+      localField: '_id',
+      foreignField: 'post',
+      as: 'comments',
+    },
+  },
+  {
+    $project: {
+      image: true,
+      comments: { $size: { $ifNull: ['$comments', []] } },
+      likes: { $size: { $ifNull: ['$likes', []] } },
+      description: true,
+    },
+  },
+];

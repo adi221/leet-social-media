@@ -1,12 +1,36 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { FiCamera } from 'react-icons/fi';
 import PreviewImage from '../previewImage/PreviewImage';
+import UploadButton from '../navbar/UploadButton';
 
-const ProfileContent = ({ list, username }) => {
+const ProfileContent = ({ list, username, currentProfile = '' }) => {
   const history = useHistory();
-  const imgHandler = (username, id) => {
-    history.push(`/posts/${username}/${id}`);
+  const imgHandler = (username, postId) => {
+    history.push(`/posts/${username}/${postId}`);
   };
+
+  if (list.length === 0) {
+    return (
+      <div className='profile-page__content--empty'>
+        <FiCamera />
+        {currentProfile ? (
+          <>
+            <h2>Share Posts</h2>
+            <p>When you share photos, they will appear on your profile.</p>
+            <UploadButton style={{ width: 'auto', textAlign: 'center' }}>
+              <p className='blue bold'>Upload your first photo</p>
+            </UploadButton>
+          </>
+        ) : (
+          <>
+            <h2>No Posts Yet</h2>
+            <p>When {username} posts, you'll see their photos here.</p>
+          </>
+        )}
+      </div>
+    );
+  }
 
   return (
     <>

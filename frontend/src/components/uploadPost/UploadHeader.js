@@ -11,13 +11,7 @@ const UploadHeader = ({ activeMode, changeMode, uploadPost, loading }) => {
   return (
     <div className='modal__upload--header'>
       {activeMode === 'preview' ? (
-        <button
-          onClick={() =>
-            (activeMode = 'preview'
-              ? dispatch(closeModal())
-              : changeMode('preview'))
-          }
-        >
+        <button onClick={() => dispatch(closeModal())}>
           <GrClose />
         </button>
       ) : (

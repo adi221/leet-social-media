@@ -67,6 +67,7 @@ const SinglePost = ({ uniqueId, simple = false }) => {
       openModal('USER_LIST', {
         userOrPostId: uniqueId,
         requestType: 'POST_LIKES_USERS',
+        listType: 'Likes',
       })
     );
   };

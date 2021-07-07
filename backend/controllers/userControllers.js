@@ -5,7 +5,10 @@ import Post from '../models/postModel.js';
 import Notification from '../models/notificationModel.js';
 import { sendNotification } from '../handlers/socketHandlers.js';
 import { resizeImage } from '../handlers/imageResizeHandlers.js';
-import { getRelatedUsers } from '../utils/controllerUtils.js';
+import {
+  getRelatedUsers,
+  populatePostPreviewPipeline,
+} from '../utils/controllerUtils.js';
 import mongoose from 'mongoose';
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -99,14 +102,7 @@ const getUserProfileDetails = asyncHandler(async (req, res) => {
       $match: { user: ObjectId(_id) },
     },
     { $sort: { createdAt: -1 } },
-    {
-      $project: {
-        image: true,
-        comments: { $size: '$comments' },
-        likes: { $size: '$likes' },
-        description: true,
-      },
-    },
+    ...populatePostPreviewPipeline,
   ]);
 
   res.json({
@@ -143,15 +139,7 @@ const getUserSavedLikedPosts = asyncHandler(async (req, res) => {
           $and: [{ image: { $ne: undefined } }, { _id: ObjectId(id) }],
         },
       },
-      // { $match: { _id: ObjectId(id) } },
-      {
-        $project: {
-          image: true,
-          comments: { $size: '$comments' },
-          likes: { $size: '$likes' },
-          description: true,
-        },
-      },
+      ...populatePostPreviewPipeline,
     ]);
   };
 

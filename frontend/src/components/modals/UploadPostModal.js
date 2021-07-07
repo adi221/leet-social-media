@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import UploadPreview from '../uploadPost/UploadPreview';
 import UploadHeader from '../uploadPost/UploadHeader';
@@ -12,6 +13,7 @@ const UploadPostModal = ({ file }) => {
   const [activeMode, setActiveMode] = useState('preview');
   const [image, setImage] = useState('');
   const [description, setDescription] = useState('');
+  const history = useHistory();
 
   const dispatch = useDispatch();
   const { success, loading, error } = useSelector(state => state.postCreate);
@@ -33,11 +35,12 @@ const UploadPostModal = ({ file }) => {
     if (success || error) {
       dispatch(closeModal());
       dispatch({ type: POST_CREATE_RESET });
+      history.push('/');
       success && dispatch(showAlert('Successfully uploaded'));
       error &&
         dispatch(showAlert('Could not upload your post. Please try again.'));
     }
-  }, [success, dispatch, error]);
+  }, [success, dispatch, error, history]);
 
   useEffect(() => {
     if (image) return;

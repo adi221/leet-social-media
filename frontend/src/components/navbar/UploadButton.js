@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { FiCamera } from 'react-icons/fi';
 import { openModal } from '../../actions/utilActions';
 
-const UploadButton = () => {
+const UploadButton = ({ children = null, style }) => {
   const [file, setFile] = useState('');
   const fileInputRef = useRef(null);
   const dispatch = useDispatch();
@@ -17,8 +17,12 @@ const UploadButton = () => {
 
   return (
     <div className='nav__center--link is-flexed'>
-      <label htmlFor='file' className='nav__center--upload '>
-        <FiCamera className='nav__center--upload' />
+      <label
+        htmlFor='file'
+        style={{ ...style }}
+        className='nav__center--upload '
+      >
+        {children ? children : <FiCamera className='nav__center--upload' />}
         <input
           type='file'
           id='file'

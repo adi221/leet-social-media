@@ -44,7 +44,7 @@
     height: 37.5rem;
 
     &-desc {
-      height: 8rem;
+      height: 9rem;
       display: grid;
       grid-template-columns: 4rem 1fr 9rem;
       align-items: start;
@@ -81,8 +81,8 @@
         justify-self: center;
         width: 9rem;
         max-height: 9rem;
-        object-fit: cover;
         padding: 0.2rem 0.4rem;
+        object-fit: cover;
       }
     }
   }

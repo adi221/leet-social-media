@@ -65,7 +65,11 @@ const ProfilePage = () => {
         <main className='profile-page__content'>
           <Switch>
             <PrivateRoute exact path='/profile/:username'>
-              <ProfileContent list={userPosts} username={username} />
+              <ProfileContent
+                list={userPosts}
+                username={username}
+                currentProfile={userInfo.username === username}
+              />
             </PrivateRoute>
             {userInfo._id === _id && (
               <>
