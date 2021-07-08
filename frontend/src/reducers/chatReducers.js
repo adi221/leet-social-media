@@ -24,6 +24,7 @@ import {
   ADD_USER_GROUP_RESET,
   ADD_NEW_GROUP_MEMBER,
   REMOVE_CHAT_FROM_LIST,
+  MESSAGE_UNSENT,
 } from '../constants/chatConstants';
 
 export const createChatReducer = (
@@ -125,7 +126,8 @@ export const chatFeedReducer = (state = chatFeedInitialState, action) => {
         hasMoreMessages: messages.length === 20,
       };
     case RECEIVED_MESSAGE:
-      const { fromUser, message, chatId, messageType, post } = action.payload;
+      const { fromUser, message, chatId, messageType, post, messageId } =
+        action.payload;
       // if chatId doesnt equal current chatId shown to user don't add new message
       if (chatId === state.currentChatId) {
         return {
@@ -133,7 +135,7 @@ export const chatFeedReducer = (state = chatFeedInitialState, action) => {
           messages: [
             ...state.messages,
             {
-              _id: new Date().toString(),
+              _id: messageId,
               fromUser,
               message,
               messageType,
@@ -172,6 +174,12 @@ export const chatFeedReducer = (state = chatFeedInitialState, action) => {
       };
     case GET_ADDITIONAL_MESSAGES_FAIL:
       return state;
+    case MESSAGE_UNSENT:
+      const newMessages = state.messages.filter(
+        message => message._id !== action.payload
+      );
+
+      return { ...state, messages: newMessages };
     default:
       return state;
   }

@@ -50,9 +50,11 @@ const socketServer = socketio => {
 
           chat.messages.push(newMessage);
           await chat.save();
+          const newMessageId = chat.messages[chat.messages.length - 1]._id;
 
           socketio.sockets.in(fromUser.toString()).emit('receivedMessage', {
             ...newMessage,
+            messageId: newMessageId,
             chatId,
             createdAt: new Date(),
           });
@@ -60,6 +62,7 @@ const socketServer = socketio => {
           toUserId.forEach(userId => {
             socketio.sockets.in(userId.toString()).emit('receivedMessage', {
               ...newMessage,
+              messageId: newMessageId,
               chatId,
               createdAt: new Date(),
             });
@@ -134,6 +137,7 @@ const socketServer = socketio => {
 
         for (const receiver of postReceiversId) {
           let chatId;
+          let newMessageId;
           // Check if there is an existing chat
           const chatExists = await doesChatAlreadyExist(fromUser, receiver);
           // yes ? so add new message to current chat
@@ -142,6 +146,7 @@ const socketServer = socketio => {
             const chat = await Chat.findById(chatId);
             chat.messages.push(newMessage);
             await chat.save();
+            newMessageId = chat.messages[chat.messages.length - 1]._id;
           } else {
             // no ? open new chat and add the message
             const chatUsers = [{ user: fromUser }, { user: receiver }];
@@ -152,11 +157,13 @@ const socketServer = socketio => {
             });
             await chat.save();
             chatId = chat._id.toString();
+            newMessageId = chat.messages[chat.messages.length - 1]._id;
           }
 
           // Add the message in socket for online users
           socketio.sockets.in(receiver.toString()).emit('receivedMessage', {
             ...newMessage,
+            messageId: newMessageId,
             chatId,
             createdAt: new Date(),
           });
@@ -187,6 +194,21 @@ const socketServer = socketio => {
         socketio.sockets
           .in(fromUser.toString())
           .emit('successPostMessage', { success: true });
+      });
+
+      socket.on('unsendMessage', async ({ messageId, chatId, userId }) => {
+        console.log(messageId, chatId, userId);
+        try {
+          await Chat.updateOne(
+            { _id: chatId },
+            { $pull: { messages: { _id: messageId } } }
+          );
+          socketio.sockets
+            .in(userId.toString())
+            .emit('messageUnsent', { chatId, messageId });
+        } catch (error) {
+          console.log(error);
+        }
       });
 
       socket.on('disconnect', () => {

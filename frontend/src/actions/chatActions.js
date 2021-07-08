@@ -22,6 +22,7 @@ import {
   ADD_USER_GROUP_FAIL,
   ADD_NEW_GROUP_MEMBER,
   REMOVE_CHAT_FROM_LIST,
+  MESSAGE_UNSENT,
 } from '../constants/chatConstants';
 import {
   createChatApi,
@@ -174,3 +175,19 @@ export const removeChatFromList = chatId => ({
   type: REMOVE_CHAT_FROM_LIST,
   payload: chatId,
 });
+
+export const messageUnsent = (chatId, messageId) => (dispatch, getState) => {
+  const {
+    chatFeed: { messages, currentChatId },
+  } = getState();
+  // quick check
+  if (currentChatId !== chatId) return;
+  // if the message is the last message so update last message in chat list
+  if (messages[messages.length - 1]._id === messageId) {
+    dispatch({
+      type: UPDATE_LAST_MESSAGE,
+      payload: { ...messages[messages.length - 2], chatId },
+    });
+  }
+  dispatch({ type: MESSAGE_UNSENT, payload: messageId });
+};

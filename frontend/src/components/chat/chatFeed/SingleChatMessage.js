@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import PostMessageCard from './PostMessageCard';
 import OptionsIcon from '../../icons/OptionsIcon';
-import SingleChatMessagePopup from './SingleChatMessagePopup';
+import MessagePopup from './MessagePopup';
 
 const SingleChatMessage = ({
   fromUser,
@@ -14,6 +14,8 @@ const SingleChatMessage = ({
   messages,
   partners,
   chatType,
+  _id: messageId,
+  chatId,
 }) => {
   const { userInfo } = useSelector(state => state.userLogin);
   const history = useHistory();
@@ -90,25 +92,34 @@ const SingleChatMessage = ({
   };
 
   return (
-    <div
-      className={`chat-feed__messages--message ${determineMessageOwner()} ${
-        addUsernameOrNot() && 'mt-sm'
-      }`}
-    >
-      {addThumbnailOrNot() && determineThumbnailDetails()}
-      {addUsernameOrNot() && determineUsernameDetails()}
-      {messageType === 'post' ? (
-        <PostMessageCard postId={postId} />
-      ) : (
-        <p className='chat-feed__messages--message-content'>{message}</p>
-      )}
-      {userInfo._id === fromUser && (
-        <OptionsIcon
-          styleClass='chat-feed__messages--message-options'
-          onClick={() => setShowOptions(!showOptions)}
-        />
-      )}
-      {showOptions && <SingleChatMessagePopup />}
+    <div className='chat-feed__messages--message-container'>
+      <div
+        className={`chat-feed__messages--message ${determineMessageOwner()} ${
+          addUsernameOrNot() && 'mt-sm'
+        }`}
+      >
+        {addThumbnailOrNot() && determineThumbnailDetails()}
+        {addUsernameOrNot() && determineUsernameDetails()}
+        {messageType === 'post' ? (
+          <PostMessageCard postId={postId} />
+        ) : (
+          <p className='chat-feed__messages--message-content'>{message}</p>
+        )}
+        {userInfo._id === fromUser && (
+          <OptionsIcon
+            styleClass='chat-feed__messages--message-options'
+            onClick={() => setShowOptions(!showOptions)}
+          />
+        )}
+        {showOptions && (
+          <MessagePopup
+            hideOptions={() => setShowOptions(false)}
+            messageId={messageId}
+            chatId={chatId}
+            userId={userInfo._id}
+          />
+        )}
+      </div>
     </div>
   );
 };

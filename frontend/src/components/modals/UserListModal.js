@@ -13,7 +13,6 @@ import { closeModal } from '../../actions/utilActions';
  */
 
 const UserListModal = props => {
-  console.log(props);
   const dispatch = useDispatch();
 
   return (

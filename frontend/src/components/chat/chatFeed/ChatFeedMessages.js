@@ -17,6 +17,7 @@ const ChatFeedMessages = ({ partnerTypingId, chatId }) => {
     messages,
     partners,
     chatType,
+    currentChatId,
   } = useSelector(state => state.chatFeed);
 
   // Scroll bottom on mounting, when new message is added, or partner is typing
@@ -79,6 +80,7 @@ const ChatFeedMessages = ({ partnerTypingId, chatId }) => {
             messages={messages}
             partners={partners}
             chatType={chatType}
+            chatId={currentChatId}
           />
         );
       })}

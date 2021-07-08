@@ -12,7 +12,7 @@
 
 .modal {
   border-radius: 10px;
-  min-width: 420px;
+  min-width: $modal-regular-width;
   max-width: 95vw;
   transition: $transition;
   z-index: 100;
@@ -179,6 +179,17 @@
         opacity: 0.7;
         cursor: default;
       }
+    }
+  }
+
+  &__unsend-message {
+    text-align: center;
+    padding: 1rem 1rem;
+    width: $modal-regular-width;
+
+    p {
+      color: $clr-grey-3;
+      margin-top: 1rem;
     }
   }
 }

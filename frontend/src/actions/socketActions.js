@@ -12,6 +12,7 @@ import {
   updateLastMessage,
   addNewGroupMembers,
   removeChatFromList,
+  messageUnsent,
 } from '../actions/chatActions';
 import { sharePostSuccess, addNewPost } from '../actions/postActions';
 
@@ -89,7 +90,10 @@ export const connectSocket = () => (dispatch, getState) => {
 
   socket.on('successPostMessage', () => {
     dispatch(sharePostSuccess());
-    // Add alert
+  });
+
+  socket.on('messageUnsent', ({ chatId, messageId }) => {
+    dispatch(messageUnsent(chatId, messageId));
   });
 };
 
