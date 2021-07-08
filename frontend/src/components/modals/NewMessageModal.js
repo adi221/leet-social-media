@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { GrClose } from 'react-icons/gr';
+import PropTypes from 'prop-types';
 import { UsersList } from '../../components';
 import SingleUserList from '../usersList/SingleUserList';
 import LoaderSvg from '../loaders/LoaderSvg';
@@ -10,6 +11,14 @@ import { closeModal } from '../../actions/utilActions';
 import { RESET_CHAT_REDIRECT } from '../../constants/chatConstants';
 import { createChat } from '../../actions/chatActions';
 import { getUserSearch } from '../../actions/userActions';
+
+/**
+ * Functional react component to create new chat. If chat exists user will be immediately redirected,
+ * else he will be redirected to the newly created chat.
+ * @function NewMessageModal
+ * @param {object} props - React props.
+ * @returns {JSX.Element} - Rendered component
+ */
 
 const NewMessageModal = props => {
   const [query, setQuery] = useState('');
@@ -93,6 +102,12 @@ const NewMessageModal = props => {
       )}
     </>
   );
+};
+
+NewMessageModal.propTypes = {
+  checkButton: PropTypes.bool.isRequired,
+  requestType: PropTypes.string.isRequired,
+  userOrPostId: PropTypes.string.isRequired,
 };
 
 export default NewMessageModal;

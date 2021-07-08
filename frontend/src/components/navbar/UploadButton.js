@@ -18,14 +18,14 @@ const UploadButton = ({ children = null, style }) => {
   return (
     <div className='nav__center--link is-flexed'>
       <label
-        htmlFor='file'
+        htmlFor='newpost'
         style={{ ...style }}
-        className='nav__center--upload '
+        className='nav__center--upload'
       >
         {children ? children : <FiCamera className='nav__center--upload' />}
         <input
           type='file'
-          id='file'
+          id='newpost'
           onChange={e => setFile(e.target.files[0])}
           accept='image/x-png,image/jpeg'
           ref={fileInputRef}

@@ -1,10 +1,18 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
 import { closeModal } from '../../actions/utilActions';
 import { FollowButton } from '../../components';
 import { POST_DELETE_RESET } from '../../constants/postConstants';
 import { deletePost, getPosts } from '../../actions/postActions';
+
+/**
+ * Functional react component to show SinglePost options
+ * @function SinglePostModal
+ * @param {object} props - React props.
+ * @returns {JSX.Element} - Rendered component
+ */
 
 const SinglePostModal = props => {
   const { postId, username, userId, profileImage } = props;
@@ -57,6 +65,13 @@ const SinglePostModal = props => {
       </li>
     </ul>
   );
+};
+
+SinglePostModal.propTypes = {
+  username: PropTypes.string.isRequired,
+  postId: PropTypes.string.isRequired,
+  userId: PropTypes.string.isRequired,
+  profileImage: PropTypes.string.isRequired,
 };
 
 export default SinglePostModal;

@@ -3,6 +3,13 @@ import { useDispatch } from 'react-redux';
 import { GrClose } from 'react-icons/gr';
 import { closeModal } from '../../actions/utilActions';
 import { updateUserProfile } from '../../actions/userActions';
+import { showAlert } from '../../actions/utilActions';
+
+/**
+ * Functional react component for options of a single comment / reply
+ * @function EditImageModal
+ * @returns {JSX.Element} - Rendered component
+ */
 
 // If user deletes current photo
 const defaultImage =
@@ -34,7 +41,10 @@ const EditImageModal = () => {
     getBase64(e.target.files[0])
       .then(result => dispatch(updateUserProfile({ image: result })))
       .then(() => dispatch(closeModal()))
-      .catch(err => console.log(err));
+      .catch(err => {
+        dispatch(closeModal());
+        dispatch(showAlert('Could not update image profile'));
+      });
   };
 
   return (

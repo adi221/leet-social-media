@@ -13,6 +13,12 @@ import { closeModal } from '../../actions/utilActions';
 import { RESET_CHAT_PARTNERS } from '../../constants/chatConstants';
 import { RESET_POST_RECEIVERS } from '../../constants/postConstants';
 
+/**
+ * Functional react component to render modals. It's the parent component of all modals.
+ * @function RootModal
+ * @returns {JSX.Element} - Specific modal rendered, according to modal type.
+ */
+
 const MODAL_COMPONENTS = {
   EDIT_PROFILE_IMAGE: EditProfileImageModal,
   SINGLE_POST: SinglePostModal,

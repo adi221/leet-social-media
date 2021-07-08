@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { GrClose } from 'react-icons/gr';
+import PropTypes from 'prop-types';
 import { UsersList } from '../../components';
 import SingleUserList from '../usersList/SingleUserList';
 import LoaderSvg from '../loaders/LoaderSvg';
@@ -9,6 +10,14 @@ import { closeModal } from '../../actions/utilActions';
 import { addUsersToGroup } from '../../actions/chatActions';
 import { getUserSearch } from '../../actions/userActions';
 import { ADD_USER_GROUP_RESET } from '../../constants/chatConstants';
+import { showAlert } from '../../actions/utilActions';
+
+/**
+ * Functional react component to add new users to group
+ * @function AddUserGroupModal
+ * @param {object} props - React props.
+ * @returns {JSX.Element} - Rendered component
+ */
 
 const AddUserGroupModal = props => {
   const { chatId } = props;
@@ -34,6 +43,7 @@ const AddUserGroupModal = props => {
     if (addUserSuccess) {
       dispatch(closeModal());
       dispatch({ type: ADD_USER_GROUP_RESET });
+      dispatch(showAlert('Successfully added'));
     }
   }, [dispatch, addUserSuccess]);
 
@@ -98,6 +108,13 @@ const AddUserGroupModal = props => {
       )}
     </>
   );
+};
+
+AddUserGroupModal.propTypes = {
+  chatId: PropTypes.string.isRequired,
+  checkButton: PropTypes.bool.isRequired,
+  requestType: PropTypes.string.isRequired,
+  userOrPostId: PropTypes.string.isRequired,
 };
 
 export default AddUserGroupModal;

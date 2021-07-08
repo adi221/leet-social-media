@@ -81,7 +81,11 @@ const ChatFeed = () => {
       />
       {showChatInfo ? (
         <>
-          <ChatInfoMembers partners={partners} chatId={chatId} />
+          <ChatInfoMembers
+            partners={partners}
+            chatId={chatId}
+            chatType={chatType}
+          />
           <ChatInfoOptions chatId={chatId} chatType={chatType} />
         </>
       ) : (

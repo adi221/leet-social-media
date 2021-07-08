@@ -1,8 +1,16 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 import { closeModal } from '../../actions/utilActions';
 import { USER_STATS_FOLLOWING } from '../../constants/userConstants';
 import { unfollowUserApi } from '../../services/userService';
+
+/**
+ * Functional react component where user get to choose if he wants to unfollow a specific user
+ * @function UnfollowUserModal
+ * @param {object} props - React props.
+ * @returns {JSX.Element} - Rendered component
+ */
 
 const UnfollowUserModal = props => {
   const { userId, username, profileImage } = props;
@@ -42,6 +50,12 @@ const UnfollowUserModal = props => {
       </ul>
     </>
   );
+};
+
+UnfollowUserModal.propTypes = {
+  userId: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
+  profileImage: PropTypes.string.isRequired,
 };
 
 export default UnfollowUserModal;

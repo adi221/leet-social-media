@@ -69,7 +69,7 @@ const SingleComment = ({
   };
 
   const getCommentRepliesHandler = async () => {
-    // open/close and all replies are loaded so toggle
+    // open/close - all replies are loaded so toggle
     if (commentReplies.length === commentRepliesCount) {
       setShowReplies(!showReplies);
     } else {
@@ -85,7 +85,6 @@ const SingleComment = ({
         console.log(error);
       }
     }
-    // TODO: What if there is new comments written
   };
 
   const handleDeleteComment = async () => {

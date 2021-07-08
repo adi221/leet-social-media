@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 import { GrClose } from 'react-icons/gr';
 import { UsersList } from '../../components';
 import SingleUserList from '../usersList/SingleUserList';
@@ -10,6 +11,13 @@ import {
   SHARE_POST_RESET,
 } from '../../constants/postConstants';
 import { getUserSearch } from '../../actions/userActions';
+
+/**
+ * Functional react component to send a post message.
+ * @function SharePostModal
+ * @param {object} props - React props.
+ * @returns {JSX.Element} - Rendered component
+ */
 
 const SharePostModal = props => {
   const [query, setQuery] = useState('');
@@ -104,6 +112,13 @@ const SharePostModal = props => {
       </button>
     </div>
   );
+};
+
+SharePostModal.propTypes = {
+  postId: PropTypes.string.isRequired,
+  userOrPostId: PropTypes.string.isRequired,
+  requestType: PropTypes.string.isRequired,
+  checkButton: PropTypes.bool.isRequired,
 };
 
 export default SharePostModal;

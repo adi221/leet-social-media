@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
 import UploadPreview from '../uploadPost/UploadPreview';
 import UploadHeader from '../uploadPost/UploadHeader';
 import UploadDetails from '../uploadPost/UploadDetails';
 import { POST_CREATE_RESET } from '../../constants/postConstants';
 import { createPost } from '../../actions/postActions';
 import { closeModal, showAlert } from '../../actions/utilActions';
+
+/**
+ * Functional react component to upload new post
+ * @function UploadPostModal
+ * @param {object} file - image file
+ * @returns {JSX.Element} - Rendered component
+ */
 
 const UploadPostModal = ({ file }) => {
   // active mode is either preview or details
@@ -76,6 +84,10 @@ const UploadPostModal = ({ file }) => {
       )}
     </div>
   );
+};
+
+UploadPostModal.propTypes = {
+  file: PropTypes.object.isRequired,
 };
 
 export default UploadPostModal;
