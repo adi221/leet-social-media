@@ -24,9 +24,6 @@ import {
   USER_SUGGESTIONS_REQUEST,
   USER_SUGGESTIONS_SUCCESS,
   USER_SUGGESTIONS_FAIL,
-  USER_SEARCH_REQUEST,
-  USER_SEARCH_SUCCESS,
-  USER_SEARCH_FAIL,
   USER_DELETE_REQUEST,
   USER_DELETE_SUCCESS,
   USER_DELETE_FAIL,
@@ -44,7 +41,6 @@ import {
   updateUserPasswordApi,
   getUserSuggestionsApi,
   getUserStatsApi,
-  getUserSearchApi,
   deleteUserApi,
 } from '../services/userService';
 
@@ -218,22 +214,6 @@ export const getUserStats = id => async dispatch => {
   } catch (error) {
     dispatch({
       type: USER_STATS_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    });
-  }
-};
-
-export const getUserSearch = keyword => async dispatch => {
-  try {
-    dispatch({ type: USER_SEARCH_REQUEST });
-    const data = await getUserSearchApi(keyword);
-    dispatch({ type: USER_SEARCH_SUCCESS, payload: data });
-  } catch (error) {
-    dispatch({
-      type: USER_SEARCH_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

@@ -10,7 +10,7 @@ import {
   RESET_POST_RECEIVERS,
   SHARE_POST_RESET,
 } from '../../constants/postConstants';
-import { getUserSearch } from '../../actions/userActions';
+import useSearchUsersDebounced from '../../hooks/useSearchUsersDebounced';
 
 /**
  * Functional react component to send a post message.
@@ -26,9 +26,9 @@ const SharePostModal = props => {
   const { socket } = useSelector(state => state.socket);
   const { userInfo } = useSelector(state => state.userLogin);
   const { postReceiversId, success } = useSelector(state => state.sharePost);
-  const { users, loading: searchLoading } = useSelector(
-    state => state.userSearch
-  );
+
+  let { handleSearchDebouncedRef, result, setResult, fetching, setFetching } =
+    useSearchUsersDebounced();
 
   // sharePost success - show alert and close modal and reset success
   useEffect(() => {
@@ -38,12 +38,6 @@ const SharePostModal = props => {
       dispatch(showAlert('Sent'));
     }
   }, [success, dispatch]);
-
-  // get users from search
-  useEffect(() => {
-    if (!query) return;
-    dispatch(getUserSearch(query));
-  }, [query, dispatch]);
 
   const sharePostHandler = () => {
     if (postReceiversId.length === 0) return;
@@ -55,6 +49,17 @@ const SharePostModal = props => {
     };
 
     socket.emit('sharePostMessage', msg);
+  };
+
+  const onChangeHandler = e => {
+    let value = e.target.value;
+    setQuery(value);
+    if (!value) return;
+    // useDebouncedUserSearch properties
+    setFetching(true);
+    // Setting the result to an empty array to show skeleton
+    setResult([]);
+    handleSearchDebouncedRef(value);
   };
 
   return (
@@ -76,7 +81,7 @@ const SharePostModal = props => {
           type='text'
           placeholder='Search...'
           value={query}
-          onChange={e => setQuery(e.target.value)}
+          onChange={onChangeHandler}
         />
       </div>
       {query.length === 0 ? (
@@ -91,14 +96,14 @@ const SharePostModal = props => {
         </>
       ) : (
         <>
-          {searchLoading ? (
+          {fetching ? (
             <UsersListSkeleton style={{ width: 'min(420px, 95vw)' }} />
           ) : (
             <>
-              {users.map(user => {
+              {result.map(user => {
                 return <SingleUserList key={user._id} {...user} checkButton />;
               })}
-              {!searchLoading && users.length === 0 && <p>No users found</p>}
+              {!fetching && result.length === 0 && <p>No users found</p>}
             </>
           )}
         </>

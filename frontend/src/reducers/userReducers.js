@@ -26,9 +26,6 @@ import {
   USER_SUGGESTIONS_REQUEST,
   USER_SUGGESTIONS_SUCCESS,
   USER_SUGGESTIONS_FAIL,
-  USER_SEARCH_REQUEST,
-  USER_SEARCH_SUCCESS,
-  USER_SEARCH_FAIL,
   USER_DELETE_REQUEST,
   USER_DELETE_SUCCESS,
   USER_DELETE_FAIL,
@@ -161,19 +158,6 @@ export const userSuggestionsReducer = (state = { suggestions: [] }, action) => {
     case USER_SUGGESTIONS_SUCCESS:
       return { loading: false, suggestions: action.payload };
     case USER_SUGGESTIONS_FAIL:
-      return { loading: false, error: action.payload };
-    default:
-      return state;
-  }
-};
-
-export const userSearchReducer = (state = { users: [] }, action) => {
-  switch (action.type) {
-    case USER_SEARCH_REQUEST:
-      return { loading: true, users: [] };
-    case USER_SEARCH_SUCCESS:
-      return { loading: false, users: action.payload };
-    case USER_SEARCH_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;

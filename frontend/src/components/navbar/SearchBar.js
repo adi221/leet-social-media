@@ -1,66 +1,70 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { getUserSearch } from '../../actions/userActions';
+import useSearchUsersDebounced from '../../hooks/useSearchUsersDebounced';
+import useComponentVisible from '../../hooks/useComponentVisible';
+import UsersListSkeleton from '../loaders/UsersListSkeleton';
 
 const SearchBar = () => {
   const [query, setQuery] = useState('');
-  const [showResults, setShowResults] = useState(false);
-  const dispatch = useDispatch();
-  const inputRef = useRef();
+  const {
+    ref,
+    isComponentVisible: showResults,
+    setIsComponentVisible: setShowResults,
+  } = useComponentVisible(false);
 
-  const { users } = useSelector(state => state.userSearch);
+  let { handleSearchDebouncedRef, result, setResult, fetching, setFetching } =
+    useSearchUsersDebounced();
 
-  const queryHandler = e => {
-    setQuery(e.target.value);
+  const onChangeHandler = e => {
+    let value = e.target.value;
+    setQuery(value);
+    if (!value) return;
+    // useDebouncedUserSearch properties
+    setFetching(true);
+    // Setting the result to an empty array to show skeleton
+    setResult([]);
+    handleSearchDebouncedRef(value);
   };
 
-  useEffect(() => {
-    if (!query) return;
-    dispatch(getUserSearch(query));
-  }, [query, dispatch]);
+  const renderSearchDropdown = () => {
+    if (!showResults || !query) return null;
+    if (fetching) {
+      return (
+        <UsersListSkeleton
+          style={{ width: '20rem', backgroundColor: 'white' }}
+        />
+      );
+    }
+    if (query && result.length === 0) {
+      return <p className='empty-search'>No results found.</p>;
+    }
 
-  useEffect(() => {
-    inputRef.current.addEventListener('click', e => {
-      e.stopPropagation();
-      setShowResults(true);
+    return result.map(user => {
+      const { _id, name, username, profileImage } = user;
+      return (
+        <div className='search-bar__dropdown--item' key={_id}>
+          <Link to={`/profile/${username}`}>
+            <img src={profileImage} alt={username} className='mr-sm' />
+            <div>
+              <p className='bold'>{username}</p>
+              <p>{name}</p>
+            </div>
+          </Link>
+        </div>
+      );
     });
-    document.addEventListener('click', () => {
-      setShowResults(false);
-    });
-  }, []);
+  };
 
   return (
-    <div className='search-bar'>
+    <div className='search-bar' ref={ref}>
       <input
         placeholder='Search..'
         value={query}
-        onChange={queryHandler}
-        ref={inputRef}
-        className='search is-bordered'
+        onChange={onChangeHandler}
+        className='search-bar__search is-bordered'
+        onClick={() => setShowResults(true)}
       />
-      {showResults && (
-        <div className='search-bar-dropdown'>
-          {!query ? null : users.length === 0 && query ? (
-            <p className='search-no-results'>No results found.</p>
-          ) : (
-            users.map(user => {
-              const { _id, name, username, profileImage } = user;
-              return (
-                <div className='search-bar-dropdown-item' key={_id}>
-                  <Link to={`/profile/${username}`}>
-                    <img src={profileImage} alt={username} className='mr-sm' />
-                    <div>
-                      <p className='bold'>{username}</p>
-                      <p>{name}</p>
-                    </div>
-                  </Link>
-                </div>
-              );
-            })
-          )}
-        </div>
-      )}
+      <div className='search-bar__dropdown'>{renderSearchDropdown()}</div>
     </div>
   );
 };

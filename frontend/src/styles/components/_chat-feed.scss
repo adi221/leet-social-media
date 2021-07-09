@@ -210,6 +210,7 @@
         border-radius: 10px;
         background-color: $clr-black;
         display: flex;
+        z-index: 2;
 
         &::before {
           position: absolute;
@@ -221,6 +222,14 @@
           top: 98%;
           position: absolute;
           clip-path: polygon(0% 0, 50% 100%, 100% 0%); // Opposite triangle
+        }
+
+        &-other-person {
+          left: 2.1rem;
+
+          &::before {
+            left: 13%;
+          }
         }
 
         p {

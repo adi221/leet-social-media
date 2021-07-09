@@ -34,7 +34,11 @@ const SingleChatMessagePopup = ({
   };
 
   return (
-    <div className='chat-feed__messages--message-popup'>
+    <div
+      className={`chat-feed__messages--message-popup ${
+        !isOwner && 'chat-feed__messages--message-popup-other-person'
+      }`}
+    >
       <p onClick={copyClipboardHandler}>Copy</p>
       {isOwner && <p onClick={unsendModalHandler}>Unsend</p>}
     </div>

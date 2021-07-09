@@ -8,9 +8,9 @@ import LoaderSvg from '../loaders/LoaderSvg';
 import UsersListSkeleton from '../loaders/UsersListSkeleton';
 import { closeModal } from '../../actions/utilActions';
 import { addUsersToGroup } from '../../actions/chatActions';
-import { getUserSearch } from '../../actions/userActions';
 import { ADD_USER_GROUP_RESET } from '../../constants/chatConstants';
 import { showAlert } from '../../actions/utilActions';
+import useSearchUsersDebounced from '../../hooks/useSearchUsersDebounced';
 
 /**
  * Functional react component to add new users to group
@@ -28,15 +28,9 @@ const AddUserGroupModal = props => {
   const { partnerUsersId, addUserSuccess, loading } = useSelector(
     state => state.createChat
   );
-  const { users, loading: searchLoading } = useSelector(
-    state => state.userSearch
-  );
 
-  // get users from search
-  useEffect(() => {
-    if (!query) return;
-    dispatch(getUserSearch(query));
-  }, [query, dispatch]);
+  let { handleSearchDebouncedRef, result, setResult, fetching, setFetching } =
+    useSearchUsersDebounced();
 
   // close modal after user added and show alert 'Successfully added'
   useEffect(() => {
@@ -47,10 +41,22 @@ const AddUserGroupModal = props => {
     }
   }, [dispatch, addUserSuccess]);
 
+  const onChangeHandler = e => {
+    let value = e.target.value;
+    setQuery(value);
+    if (!value) return;
+    // useDebouncedUserSearch properties
+    setFetching(true);
+    // Setting the result to an empty array to show skeleton
+    setResult([]);
+    handleSearchDebouncedRef(value);
+  };
+
   const addNewUsersHandler = () => {
     dispatch(addUsersToGroup(chatId));
   };
 
+  // users to hide from search result
   const excludeUsers = partners.map(partner => partner._id);
 
   return (
@@ -75,7 +81,7 @@ const AddUserGroupModal = props => {
           type='text'
           placeholder='Search...'
           value={query}
-          onChange={e => setQuery(e.target.value)}
+          onChange={onChangeHandler}
         />
       </div>
       {query.length === 0 ? (
@@ -90,18 +96,22 @@ const AddUserGroupModal = props => {
         </>
       ) : (
         <>
-          {searchLoading ? (
+          {fetching ? (
             <UsersListSkeleton style={{ width: 'min(420px, 95vw)' }} />
           ) : (
             <>
-              {users.map(user => {
+              {result.map(user => {
                 if (excludeUsers.includes(user._id)) {
                   return null;
                 }
 
                 return <SingleUserList key={user._id} {...user} checkButton />;
               })}
-              {!searchLoading && users.length === 0 && <p>No users found</p>}
+              {!fetching &&
+                result.filter(user => !excludeUsers.includes(user._id))
+                  .length === 0 && (
+                  <p className='empty-search'>No users found</p>
+                )}
             </>
           )}
         </>

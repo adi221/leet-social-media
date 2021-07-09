@@ -10,7 +10,7 @@ import UsersListSkeleton from '../loaders/UsersListSkeleton';
 import { closeModal } from '../../actions/utilActions';
 import { RESET_CHAT_REDIRECT } from '../../constants/chatConstants';
 import { createChat } from '../../actions/chatActions';
-import { getUserSearch } from '../../actions/userActions';
+import useSearchUsersDebounced from '../../hooks/useSearchUsersDebounced';
 
 /**
  * Functional react component to create new chat. If chat exists user will be immediately redirected,
@@ -28,15 +28,9 @@ const NewMessageModal = props => {
   const { partnerUsersId, redirectChatId, loading } = useSelector(
     state => state.createChat
   );
-  const { users, loading: searchLoading } = useSelector(
-    state => state.userSearch
-  );
 
-  // get users from search
-  useEffect(() => {
-    if (!query) return;
-    dispatch(getUserSearch(query));
-  }, [query, dispatch]);
+  let { handleSearchDebouncedRef, result, setResult, fetching, setFetching } =
+    useSearchUsersDebounced();
 
   // redirecting after creating new chat
   useEffect(() => {
@@ -49,6 +43,17 @@ const NewMessageModal = props => {
 
   const createNewChatHandler = () => {
     dispatch(createChat());
+  };
+
+  const onChangeHandler = e => {
+    let value = e.target.value;
+    setQuery(value);
+    if (!value) return;
+    // useDebouncedUserSearch properties
+    setFetching(true);
+    // Setting the result to an empty array to show skeleton
+    setResult([]);
+    handleSearchDebouncedRef(value);
   };
 
   return (
@@ -73,7 +78,7 @@ const NewMessageModal = props => {
           type='text'
           placeholder='Search...'
           value={query}
-          onChange={e => setQuery(e.target.value)}
+          onChange={onChangeHandler}
         />
       </div>
       {query.length === 0 ? (
@@ -88,14 +93,16 @@ const NewMessageModal = props => {
         </>
       ) : (
         <>
-          {searchLoading ? (
+          {fetching ? (
             <UsersListSkeleton style={{ width: 'min(420px, 95vw)' }} />
           ) : (
             <>
-              {users.map(user => {
+              {result.map(user => {
                 return <SingleUserList key={user._id} {...user} checkButton />;
               })}
-              {!searchLoading && users.length === 0 && <p>No users found</p>}
+              {!fetching && result.length === 0 && (
+                <p className='empty-search'>No users found</p>
+              )}
             </>
           )}
         </>
