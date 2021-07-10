@@ -9,6 +9,7 @@ import {
   getUserProfileDetails,
   getUserProfileRelatedPosts,
 } from '../actions/userActions';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 
 const ProfilePage = () => {
   const { username } = useParams();
@@ -26,6 +27,8 @@ const ProfilePage = () => {
     state => state.userDetailsProfile
   );
   const { userPosts, userSavedPosts, userLikedPosts, _id } = user;
+
+  useDocumentTitle(user.name || 'Leet Social Media');
 
   if (loading) return <Loader />;
   if (error) return <ErrorPage />;
