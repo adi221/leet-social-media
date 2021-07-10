@@ -8,6 +8,7 @@ const ObjectId = mongoose.Types.ObjectId;
 // @route GET /api/notifications/:id
 // @access User
 const getNotifications = asyncHandler(async (req, res) => {
+  const { offset = 0 } = req.params;
   const { _id } = req.user;
 
   const notifications = await Notification.aggregate([
@@ -15,6 +16,8 @@ const getNotifications = asyncHandler(async (req, res) => {
       $match: { receiver: ObjectId(_id) },
     },
     { $sort: { createdAt: -1 } },
+    { $skip: Number(offset) },
+    { $limit: 15 },
     // Get sender's image, username
     {
       $lookup: {

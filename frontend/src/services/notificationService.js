@@ -5,11 +5,15 @@ import { sendConfig } from '../helpers/configHeaders';
  * Retrieves notifications for a user
  * @function getNotifications
  * @param {string} token Authorization token
+ * @param {number} offset Number of notifications to skip
  * @returns {array} Array of notifications
  */
-export const getNotificationsApi = async token => {
+export const getNotificationsApi = async (token, offset = 0) => {
   try {
-    const { data } = await axios.get(`/api/notifications`, sendConfig(token));
+    const { data } = await axios.get(
+      `/api/notifications/${offset}`,
+      sendConfig(token)
+    );
     return data;
   } catch (error) {
     throw new Error(error);

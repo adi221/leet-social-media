@@ -6,6 +6,9 @@ import {
   GET_NOTIFICATIONS_RESET,
   READ_NOTIFICATIONS,
   HIDE_NOTIFICATION_POPUP,
+  GET_ADDITIONAL_NOTIFICATIONS_REQUEST,
+  GET_ADDITIONAL_NOTIFICATIONS_SUCCESS,
+  GET_ADDITIONAL_NOTIFICATIONS_FAIL,
   GET_CHAT_NOTIFICATIONS_REQUEST,
   GET_CHAT_NOTIFICATIONS_SUCCESS,
   GET_CHAT_NOTIFICATIONS_FAIL,
@@ -19,6 +22,8 @@ const notificationsInitialState = {
   loading: false,
   error: false,
   showPopup: false,
+  fetchingAdditional: false,
+  hasMoreNotifications: true,
 };
 
 export const notificationsReducer = (
@@ -49,8 +54,28 @@ export const notificationsReducer = (
     case GET_NOTIFICATIONS_FAIL:
       return { ...state, loading: false, error: action.payload };
     case GET_NOTIFICATIONS_RESET: {
-      return { ...state, notifications: [], unreadCount: 0 };
+      return {
+        ...state,
+        notifications: [],
+        unreadCount: 0,
+        hasMoreNotifications: true,
+      };
     }
+    case GET_ADDITIONAL_NOTIFICATIONS_REQUEST:
+      return { ...state, fetchingAdditional: true };
+    case GET_ADDITIONAL_NOTIFICATIONS_SUCCESS:
+      return {
+        ...state,
+        fetchingAdditional: false,
+        hasMoreNotifications: action.payload.length === 15,
+        notifications: [...state.notifications, ...action.payload],
+      };
+    case GET_ADDITIONAL_NOTIFICATIONS_FAIL:
+      return {
+        ...state,
+        fetchingAdditional: false,
+        hasMoreNotifications: false,
+      };
     case READ_NOTIFICATIONS:
       return { ...state, unreadCount: 0 };
     case HIDE_NOTIFICATION_POPUP:

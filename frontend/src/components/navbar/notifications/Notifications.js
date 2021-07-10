@@ -1,25 +1,51 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { UsersListSkeleton } from '../..';
+import useScrollPositionThrottled from '../../../hooks/useScrollPositionThrottled';
+import LoaderSpinner from '../../loaders/LoaderSpinner';
 import SingleNotification from './SingleNotification';
 import {
   getNotifications,
   resetNotifications,
+  getAdditionalNotifications,
   readNotifications,
 } from '../../../actions/notificationActions';
 
 const Notifications = ({ notificationsRef, show }) => {
   const dispatch = useDispatch();
-  const { notifications, loading } = useSelector(state => state.notifications);
+
+  const { notifications, loading, hasMoreNotifications, fetchingAdditional } =
+    useSelector(state => state.notifications);
+
+  // to prevent additional rerendering while useScrollPositionThrottled is in action
+  const notifAmountRef = useRef(notifications.length).current;
+  const offsetSet = useRef(new Set()).current;
 
   useEffect(() => {
-    dispatch(getNotifications());
+    !notifAmountRef && dispatch(getNotifications());
     dispatch(readNotifications());
 
     return () => {
       dispatch(resetNotifications());
     };
-  }, [dispatch]);
+  }, [dispatch, notifAmountRef]);
+
+  useScrollPositionThrottled(
+    async ({ atBottom }) => {
+      if (
+        atBottom &&
+        hasMoreNotifications &&
+        !offsetSet.has(notifications.length) &&
+        !loading &&
+        !fetchingAdditional
+      ) {
+        dispatch(getAdditionalNotifications(notifications.length));
+        offsetSet.add(notifications.length);
+      }
+    },
+    notificationsRef.current,
+    [notificationsRef.current]
+  );
 
   if (loading)
     return (
@@ -31,7 +57,7 @@ const Notifications = ({ notificationsRef, show }) => {
   if (!show) return null;
 
   return (
-    <ul className=' nav-notifications' ref={notificationsRef}>
+    <ul className='nav-notifications' ref={notificationsRef}>
       {notifications.length > 0 ? (
         notifications.map(notification => {
           return (
@@ -46,6 +72,7 @@ const Notifications = ({ notificationsRef, show }) => {
           You don't have notifications
         </li>
       )}
+      {fetchingAdditional && <LoaderSpinner />}
     </ul>
   );
 };

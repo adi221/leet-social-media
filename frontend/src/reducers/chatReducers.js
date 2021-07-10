@@ -171,9 +171,10 @@ export const chatFeedReducer = (state = chatFeedInitialState, action) => {
         ...state,
         messages: [...action.payload, ...state.messages],
         hasMoreMessages: action.payload.length === 20,
+        fetchingAdditional: false,
       };
     case GET_ADDITIONAL_MESSAGES_FAIL:
-      return state;
+      return { ...state, fetchingAdditional: false };
     case MESSAGE_UNSENT:
       const newMessages = state.messages.filter(
         message => message._id !== action.payload

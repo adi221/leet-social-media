@@ -8,7 +8,8 @@ import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-router.route('/').put(protect, readNotification).get(protect, getNotifications);
+router.route('/').put(protect, readNotification);
 router.route('/chat').get(protect, getChatNotifications);
+router.route('/:offset').get(protect, getNotifications);
 
 export default router;
