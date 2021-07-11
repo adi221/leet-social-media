@@ -19,15 +19,15 @@ export const getCommentsOfPost = async (postId, offset = 0, exclude = 0) => {
           comments: [
             { $match: { post: ObjectId(postId) } },
             // sort the newest comments to the top
-            // { $sort: { createdAt: -1 } },
+            { $sort: { createdAt: -1 } },
             // Skip the comments we do not want
             // This is desireable in the even that a comment has been created
             // and stored locally, we'd not want duplicate comments
             // { $skip: Number(exclude) },
             // get 10 last comments and then resort comments to ascending order
             { $skip: Number(offset) },
-            // { $limit: 10 },
-            // { $sort: { createdAt: 1 } },
+            { $limit: 10 },
+            { $sort: { createdAt: 1 } },
             {
               $lookup: {
                 from: 'commentreplies',

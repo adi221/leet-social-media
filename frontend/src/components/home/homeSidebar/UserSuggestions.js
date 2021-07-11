@@ -11,12 +11,15 @@ const UserSuggestions = ({ offset = 5 }) => {
   const { userInfo } = useSelector(state => state.userLogin);
 
   useEffect(() => {
-    const controller = new AbortController();
+    if (suggestions.length > 0) return;
+    // For cleanup purposes
+    let controller = new AbortController();
     const getUsers = async () => {
       try {
         setLoading(true);
         const data = await getUserSuggestionsApi(userInfo._id, offset);
         setSuggestions(data);
+        controller = null;
       } catch (error) {
         setError(true);
       }
@@ -25,7 +28,7 @@ const UserSuggestions = ({ offset = 5 }) => {
 
     getUsers();
     return () => controller?.abort;
-  }, [userInfo, offset]);
+  }, [userInfo, offset, suggestions]);
 
   if (error) return null;
 

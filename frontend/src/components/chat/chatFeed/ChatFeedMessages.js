@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import useScrollPositionThrottled from '../../../hooks/useScrollPositionThrottled';
@@ -10,6 +10,10 @@ const ChatFeedMessages = ({ partnerTypingId, chatId }) => {
   const history = useHistory();
   const dispatch = useDispatch();
   const msgBoxRef = useRef();
+
+  // To retrigger ref.current - in mounting it equals null and therefore we need to
+  // re-set it for useScrollPositionThrottled hook
+  const [nodeRef, setNodeRef] = useState(msgBoxRef.current);
 
   // to maintain scrollTop when fetching new messages
   const fetchingAdditionalPromise = () =>
@@ -35,10 +39,14 @@ const ChatFeedMessages = ({ partnerTypingId, chatId }) => {
     msgBoxRef.current.scrollTop = msgBoxRef.current.scrollHeight;
   }, [loading, partnerTypingId]);
 
+  useEffect(() => {
+    if (nodeRef) return;
+    setNodeRef(msgBoxRef.current);
+  }, [msgBoxRef, nodeRef]);
+
   // For fetching additional messages
   useScrollPositionThrottled(
-    async ({ atTop, currentScrollPosition }) => {
-      console.log(currentScrollPosition);
+    async ({ atTop }) => {
       if (
         atTop &&
         hasMoreMessages &&
@@ -59,7 +67,7 @@ const ChatFeedMessages = ({ partnerTypingId, chatId }) => {
       }
     },
     msgBoxRef.current,
-    [messages]
+    []
   );
 
   const imageHandler = username => {

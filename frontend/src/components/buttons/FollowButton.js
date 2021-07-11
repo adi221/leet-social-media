@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 import { openModal } from '../../actions/utilActions';
 import { USER_STATS_FOLLOWING } from '../../constants/userConstants';
 import LoaderSvg from '../loaders/LoaderSvg';

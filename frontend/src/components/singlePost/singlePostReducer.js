@@ -10,6 +10,7 @@ import {
   SINGLE_POST_COMMENT_LIKE_SUCCESS,
   SINGLE_POST_LOADING_ADDITIONAL,
   SINGLE_POST_GET_ADDITIONAL_COMMENTS_SUCCESS,
+  SINGLE_POST_GET_ADDITIONAL_COMMENTS_FAIL,
   SINGLE_POST_IS_REPLYING,
   SINGLE_POST_COMMENT_REPLY_SUCCESS,
   SINGLE_POST_ADD_REPLIES_SUCCESS,
@@ -105,6 +106,11 @@ export const singlePostReducer = (state, action) => {
           ...state.post,
           comments: [...additionalComments, ...state.post.comments],
         },
+      };
+    case SINGLE_POST_GET_ADDITIONAL_COMMENTS_FAIL:
+      return {
+        ...state,
+        loadingAdditionalComments: false,
       };
     case SINGLE_POST_IS_REPLYING:
       // action.payload can be null if we want to remove else user and comment details

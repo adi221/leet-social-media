@@ -307,8 +307,6 @@ const getAdditionalMessagesChat = asyncHandler(async (req, res) => {
     },
   ]);
 
-  console.log(additionalMessages);
-
   if (additionalMessages) {
     // returns an array
     res.json(additionalMessages[0].messages);
