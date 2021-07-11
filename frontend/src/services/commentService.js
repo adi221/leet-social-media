@@ -41,10 +41,9 @@ export const likeComment = async (commentId, token) => {
  * @function getComments
  * @param {string} postId The id of a post to retrieve comments from
  * @param {number} offset The amount of comments to skip
- * @param {number} exclude The amount of comments to exlude (newest to oldest)
  * @returns {array} Array of comment details
  */
-export const getComments = async (postId, offset = 0, exclude = 0) => {
+export const getComments = async (postId, offset = 0) => {
   try {
     const { data } = await axios.get(`/api/comments/${postId}/${offset}`);
     return data;

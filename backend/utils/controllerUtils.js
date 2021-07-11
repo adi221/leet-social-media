@@ -11,7 +11,7 @@ const ObjectId = mongoose.Types.ObjectId;
  * @param {number} exclude
  * @returns {array} array of first 10 comments and total comments count
  */
-export const getCommentsOfPost = async (postId, offset = 0, exclude = 0) => {
+export const getCommentsOfPost = async (postId, offset = 0) => {
   try {
     const commentsAggregation = await Comment.aggregate([
       {
@@ -20,10 +20,6 @@ export const getCommentsOfPost = async (postId, offset = 0, exclude = 0) => {
             { $match: { post: ObjectId(postId) } },
             // sort the newest comments to the top
             { $sort: { createdAt: -1 } },
-            // Skip the comments we do not want
-            // This is desireable in the even that a comment has been created
-            // and stored locally, we'd not want duplicate comments
-            // { $skip: Number(exclude) },
             // get 10 last comments and then resort comments to ascending order
             { $skip: Number(offset) },
             { $limit: 10 },
