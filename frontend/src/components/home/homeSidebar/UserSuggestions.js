@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { UsersListSkeleton } from '../../../components';
 import { getUserSuggestionsApi } from '../../../services/userService';
@@ -9,25 +9,24 @@ const UserSuggestions = ({ offset = 5 }) => {
   const [suggestions, setSuggestions] = useState([]);
   const [error, setError] = useState(false);
   const { userInfo } = useSelector(state => state.userLogin);
+  // To prevent React state update on an unmounted component
+  const didCancel = useRef(false);
 
   useEffect(() => {
-    if (suggestions.length > 0) return;
-    // For cleanup purposes
-    let controller = new AbortController();
     const getUsers = async () => {
+      if (didCancel.current) return;
       try {
-        setLoading(true);
+        // setLoading(true);
         const data = await getUserSuggestionsApi(userInfo._id, offset);
         setSuggestions(data);
-        controller = null;
       } catch (error) {
         setError(true);
       }
       setLoading(false);
     };
-
     getUsers();
-    return () => controller?.abort;
+
+    return () => (didCancel.current = true);
   }, [userInfo, offset, suggestions]);
 
   if (error) return null;

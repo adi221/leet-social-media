@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { UsersListSkeleton } from '../..';
 import useScrollPositionThrottled from '../../../hooks/useScrollPositionThrottled';
@@ -16,6 +16,10 @@ const Notifications = ({ notificationsRef, show }) => {
 
   const { notifications, loading, hasMoreNotifications, fetchingAdditional } =
     useSelector(state => state.notifications);
+
+  // To retrigger ref.current - in mounting it equals null and therefore we need to
+  // re-set it for useScrollPositionThrottled hook
+  const [nodeRef, setNodeRef] = useState(notificationsRef.current);
 
   // to prevent additional rerendering while useScrollPositionThrottled is in action
   const notifAmountRef = useRef(notifications.length).current;
@@ -46,6 +50,11 @@ const Notifications = ({ notificationsRef, show }) => {
     notificationsRef.current,
     [notificationsRef.current]
   );
+
+  useEffect(() => {
+    if (nodeRef) return;
+    setNodeRef(notificationsRef.current);
+  }, [notificationsRef, nodeRef]);
 
   if (loading)
     return (

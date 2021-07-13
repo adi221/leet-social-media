@@ -58,6 +58,11 @@
         box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2),
           -2px 0 4px rgba(0, 0, 0, 0.2);
 
+        &::before {
+          @include dropdownTriangle;
+          left: 88%;
+        }
+
         li {
           width: 230px;
           color: #000;

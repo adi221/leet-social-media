@@ -9,6 +9,11 @@
   max-height: 24rem;
   overflow-y: auto;
 
+  &::before {
+    @include dropdownTriangle;
+    left: 90%;
+  }
+
   &__item {
     width: 33rem;
     padding: 0.8rem 0.3rem 0.8rem 0.9rem;

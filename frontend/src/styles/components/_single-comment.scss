@@ -90,6 +90,11 @@
     color: $clr-grey-3;
     margin: 0.8rem 0 0.8rem 1.6rem;
     font-family: inherit;
+    transition: all 1s ease-in-out;
+
+    &:active {
+      opacity: 0.5;
+    }
 
     &--dash {
       height: 1px;

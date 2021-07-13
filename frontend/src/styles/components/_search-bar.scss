@@ -27,6 +27,10 @@
     max-height: 18rem;
     overflow-x: hidden;
 
+    &::before {
+      @include dropdownTriangle;
+    }
+
     &--item {
       width: 20rem;
       display: block;
