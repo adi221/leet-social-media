@@ -19,7 +19,7 @@ const PostMessageCard = ({ postId }) => {
       }
       setLoading(false);
     },
-    [postId]
+    [postId, history]
   );
 
   useEffect(() => {

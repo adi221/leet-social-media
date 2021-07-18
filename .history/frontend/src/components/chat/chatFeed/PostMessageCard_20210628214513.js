@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import SkeletonLoader from '../../loaders/SkeletonLoader';
@@ -8,19 +8,16 @@ const PostMessageCard = ({ postId }) => {
   const [post, setPost] = useState({});
   const history = useHistory();
 
-  const getPostDetails = useCallback(
-    async id => {
-      try {
-        setLoading(true);
-        const { data } = await axios.get(`/api/posts/${id}`);
-        setPost(data);
-      } catch (error) {
-        console.log(error);
-      }
-      setLoading(false);
-    },
-    [postId]
-  );
+  const getPostDetails = async id => {
+    try {
+      setLoading(true);
+      const { data } = await axios.get(`/api/posts/${id}`);
+      setPost(data);
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
 
   useEffect(() => {
     if (Object.keys(post).length > 0) return;
