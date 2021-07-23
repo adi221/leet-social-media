@@ -10,6 +10,7 @@ const SingleChatMessagePopup = ({
   userId,
   message,
   isOwner,
+  isPost,
 }) => {
   const { socket } = useSelector(state => state.socket);
   const dispatch = useDispatch();
@@ -28,9 +29,12 @@ const SingleChatMessagePopup = ({
   const copyClipboardHandler = () => {
     // if message type is post so the argument is post url
     // if(messageType === 'post')
-    copyClipboard(message);
-    dispatch(showAlert('Message copied'));
-    hideOptions();
+    if (isPost) {
+    } else {
+      copyClipboard(message);
+      dispatch(showAlert('Message copied'));
+      hideOptions();
+    }
   };
 
   return (

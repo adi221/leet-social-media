@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import useComponentVisible from '../../../hooks/useComponentVisible';
 import PostMessageCard from './PostMessageCard';
@@ -20,6 +20,7 @@ const SingleChatMessage = ({
 }) => {
   const { userInfo } = useSelector(state => state.userLogin);
   const history = useHistory();
+  const location = useLocation();
 
   const {
     ref,
@@ -130,6 +131,7 @@ const SingleChatMessage = ({
               userId={userInfo._id}
               message={message}
               isOwner={fromUser === userInfo._id}
+              isPost={messageType === 'post'}
             />
           )}
         </div>
@@ -137,5 +139,4 @@ const SingleChatMessage = ({
     </div>
   );
 };
-
 export default SingleChatMessage;

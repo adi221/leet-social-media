@@ -50,7 +50,7 @@ export const createPostApi = async (postBody, token) => {
  * @function likePostApi
  * @param {string} postId id of a post
  * @param {string} token authorization token
- * @returns {array} updated array of likes for post TODO:
+ * @returns {array} updated array of likes for post 
  */
 export const likePostApi = async (postId, token) => {
   try {

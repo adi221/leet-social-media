@@ -134,7 +134,6 @@ export const singlePostReducer = (state, action) => {
       }
     case SINGLE_POST_COMMENT_REPLY_SUCCESS:
       const newCommentReply = action.payload;
-      console.log(action.payload);
       const modifiedComments = state.post.comments.map(comment => {
         if (comment._id === newCommentReply.parentComment) {
           comment.commentReplies.push(newCommentReply);

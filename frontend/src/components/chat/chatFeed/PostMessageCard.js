@@ -53,7 +53,7 @@ const PostMessageCard = ({ postId }) => {
         />
       )}
       {loading ? (
-        <SkeletonLoader style={{ height: '2.4rem', width: '16rem' }} />
+        <SkeletonLoader style={{ height: '1.8rem', width: '16rem' }} />
       ) : (
         <div className='chat-feed__messages--message-post-body'>
           <p>

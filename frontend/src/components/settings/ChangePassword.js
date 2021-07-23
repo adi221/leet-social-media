@@ -93,11 +93,6 @@ const ChangePassword = ({ currSettings }) => {
             {loading && <LoaderSvg />}
           </button>
         </div>
-        {/* {loading && <Message type='info' text='Loading...' />}
-        {success && (
-          <Message type='success' text='Password successfully changed' />
-        )}
-        {error && <Message type='danger' text={error} />} */}
       </form>
     </>
   );

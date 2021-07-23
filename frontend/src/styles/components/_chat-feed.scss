@@ -117,7 +117,6 @@
 
       &-post {
         width: 16rem;
-        height: max-content;
         background-color: #f0f0f0;
         border-radius: 20px;
 
@@ -145,7 +144,7 @@
         &-body {
           padding: 0.5rem 0.8rem 0.2rem;
           margin-bottom: 1rem;
-          min-height: 2.4rem;
+          height: 1.8rem;
           p {
             word-wrap: break-word;
             word-break: break-word;
